@@ -12,10 +12,11 @@ public class Boot
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Truncheon has booted in "+Args[0]+" mode");
             console.readLine();
+            new Truncheon.Core.MainMenu().mainMenu();
         }
         catch(Exception E)
         {
-            //Error handling API
+            new Truncheon.API.ErrorHandler().handleException(E);
         }
     }
 }

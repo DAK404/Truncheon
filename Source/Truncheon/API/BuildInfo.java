@@ -5,8 +5,8 @@ public final class BuildInfo
     public void versionViewer()
     {
         clearScreen();
-        System.out.println("Truncheon Kernel 0.1.1_X");
-        System.out.println("Build Date: 09-Apr-2021");
+        System.out.println("Truncheon Kernel 0.1.4_X");
+        System.out.println("Build Date: 19-Apr-2021");
         System.out.println("Notes: Prototype Build\n\n");
     }
 
