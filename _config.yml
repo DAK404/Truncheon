@@ -9,4 +9,4 @@ include:
   - Index.md
 
 theme: jekyll-theme-minimal
-logo: ./Documentation/Assets/Logo.png
+logo: ./assets/Images/Logo.png
