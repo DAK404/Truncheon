@@ -2,7 +2,7 @@ package Truncheon.Core;
 
 import java.io.Console;
 
-public class Boot
+public final class Boot
 {
     public static void main(String[] Args)throws Exception
     {

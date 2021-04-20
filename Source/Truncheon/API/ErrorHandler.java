@@ -1,10 +1,8 @@
 package Truncheon.API;
 
 import java.io.StringWriter;
-import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.Console;
-import java.io.File;
 
 public final class ErrorHandler
 {
@@ -38,11 +36,11 @@ public final class ErrorHandler
 			PrintWriter pw = new PrintWriter(sw);
 			E.printStackTrace(pw);
 
-            new Truncheon.API.Logger().Log(sw.toString(), "./System/Public/Logs/Truncheon/Error");
+            new Truncheon.API.Wraith.WriteFile().logToFile(sw.toString(), "./System/Public/Logs/Truncheon/Error");
             
             Console console=System.console();
             System.err.println("\n[ OPTIONAL ] : Any relevant information to add to file?");
-            new Truncheon.API.Logger().Log("User Comments: " + console.readLine("User Comments: "), "./System/Public/Logs/Truncheon/Error");
+            new Truncheon.API.Wraith.WriteFile().logToFile("User Comments: " + console.readLine("User Comments: ") + "\n", "./System/Public/Logs/Truncheon/Error");
 
             sw.close();
             pw.close();
