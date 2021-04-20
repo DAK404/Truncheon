@@ -18,7 +18,7 @@
 
 ---
 
-# IMPORTANT LINKS
+# Important Links
 
 Here are a few quick links to prerequisite software to help you get started right away. No need to read the entire document and hunt for important links. All of them, right here.
 
@@ -35,9 +35,9 @@ Here are a few quick links to prerequisite software to help you get started righ
 
 **MISCELLANEOUS QUICK LINKS**
 
-* [Website](https://dak404.github.io/Truncheon)
-* [License](License.md)
-* [Source Code](https://github.com/DAK404/Truncheon)
+* [Truncheon Website](https://dak404.github.io/Truncheon)
+* [License and Legal Information](License.md)
+* [Program Source Code](https://github.com/DAK404/Truncheon)
 * [Program Documentation](https://dak404.github.io/Truncheon/Documentation/index.html)
 * Download Latest Release (Coming Soon!)
 
@@ -86,7 +86,7 @@ This should have initialized with setting up the environment to build or customi
 
 # Building the Program
 
-The program can be build by using the following steps:
+The program can be built by using the following steps:
 
 1. Copy `Tools.bat` or `Tools.sh` from `./Tools` directory to `./Source` directory.
 2. Run the Batch File or the Shell Script.
@@ -96,7 +96,7 @@ The program can be build by using the following steps:
 6. \<Optional\> Run the Batch file or shell script and follow the on screen instructions OR run the program by using the command `java ProgramLauncher \<kernelName\> \<BootMode\>
 
 <span style="color:#05e401">**Fun Fact!  
-The program and tools have contextual help built into them. In case you will need to refer to the same, you can always type `help` or choose the help option.**</span>
+The program and tools have contextual help built into them. In case you will need to refer to the same, you can always type `help` anywhere in the prompt or choose the help option if available.**</span>
 
 [Back To Top](#table-of-contents)
 
@@ -104,26 +104,35 @@ The program and tools have contextual help built into them. In case you will nee
 
 # Working With APIs
 
-There are a few Truncheon APIs which are available that are either used by Truncheon itself or other programs which are built upon Truncheon.
+APIs are built-in programs which help to implement other programs without rewriting certain parts of code repeatedly. APIs also abstracts the implementation of a given functionality, presenting the essential data to the **custom module developers**. This makes it simple to build programs on top of Truncheon easily.
 
-Right now, since the code is still being worked on, the API information is very limited and incomplete. Please check this space after the stable code base has been released publicly.
+API source code is found in the `./Source/Truncheon/API` directory. The APIs provided out of the box contain all essential programs to be used by external modules and programs. Additional APIs can be written and called as desired by the developers. (See [Creating Custom APIs](#creating-custom-apis))
 
-APIs will be extremely useful for user written modules, which will save time by not having to repeatedly write the same code for every module. A fine example of this is the Program Information. The Program Information API contains the program information (obviously) which the user need not type it out manually or update it manually for every release. This will help in saving the code size and flexibility to make user written modules.
+The API documentation will provide information how to leverage the API, while not providing the implementation of the API itself. However, there are comments in the program code which will help in improving, modifying and developing alternatives to the implementation.
 
-When working with APIs, all the accessible APIs are saved inside the `./Source/Truncheon/API` directory. These programs will have their own method of accessing a specific API which is explained inside the program documentation. The program documentation also has explanations, notes and information regarding every API, making it easier for the core program developers to modify and create their version of the API.
+However, the program documentation will contain the details about the implementation of every program in Truncheon. This will ensure that other people interested to work on/modify the program will have a good idea about the working of the program.
 
 <span style="color:#e6b400">**NOTE:  
-APIs will be updated over time, which may have changed in terms of the accessible methods used or the implementation of the API, which might break the supporting programs built on top of Truncheon. Although the changes will be specified in the changelog and the commit details, please do check the APIs' documentation from time to time for changes and do the needful.**</span>
+AS THE PROGRAM IS UPDATED IN THE FUTURE, THE IMPLEMENTAION MAY/MAY NOT CHANGE. SOMETIMES, WHEN THERE IS A NEW VERSION OF THE PROGRAM, THE API CALLS MAY/MAY NOT HAVE CHANGED. THIS WOULD MEAN THAT THE PROGRAMS BUILT ON TOP OF TRUNCHEON WILL BE AFFECTED IF NOT UPDATED. BY USING 3RD PARTY MODULES AND PROGRAMS IN TRUNCHEON, THE AUTHORS OF THE PROGRAMS ARE NOT RESPONSIBLE IN ANY WAY TO ANY DATA LOSS OR DAMAGES.  
+ANY CHANGES TO THE API CALLS ARE TO BE TRACKED AND TO BE UPDATED REGULARLY BY THE MODULE DEVELOPERS, WHEN POSSIBLE, TO AVOID ANY ISSUES.**</span>
 
 ---
 
 # Creating Custom APIs
 
-Users can create their custom APIs by adding their classes to the package `Truncheon.API.<API_Package>.API_Name`
+Anyone with the source code can create their custom APIs. It is simple and easy!  
 
-This will help in expanding the functionalities of the program as other modules too can leverage on the functionalities provided by the various, user defined APIs.
+## Quick Reference
 
-For example, when writing a new class, say `HelloWorld.java`, as an API to print Hello World on the screen, the code can be implemented in the following way:
+* API Package Nomenclature : `package Truncheon.API.<API_Package_Name>.<API_Subpackage_Name>`
+* API Calls Nomenclature : `new Truncheon.API.<API_PackageName>.<API_Subpackage_Name>`
+
+### Step 1 : Create Truncheon API
+
+* Open a new file in your favorite editor.  
+* Save the file in `./Source/Truncheon/API/`. In this example, we shall create a new class called `ExampleClass.java`, which is saved inside the above specified directory.
+* Set the package name of the `ExampleClass.java` to `package Truncheon.API;`. This will make the class to reside inside the API directory of Truncheon.
+* Begin writing the code for the program. In this example, we shall create a method to print the string "Hello World!" on the screen.
 
 ```java
 //define the HelloWorld package inside Truncheon's API packages
@@ -138,8 +147,7 @@ public class HelloWorld
             //Print Hello World!
             System.out.println("Hello World!");
 
-            //Basically, the program logic is implemented here
-            //Do whatever you want to do here.
+            //Program implementation
         }
         catch(Exception E)
         {
@@ -149,7 +157,10 @@ public class HelloWorld
 }
 ```
 
-The above example can be invoked successfully by adding the following lines of code to any of the modules. Say, in this case, we create a new class called `ProgExe.java`.
+### Step 2 : Create the driver code
+
+* Now, we need to create a driver code which will run the above code from another program.
+* In this example, we shall write a class known as `ProgExe.java`. Inside `ProgExe.java`, insert the API call within the method. The following code demonstrates the above.
 
 ```java
 //Keeping it public will allow the class to run the program.
@@ -163,21 +174,23 @@ public class ProgExe
     }
 }
 ```
+Compiling the programs by using the command `javac -d ../Binaries ProgExe.java`. The compiled programs will be placed within the `./Binaries` directory.
 
-Now, compile both the programs and the API can be utilized by the class invoking the API.
+Navigating to the `./Binaries` directory, you can see the `ProgExe.class` file. You can run this program by using the command `java ProgExe` in the terminal.
 
-To take things to the next level, the APIs have their own folders in the source files, which will help in putting certain APIs in a single folder. This will help in having a clean and organized workspace.
+### Step 3 : Create your own API with programs within.
 
-In the above example, `HelloWorld` is in the root of the API folder. To have HelloWorld in a dedicated API folder, say, `CustomAPIExample`, the `HelloWorld.java` program must be inside the `CustomAPIExample` package. The following line should replace the 1st line in the previously executed `HelloWorld.java`.
-
+* If an API has other new programs to be included in the package, a dedicated package can be created to simplify this. A sub-package can be created easily by setting the package name to `Truncheon.API.<API_PackageName>.<API_PackageName>`.
+* The main API can be called via the `new Truncheon.API.<API_PackageName>.<API_Subpackage_Name>`.
+* For example, we can name this newly created API as Example. The following code will need to be written in the API being made.
 ```java
-package Truncheon.API.CustomAPIExample.HelloWorld;
+package Truncheon.API.Example.HelloWorld;
 ```
 
-AND the following line should replace the API call in the `ProgExe.java`.
+The following line should replace the API call in the driver code, which is `ProgExe.java` in this case.
 
 ```java
-new Truncheon.API.CustomAPIExample.HelloWorld.printHelloWorld();
+new Truncheon.API.Example.HelloWorld.printHelloWorld();
 ```
 
 Summary:
@@ -185,16 +198,19 @@ Summary:
 ```
 Truncheon        : Main Package Name
 API              : Contains all the Truncheon APIs and dependencies.
-CustomAPIExample : Contains a program which will print "Hello World!"
+Example          : Contains a program which will print "Hello World!"
 HelloWorld       : The program which contains the implementation inside the printHelloWorld() method to print "Hello World!"
 ```
 Easy and simple, right?
 
 <span style="color:#05e401">**Fun Fact!  
-The code given above can be directly copied and pasted to understand the working of the API system in Truncheon!**</span>
+The above examples can be executed by copying and pasting the source code provided above. By following the instructions correctly, you can create an example API which will print "Hello World!" on the screen, which can help you begin creating your own APIs for Truncheon.**</span>
 
 <span style="color:#FF0000">**ATTENTION:  
-Core Program Developers implement APIs which can be used by user written modules. If you do not know or fully understand how to create an API, it is recommended to first practice and then begin programming the additional Truncheon APIs. The source code and this Readme file contains the information to build your own API with an example.  If you are developing user modules, the API documentation will help you to understand the purpose of the API and on invoking the APIs in your modules.**</span>
+APIS AVAILABLE WITH THE PROGRAM IS TESTED AND VERIFIED FOR ITS FUNCTIONALITY AND IMPLEMENTATION DUE TO THE NATURE OF THE [LICENSE](License.md) OF THE PROGRAM. 3RD PARTY APIS WHICH ARE NOT OPEN-SOURCE ARE NOT TESTED AND VERIFIED BY THE AUTHORS OF THIS PROGRAM. THE USERS ARE RESPONSIBLE FOR DOWNLOADING AND USING THE 3RD PARTY API PROGRAMS, WHICH MAY OR MAY NOT BE OPEN-SOURCED. THIS PROGRAM IS OPEN SOURCED.**</span> 
+
+<span style="color:#e6b400">**NOTE:  
+DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READABLE LANGUAGE WHICH, EITHER, HAS A LINK PROVIDED TO CODE OR IS SHIPPED WITH THE PROGRAM.**</span>
 
 [Back To Top](#table-of-contents)
 
