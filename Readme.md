@@ -28,7 +28,7 @@ Here are a few quick links to prerequisite software to help you get started righ
 
 **RECOMMENDED SOFTWARE/RESOURCES**
 * [Visual Studio Code](https://code.visualstudio.com/) or [Notepad++](https://notepad-plus-plus.org/)
-* [GitHub Account](httpsL//github.com)
+* [GitHub Account](https://github.com)
 * Basic Knowledge on [Java](https://docs.oracle.com/en/java/)
 * Basic RDBMS Concepts including JDBC
 * Patience and Time :)
