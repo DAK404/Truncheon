@@ -40,16 +40,27 @@ class ProgramLauncher
                 * the program has to follow the exit code to attain desired output.
                 *
                 * --- LAUNCHER EXIT TABLE ---
+                *
+                * NOTES: 
+                *
+                * OBSERVE THAT THE PROCESS CREATION STATEMENTS ARE INSIDE THE WHILE LOOP.
+                * THIS IS IMPLEMENTED SO THAT WHEN THE PROGRAM EXITS AND ALTERS PARAMETERS,
+                * THE SAME IS REFLECTED WHEN THE NEW PROCESS IS CREATED. THIS WOULD HELP
+                * IN IMPLEMENTING FUTURE FUNCTIONALITIES.
+                *
+                * ---------------------------
                 */
 
                 //Spawn a ProcessBuilder called session_monitor to track the process's exit code
                 ProcessBuilder session_monitor=new ProcessBuilder("java", Args[0]+".Core.Boot", Args[1]);
+
                 //Spawn a process with  called process_monitor to start the new process
                 Process process_monitor= session_monitor.inheritIO().start();
+
                 //Wait for the process to complete its execution before it passes on to shunt logic
                 process_monitor.waitFor();
 
-
+                //Monitor the exit code of the process to perform certain actions based on the process exit code.
                 switch(process_monitor.exitValue())
                 {
                     case 0:
@@ -78,6 +89,10 @@ class ProgramLauncher
 
                     case 900:
                             throw new Exception();
+
+                    case 150001:
+                            Args[1]="fastdbg";
+                            break;
 
                     default:
                             //Generic error output

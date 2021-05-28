@@ -1,16 +1,19 @@
 package Truncheon.Core;
 
 import java.io.Console;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public final class MainMenu
 {
-    byte count = 5;
+    private byte count = 5;
+    private boolean scriptMode = false;
     public final void mainMenu()throws Exception
     {
         try
         {
             //login();
-            menu();
+            menuShell();
         }
         catch(Exception E)
         {
@@ -18,59 +21,96 @@ public final class MainMenu
         }
     }
 
-    private final void menu()
+    private void scriptEngine(String fileName)throws Exception
+    {
+        scriptMode = true;
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+ 
+            String scriptLine;
+            while ((scriptLine = br.readLine()) != null) 
+            {
+                if(scriptLine.toString().startsWith("#"))
+                    continue;
+                else if(scriptLine.equalsIgnoreCase("End Script"))
+                    break;
+                menuLogic(scriptLine.toString());
+            }
+            br.close();
+        scriptMode = false;
+    }
+
+    private void menuShell()throws Exception
+    {
+        Console console=System.console();
+        String userName = console.readLine("Enter the User name: ");
+        String sysName = console.readLine("Enter the system name: ");
+        while(true)
+            menuLogic(console.readLine(userName+"@"+sysName+"> ").toLowerCase());
+            
+    }
+
+    //modularize this code in such a way that the program accepts the string from either a file or a string
+    private final void menuLogic(String cmd)
     {
         try
         {
-            while(true)
+            Console console=System.console();
+            switch(cmd)
             {
-                Console console=System.console();
-                switch(console.readLine("user@minimal> ").toLowerCase())
-                {
-                    case "exit":
-                                System.exit(0);
+                case "script":
+                            if(scriptMode==true)
+                            {
+                                System.out.println("Cannot execute another script while running a script.");
+                                return;
+                            }
+                            scriptEngine("./Trash/"+ console.readLine("Enter the name of the script file to load: ")+".nScript");
+                            break;
 
-                    case "restart":
-                                System.exit(1);
+                case "exit":
+                            System.exit(0);
 
-                    case "clear":
-                                new Truncheon.API.BuildInfo().versionViewer();
-                                break;
+                case "restart":
+                            System.exit(1);
 
-                    case "help":
-                                System.out.println("Work in Progress.");
-                                break;
+                case "clear":
+                            new Truncheon.API.BuildInfo().versionViewer();
+                            break;
 
-                    case "":
-                                break;
+                case "help":
+                            System.out.println("Available options:\n");
+                            System.out.println("exit\nrestart\nclear\nhelp\nfeatureX\n\nWhere X is the feature ID");
+                            break;
 
-                    case "feature1":
-                                throw new Exception();
+                case "":
+                            break;
 
-                    case "feature2":
-                                System.out.println("SHA3-256 for Hello World! is : " + new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256("Hello World!"));
-                                System.out.println("SHA3-256 for File ProgramLauncher.class is : " + new Truncheon.API.Minotaur.HAlgos().fileToSHA3_256("./ProgramLauncher.class"));
+                case "feature1":
+                            throw new Exception();
 
-                                System.out.println("MD5 for Hello World! is : " + new Truncheon.API.Minotaur.HAlgos().stringToMD5("Hello World!"));
-                                System.out.println("MD5 for File ProgramLauncher.class is : " + new Truncheon.API.Minotaur.HAlgos().fileToMD5("./ProgramLauncher.class"));
-                                break;
+                case "feature2":
+                            System.out.println("SHA3-256 for Hello World! is : " + new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256("Hello World!"));
+                            System.out.println("SHA3-256 for File ProgramLauncher.class is : " + new Truncheon.API.Minotaur.HAlgos().fileToSHA3_256("./ProgramLauncher.class"));
 
-                    case "feature3":
-                                new Truncheon.API.Wraith.WriteFile().editFile("./Trash/");
-                                break;
+                            System.out.println("MD5 for Hello World! is : " + new Truncheon.API.Minotaur.HAlgos().stringToMD5("Hello World!"));
+                            System.out.println("MD5 for File ProgramLauncher.class is : " + new Truncheon.API.Minotaur.HAlgos().fileToMD5("./ProgramLauncher.class"));
+                            break;
 
-                    case "feature4":
-                                new Truncheon.API.Wraith.ReadFile().readUserFile("./Trash/");
-                                break;
+                case "feature3":
+                            new Truncheon.API.Wraith.WriteFile().editFile("./Trash/");
+                            break;
 
-                    case "feature5":
-                                System.exit(900);
+                case "feature4":
+                            new Truncheon.API.Wraith.ReadFile().readUserFile("./Trash/");
+                            break;
 
-                    default:
-                                System.out.println("Invalid Command.");
-                                break;
-                }
+                case "feature5":
+                            System.exit(900);
+
+                default:
+                            System.out.println("Invalid Command.");
+                            break;
             }
+            return;
         }
         catch(Exception E)
         {

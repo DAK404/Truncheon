@@ -10,9 +10,23 @@ public final class Boot
         {
             Console console=System.console();
             new Truncheon.API.BuildInfo().versionViewer();
-            System.out.println("Truncheon has booted in "+Args[0]+" mode");
-            console.readLine();
-            new Truncheon.Core.MainMenu().mainMenu();
+            switch(Args[0])
+            {
+                case "fastdbg":
+                        System.out.println("Truncheon has booted in "+Args[0]+" mode\n");
+                        console.readLine("Default Debugging Session active.\nPress enter to continue.\n");
+                        new Truncheon.Core.MainMenu().mainMenu();
+                        break;
+
+                case "normal":
+                        System.out.println("Cannot boot in normal mode yet. Changing the boot mode to fastdbg.");
+                        System.in.read();
+                        System.exit(150001);
+
+                default:
+                        System.exit(101);
+            }
+            
         }
         catch(Exception E)
         {

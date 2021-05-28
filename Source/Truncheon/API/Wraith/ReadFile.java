@@ -19,7 +19,7 @@ public final class ReadFile
         }
         catch(Exception E)
         {
-        E.printStackTrace();
+            E.printStackTrace();
         }
     }
 
@@ -53,8 +53,7 @@ public final class ReadFile
         else
         {
             //Open the method to read files and read it
-            FileReader f = new FileReader(file);
-            BufferedReader ob = new BufferedReader(f);
+            BufferedReader ob = new BufferedReader(new FileReader(file));
 
             //Initialize the string to be null
             String p = "";
@@ -65,7 +64,6 @@ public final class ReadFile
 
             //After reading the file, close the streams opened.
             ob.close();
-            f.close();
         }
         System.out.println("Press Enter to Continue.");
         System.in.read();
