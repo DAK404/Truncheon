@@ -76,6 +76,7 @@ public final class MainMenu
                             new Truncheon.API.BuildInfo().versionViewer();
                             break;
 
+                case "?":
                 case "help":
                             System.out.println("Available options:\n");
                             System.out.println("exit\nrestart\nclear\nhelp\nfeatureX\n\nWhere X is the feature ID");
@@ -105,6 +106,16 @@ public final class MainMenu
 
                 case "feature5":
                             System.exit(900);
+
+                case "feature6":
+                            //Run system cmd from Truncheon
+                            //pseudo?
+                            new ProcessBuilder("cmd", "/c", console.readLine("Enter the command to execute in system shell: ")).inheritIO().start().waitFor();
+                            break;
+                
+                case "feature7":
+                            new ProcessBuilder("cmd").inheritIO().start().waitFor();
+                            break;
 
                 default:
                             System.out.println("Invalid Command.");
