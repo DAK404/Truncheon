@@ -50,12 +50,14 @@ public final class MainMenu
     }
 
     //modularize this code in such a way that the program accepts the string from either a file or a string
-    private final void menuLogic(String cmd)
+    private final void menuLogic(String input)
     {
         try
         {
             Console console=System.console();
-            switch(cmd)
+            //String[] cmd = input.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+            switch(cmd[0])
             {
                 case "script":
                             if(scriptMode==true)
@@ -63,7 +65,7 @@ public final class MainMenu
                                 System.out.println("Cannot execute another script while running a script.");
                                 return;
                             }
-                            scriptEngine("./Trash/"+ console.readLine("Enter the name of the script file to load: ")+".nScript");
+                            scriptEngine("./Trash/"+cmd[1] +".nScript");
                             break;
 
                 case "exit":
@@ -110,11 +112,18 @@ public final class MainMenu
                 case "feature6":
                             //Run system cmd from Truncheon
                             //pseudo?
-                            new ProcessBuilder("cmd", "/c", console.readLine("Enter the command to execute in system shell: ")).inheritIO().start().waitFor();
+                            new ProcessBuilder("cmd", "/c", cmd[1]).inheritIO().start().waitFor();
                             break;
                 
                 case "feature7":
                             new ProcessBuilder("cmd").inheritIO().start().waitFor();
+                            break;
+
+                case "feature8":
+                            if(cmd[1].equalsIgnoreCase(null))
+                                System.out.println("null");
+                            else
+                                System.out.println(cmd[1].replaceAll("\"", ""));
                             break;
 
                 default:
