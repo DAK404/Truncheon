@@ -2,3 +2,4 @@
 Source/*.bat
 Source/*.log
 Binaries/*
+Tools/SQLite Driver
