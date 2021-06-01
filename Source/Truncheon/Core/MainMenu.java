@@ -10,6 +10,8 @@ public final class MainMenu
     private boolean scriptMode = false;
     private boolean pseudo = false;
 
+    Console console=System.console();
+
     public final void mainMenu()throws Exception
     {
         try
@@ -150,6 +152,18 @@ public final class MainMenu
                             new Truncheon.Core.Setup().setupLogic();
                             break;
 
+                case "lock console":
+                            while(console.readLine("AFK@IDLE> ").equalsIgnoreCase("unlock console"));
+                            break;
+
+                case "login":
+                            if(login()==false)
+                                System.out.println("Login Failed");
+                            else
+                                System.out.println("Login success");
+                            break;
+
+
                 default:
                             System.out.println(input+" - Command not found.");
                             break;
@@ -162,15 +176,21 @@ public final class MainMenu
         }
     }
 
-    /*private final void login()
+    private final boolean login()throws Exception
     {
         try
         {
-
+            new Truncheon.API.BuildInfo().versionViewer();
+            System.out.println("Login to Continue.\n");
+            String Username = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Username: "));
+            String Password = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String SecurityKey = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+            return new Truncheon.API.Dragon.LoginAPI(Username, Password, SecurityKey).status();
         }
         catch(Exception E)
         {
-
+            new Truncheon.API.ErrorHandler().handleException(E);
         }
-    }*/
+        return false;
+    }
 }

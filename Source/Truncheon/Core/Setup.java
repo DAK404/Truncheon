@@ -10,24 +10,37 @@ import java.sql.DriverManager;
 public class Setup
 {
     Console console = System.console();
-    public void setupLogic()
+
+    public void setupLogic()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
         console.readLine("Welcome to Truncheon! This program needs an initial configuration before using it. To begin the setup, press the Enter/Return key. Else press the Ctrl + C keys.\nWe recommend the Computer Administrator to setup Truncheon. Please contact your Administrator if you are a user and you're seeing this message.");
+        showPrerequisites();
         createDirs();
         initializeDatabase();
+        createAdminUser();
+        cleanup();
     }
 
-    private void showPrerequisites()
+    private void showPrerequisites()throws Exception
     {
-
+        //read the license File
+        System.out.println("Do you accept the Product License? [Y/N]");
+        if(console.readLine().toLowerCase().equalsIgnoreCase("y"))
+            //read the Readme File
+            //Read the changelog file
+            System.out.println("Accepted agreement placeholder");
+        else
+            System.exit(2);
+        return;
     }
 
     private void createDirs()
     {
+        new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Checking for previous installation and existing directories...");
         String[] directoryList = {"./System", "./User", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
-        
+
         for(int i = 0; i < directoryList.length; i++)
         {
             File makeDir =  new File(directoryList[i]);
@@ -35,7 +48,7 @@ public class Setup
             if(makeDir.exists() == false)
                 makeDir.mkdirs();
             else
-                continue;            
+                System.out.println("Folder " + directoryList[i]+ " Exists.");
         }
         return;
     }
@@ -49,8 +62,8 @@ public class Setup
     {
         //TODO : IMPORT THE FSAD TABLE AND IMPORT THE CURRENT DB IF EXISTS
 
-        try 
-        {           
+        try
+        {
             //Mud.db = Master User Database file
             String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
 
@@ -69,26 +82,33 @@ public class Setup
                 "    SecurityKey text NOT NULL,\n" +
 				"    PIN text NOT NULL,\n" +
 				"    Administrator text NOT NULL);";
-				
+
             stmt.execute(sql);
+            conn.close();
             System.out.println("Master User Database File has been initialized successfully!");
-        } 
-        catch (Exception E) 
+        }
+        catch (Exception E)
         {
             new Truncheon.API.ErrorHandler().handleException(E);
-        } 
+        }
         return;
     }
 
-    private void createAdminUser()
+    private void createAdminUser()throws Exception
     {
-
-
-
+        try
+        {
+            new Truncheon.API.Dragon.AddUser(true, "Administrator", "Administrator").Setup();
+        }
+        catch(Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
     }
 
     private void cleanup()
     {
         //remove unwanted files out of the directory
+        new Truncheon.API.BuildInfo().versionViewer();
     }
 }
