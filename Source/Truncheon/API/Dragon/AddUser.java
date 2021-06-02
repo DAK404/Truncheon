@@ -1,6 +1,7 @@
 package Truncheon.API.Dragon;
 
 //import java libraries
+import java.io.File;
 import java.io.Console;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,20 +43,18 @@ public final class AddUser
         UNM=u;
     }
 
-    private boolean GetCurrentCredentials()throws Exception
+    private final boolean GetCurrentCredentials()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
 
         System.out.println("[ ATTENTION ] : Please authenticate credentials before creating a new account.");
         System.out.println("Username: "+curName);
-        System.out.print("Password: ");
-        String CurrentPassword=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword()));
-        System.out.print("Security Key: ");
-        String CurrentKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword()));
+        String CurrentPassword=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+        String CurrentKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
         return new Truncheon.API.Dragon.LoginAPI(curUser, CurrentPassword, CurrentKey).status();
     }
 
-    public final void addUserScript() throws Exception
+    public final void addUserLogic() throws Exception
     {
         try
         {
@@ -287,6 +286,7 @@ public final class AddUser
             pstmt.executeUpdate();
             conn.close();
             console.readLine("The user \""+NAME+"\" was successfully created! Press enter to continue.");
+            createDir();
             return true;
         }
         catch (Exception E)
@@ -294,6 +294,20 @@ public final class AddUser
             E.printStackTrace();
             System.out.println("Failed to create user. Please try again."); 
             return false;
+        }
+    }
+
+    private final void createDir()throws Exception
+    {
+        try
+        {
+            String[] dirNames = {UNM, UNM+"/Scripts", UNM+"/Properties"};
+            for(int i = 0; i < dirNames.length; i++)
+                new File("./Users/"+dirNames[i]).mkdir();
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
         }
     }
 }

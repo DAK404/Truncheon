@@ -8,7 +8,7 @@ public final class MainMenu
 {
     private byte count = 5;
     private boolean scriptMode = false;
-    private boolean pseudo = false;
+    //private boolean pseudo = false;
 
     Console console=System.console();
 
@@ -26,7 +26,7 @@ public final class MainMenu
     }
 
 
-    private void pseudoLogic()throws Exception
+    /*private void pseudoLogic()throws Exception
     {
         try
         {
@@ -37,7 +37,7 @@ public final class MainMenu
         {
             new Truncheon.API.ErrorHandler().handleException(E);
         }
-    }
+    }*/
 
     private void scriptEngine(String fileName)throws Exception
     {
@@ -180,12 +180,27 @@ public final class MainMenu
     {
         try
         {
+            boolean loginStatus = false;
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Login to Continue.\n");
+            System.out.println("Login Attempts Remaining: "+count+"\n\n");
             String Username = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Username: "));
             String Password = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
             String SecurityKey = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
-            return new Truncheon.API.Dragon.LoginAPI(Username, Password, SecurityKey).status();
+            loginStatus = new Truncheon.API.Dragon.LoginAPI(Username, Password, SecurityKey).status();
+            if(loginStatus==false)
+            {
+                count--;
+                if(count <= 0)
+                {
+                    System.out.println("\n\n[ ERROR ] : Too many requests. Inputs blocked for 10 minutes.");
+                    Thread.sleep(600000);
+                    count = 1;
+                    console.readLine("Login attempt has been rearmed.\nIf you want to quit, press the CTRL + C keys, or press enter to continue.");
+                }
+            }
+            return loginStatus;
+            
         }
         catch(Exception E)
         {

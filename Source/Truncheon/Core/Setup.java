@@ -39,7 +39,7 @@ public class Setup
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Checking for previous installation and existing directories...");
-        String[] directoryList = {"./System", "./User", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
+        String[] directoryList = {"./System", "./Users", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
 
         for(int i = 0; i < directoryList.length; i++)
         {
@@ -53,10 +53,10 @@ public class Setup
         return;
     }
 
-    private void createFiles()
+    /*private void createFiles()
     {
         //create the M1, M2 and M3 files.
-    }
+    }*/
 
     private void initializeDatabase()
     {
