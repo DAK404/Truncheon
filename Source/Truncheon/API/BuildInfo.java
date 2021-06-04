@@ -5,7 +5,7 @@ public final class BuildInfo
     public void versionViewer()
     {
         clearScreen();
-        System.out.println("Truncheon Kernel 0.1.5_X");
+        System.out.println("Truncheon Kernel 0.1.6_X");
         System.out.println("Build Date: 28-May-2021");
         System.out.println("Notes: TEST MODE ACTIVATED!\n");
     }
@@ -41,12 +41,18 @@ public final class BuildInfo
         }
     }
 
-    public void debuggingAPI()
+    public final void about()throws Exception
     {
-        System.out.println("Program Debug API\nPowered by Truncheon Debugger 2.0");
-        System.out.println("Checking versionViewer API");
-        versionViewer();
-        System.out.println("Checking clearScreen API");
         clearScreen();
+        System.out.println("Nion: Truncheon\n_______________\n");
+
+        System.out.println("Iteration   : 8");
+        System.out.println("Version     : 0.1.6X");
+        System.out.println("Kernel      : Synergy");
+        System.out.println("Date        : 3-June-2021");
+        System.out.println("Build ID    : 3.6.2021_0817_TRNCHN_X");
+        System.out.println("\n\nDescription :\nTruncheon is the successor of Mosaic,\nbut now focusing on simplifying the\nprogram to give back the power to the\ndevelopers and end users.\n\n");
+        System.gc();
+        return;
     }
 }

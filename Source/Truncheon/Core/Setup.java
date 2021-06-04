@@ -11,8 +11,9 @@ public class Setup
 {
     Console console = System.console();
 
-    public void setupLogic()throws Exception
+    public final void setupLogic()throws Exception
     {
+        System.gc();
         new Truncheon.API.BuildInfo().versionViewer();
         console.readLine("Welcome to Truncheon! This program needs an initial configuration before using it. To begin the setup, press the Enter/Return key. Else press the Ctrl + C keys.\nWe recommend the Computer Administrator to setup Truncheon. Please contact your Administrator if you are a user and you're seeing this message.");
         showPrerequisites();
@@ -22,7 +23,7 @@ public class Setup
         cleanup();
     }
 
-    private void showPrerequisites()throws Exception
+    private final void showPrerequisites()throws Exception
     {
         //read the license File
         System.out.println("Do you accept the Product License? [Y/N]");
@@ -35,7 +36,7 @@ public class Setup
         return;
     }
 
-    private void createDirs()
+    private final void createDirs()
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Checking for previous installation and existing directories...");
@@ -53,12 +54,12 @@ public class Setup
         return;
     }
 
-    /*private void createFiles()
+    /*private final void createFiles()
     {
         //create the M1, M2 and M3 files.
     }*/
 
-    private void initializeDatabase()
+    private final void initializeDatabase()
     {
         //TODO : IMPORT THE FSAD TABLE AND IMPORT THE CURRENT DB IF EXISTS
 
@@ -86,6 +87,7 @@ public class Setup
             stmt.execute(sql);
             conn.close();
             System.out.println("Master User Database File has been initialized successfully!");
+            System.gc();
         }
         catch (Exception E)
         {
@@ -94,7 +96,7 @@ public class Setup
         return;
     }
 
-    private void createAdminUser()throws Exception
+    private final void createAdminUser()throws Exception
     {
         try
         {
@@ -106,9 +108,10 @@ public class Setup
         }
     }
 
-    private void cleanup()
+    private final void cleanup()
     {
         //remove unwanted files out of the directory
         new Truncheon.API.BuildInfo().versionViewer();
+        System.gc();
     }
 }

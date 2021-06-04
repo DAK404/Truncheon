@@ -4,20 +4,33 @@ import java.io.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public final class MainMenu
 {
     private byte count = 5;
     private boolean scriptMode = false;
+
+    private String username="";
+    private String name = "";
+    private String PIN = "";
+    private boolean admin = false;
     //private boolean pseudo = false;
 
     Console console=System.console();
 
-    public final void mainMenu()throws Exception
+    public final void mainMenuLogic()throws Exception
     {
         try
         {
             //login();
+            while(login() == false);
+            getUserDetails();
             menuShell();
+
         }
         catch(Exception E)
         {
@@ -25,8 +38,87 @@ public final class MainMenu
         }
     }
 
+    private final boolean login()throws Exception
+    {
+        try
+        {
+            boolean loginStatus = false;
+            new Truncheon.API.BuildInfo().versionViewer();
+            System.out.println("Login to Continue.\n");
+            System.out.println("Login Attempts Remaining: "+count+"\n");
+            username = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Username: "));
+            String password = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String securityKey = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+            loginStatus = new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status();
+            if(loginStatus==false)
+            {
+                count--;
+                if(count <= 0)
+                {
+                    System.out.println("\n\n[ ERROR ] : Too many requests. Inputs blocked for 10 minutes.");
+                    Thread.sleep(600000);
+                    count = 1;
+                    console.readLine("Login attempt has been rearmed.\nIf you want to quit, press the CTRL + C keys, or press enter to continue.");
+                }
+            }
+            password = "";
+            securityKey = "";
+            return loginStatus;
+            
+        }
+        catch(Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return false;
+    }
 
-    /*private void pseudoLogic()throws Exception
+    private final void menuShell()throws Exception
+    {
+        //Console console=System.console();
+        /*while(true)
+            menuLogic(console.readLine(name+"@SYSTEM> ").toLowerCase());*/
+
+        System.out.println(name+"@SYSTEM> ");
+        System.out.println("PIN : " + PIN);
+        System.out.println("Username : " + username);
+        System.out.println("Administrator : " + admin);
+            
+    }
+
+    private final void getUserDetails()throws Exception
+    {
+        
+        PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
+        name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
+        if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+            admin=true;
+        System.gc();
+        System.out.println("AAAAA");
+    }
+
+    private final String retrieveInfo(String command, String info)throws Exception
+    {
+        System.out.println("BBBBB");
+        String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+        Connection conn = DriverManager.getConnection(url);
+
+        PreparedStatement pstmt = conn.prepareStatement(command);
+		pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+		
+        String temp = rs.getString(info);
+
+        rs.close();
+        pstmt.close();
+        conn.close();
+
+        System.gc();
+        return temp;
+    }
+}
+
+    /*private final void pseudoLogic()throws Exception
     {
         try
         {
@@ -39,7 +131,7 @@ public final class MainMenu
         }
     }*/
 
-    private void scriptEngine(String fileName)throws Exception
+    /*private final void scriptEngine(String fileName)throws Exception
     {
         scriptMode = true;
         BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -57,17 +149,8 @@ public final class MainMenu
         scriptMode = false;
     }
 
-    private void menuShell()throws Exception
-    {
-        Console console=System.console();
-        String userName = console.readLine("Enter the User name: ");
-        String sysName = console.readLine("Enter the system name: ");
-        while(true)
-            menuLogic(console.readLine(userName+"@"+sysName+"> ").toLowerCase());
-            
-    }
+    
 
-    //modularize this code in such a way that the program accepts the string from either a file or a string
     private final void menuLogic(String input)
     {
         try
@@ -209,3 +292,5 @@ public final class MainMenu
         return false;
     }
 }
+*/
+

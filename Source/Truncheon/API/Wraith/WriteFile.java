@@ -17,6 +17,11 @@ public final class WriteFile
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
             System.gc();
+            File logFile = new File("./Logs");
+            if(logFile.exists()==false)
+            {
+                logFile.mkdir();
+            }
             BufferedWriter obj = new BufferedWriter(new FileWriter("./" + fileName + ".log", true));
             PrintWriter pr = new PrintWriter(obj);
             pr.println(dateFormat.format(date) + ": " + PrintToFile);
@@ -37,7 +42,7 @@ public final class WriteFile
             boolean appendFile = true;
             String fileName = "", message = "";
 
-            System.out.println("Mosaic Text Editor 1.8");
+            System.out.println("Mosaic Text Editor 2.0");
             System.out.println("______________________\n");
             
             Console console=System.console();

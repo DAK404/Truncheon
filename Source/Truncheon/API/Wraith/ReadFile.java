@@ -38,7 +38,7 @@ public final class ReadFile
         }
     }
 
-    private void readFile() throws Exception
+    private final void readFile() throws Exception
     {
         //A link to show the build info to the user's terminal
         new Truncheon.API.BuildInfo().versionViewer();

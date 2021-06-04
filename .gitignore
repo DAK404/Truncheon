@@ -1,5 +1,5 @@
-
 Source/*.bat
 Source/*.log
 Binaries/*
 Tools/SQLite Driver
+Source/Truncheon/Core/DebugMainMenu.java
