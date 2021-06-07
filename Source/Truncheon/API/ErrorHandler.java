@@ -36,14 +36,19 @@ public final class ErrorHandler
 			PrintWriter pw = new PrintWriter(sw);
 			E.printStackTrace(pw);
 
-            new Truncheon.API.Wraith.WriteFile().logToFile(sw.toString(), "./System/Public/Logs/Truncheon/Error");
-            
+            new Truncheon.API.Wraith.WriteFile().logToFile("--- ERROR REPORT ---\n", "Logs/ErrorLog");
+            new Truncheon.API.Wraith.WriteFile().logToFile("Program Stack Trace\n", "Logs/ErrorLog");
+            new Truncheon.API.Wraith.WriteFile().logToFile(sw.toString(), "Logs/ErrorLog");
+            new Truncheon.API.Wraith.WriteFile().logToFile("End Of Stack Trace\n", "Logs/ErrorLog");
             Console console=System.console();
             System.err.println("\n[ OPTIONAL ] : Any relevant information to add to file?");
-            new Truncheon.API.Wraith.WriteFile().logToFile("User Comments: " + console.readLine("User Comments: ") + "\n", "./System/Public/Logs/Truncheon/Error");
+            new Truncheon.API.Wraith.WriteFile().logToFile("User Comments: " + console.readLine("User Comments: ") + "\n", "Logs/ErrorLog");
+
+            new Truncheon.API.Wraith.WriteFile().logToFile("--- ERROR REPORT ---\n\n", "Logs/ErrorLog");
 
             sw.close();
             pw.close();
+            System.gc();
 
             System.err.println("\nError information has been written to log file successfully.");
             System.err.println("Program cannot be recovered to previous state. Unsaved data will be lost.\nPress enter to restart program.");

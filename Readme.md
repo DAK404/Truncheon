@@ -11,10 +11,11 @@
 4. [Building The Program](#building-the-program)
 5. [Working with APIs](#working-with-apis)
 6. [Creating custom APIs](#creating-custom-apis)
-7. [Database and JDBC](#database-and-jdbc)
-8. [Contribution Etiquettes](#contribution-etiquettes)
-8. [Documentation](#documentation)
-10. [Contact Information](#contact-information)
+7. [Nion Script Language](#nion-script-language)
+8. [Database and JDBC](#database-and-jdbc)
+9. [Contribution Etiquettes](#contribution-etiquettes)
+10. [Documentation](#documentation)
+11. [Contact Information](#contact-information)
 
 ---
 
@@ -27,7 +28,7 @@ Here are a few quick links to prerequisite software to help you get started righ
 * [OpenJDK](https://jdk.java.net)
 
 **RECOMMENDED SOFTWARE/RESOURCES**
-* [Visual Studio Code](https://code.visualstudio.com/) or [Notepad++](https://notepad-plus-plus.org/)
+* [Visual Studio Code](https://code.visualstudio.com/) or [Notepad++](https://notepad-plus-plus.org/) or a text editor of your choice!
 * [GitHub Account](https://github.com)
 * Basic Knowledge on [Java](https://docs.oracle.com/en/java/)
 * Basic RDBMS Concepts including JDBC
@@ -207,7 +208,7 @@ Easy and simple, right?
 The above examples can be executed by copying and pasting the source code provided above. By following the instructions correctly, you can create an example API which will print "Hello World!" on the screen, which can help you begin creating your own APIs for Truncheon.**</span>
 
 <span style="color:#FF0000">**ATTENTION:  
-APIS AVAILABLE WITH THE PROGRAM IS TESTED AND VERIFIED FOR ITS FUNCTIONALITY AND IMPLEMENTATION DUE TO THE NATURE OF THE [LICENSE](License.md) OF THE PROGRAM. 3RD PARTY APIS WHICH ARE NOT OPEN-SOURCE ARE NOT TESTED AND VERIFIED BY THE AUTHORS OF THIS PROGRAM. THE USERS ARE RESPONSIBLE FOR DOWNLOADING AND USING THE 3RD PARTY API PROGRAMS, WHICH MAY OR MAY NOT BE OPEN-SOURCED. THIS PROGRAM IS OPEN SOURCED.**</span> 
+APIS IMPLEMENTED IN THE OFFICIAL RELEASES OF TRUNCHEON IS TESTED. THE USER IS LIABLE FOR THE LOSS OF DATA OR ANY DAMAGES OR MALFUNCTION THAT ARISES FROM THE USE OF THE PROGRAM APIS. MORE REGARDING THIS IN THE [LICENSE](License.md) FILE. THAT BEING SAID, THE PROGRAM FEATURES AND APIS ARE THOROUGHLY CHECKED AND TESTED. FUTURE UPDATES MAY INCLUDE CHANGES TO THE API IMPLEMENTATION AND/OR TO THE API CALLS. ANY PROGRAM BUILT ON TOP OF TRUNCHEON MAY NEED TO UPDATE THEIR PROGRAM TO ACCOMODATE THE CHANGES. THIS PROGRAM IS OPEN SOURCE AND THE LINK TO THE SOURCE CODE AND DOCUMENTATION IS GIVEN ABOVE.**</span> 
 
 <span style="color:#e6b400">**NOTE:  
 DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READABLE LANGUAGE WHICH, EITHER, HAS A LINK PROVIDED TO CODE OR IS SHIPPED WITH THE PROGRAM.**</span>
@@ -218,18 +219,63 @@ DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READ
 
 # Database and JDBC
 
+**FEATURE UNDER DEVELOPMENT!**
+
 Truncheon uses the SQLite 3 JDBC system to work with the databases. It also has built in APIs to interface with the JDBC system in a more simplified format for the user defined APIs and modules to leverage functionalities easily.
 
 The Dragon API is one such example, which uses classes to create, delete, update credentials, login, pseudo, promote and demote a given user. All this is possible by using JDBC and the subsequent APIs used to interface with the JDBC easily.
 
-<span style="color:#FF0000">**ATTENTION:  
-This JDBC system is incomplete for the moment, please watch this space for this will be updated real soon!**</span>
+Currently, the Dragon API has a feature to add a new user into the system, but has not been linked to the mainmenu since the feature is being tested and worked on. A future update shall enable the feature!
+
+[Back To Top](#table-of-contents)
+
+---
+
+# Nion Script Language
+
+**FEATURE UNDER DEVELOPMENT!**
+
+A new functionality has been implemented in this iteration: A Script Engine.
+
+The script engine has been developed to automate and run user written scripts to perform actions easily. Multiple commands can be easily executed by the system with minimal user interaction with the system.
+
+The script language syntax is easy. It is similar to Windows&reg; Batch/Command scripting and Linux Shell scripting. The main advantage is irrespective of the platform that the program is run on, the scripts can be easily written and executed on either system.
+
+**NOTE: THE SCRIPTS CAN BE RUN USING TRUNCHEON SHELL ONLY. IT CANNOT BE USED BY THE NATIVE OS INTERPRETER DIRECTLY.**
+
+Any line starting with the '#' symbol signifies that it is a comment and not a statement to be executed by the interpreter.
+
+This scripting language is straight forward to use. The following script will help the user to display the details of the Truncheon shell and then print Hello World on the screen.
+
+```
+# Author: DAK (@DAK404)
+# Purpose: A demo scipt which can be executed by the Truncheon Shell.
+
+# Display the program information
+about
+
+# Print Hello World string on the screen
+echo "Hello World!"
+
+# To run any other command that the user wishes, refer to the commands available in the main menu. Any command in the main menu can be written here to perform the desired task.
+# <Name_Of_Command>
+
+# It is generally a good idea to indicate to the interpreter that it has reached the end of the script file. Once it reaches "End Script", any command that follows will not be executed.
+End Script
+```
+The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>">), which will redirect the user's input to the OS's interpreter.
+
+Scripting as of now cannot execute other scripts when a script is already being run. This is to prevent any malicious abuse of the functionality. A future update may or may not implement features to run a script within another script safely.
+
+As of now, the program and the scripting features are still under development and will provide a limited access to the scripting functionality. Feedbacks are always welcome!
 
 [Back To Top](#table-of-contents)
 
 ---
 
 # Contribution Etiquettes
+
+**NOTE : THESE GUIDELINES HAVE NOT BEEN FOLLOWED IN THE CURRENT CODEBASE SINCE THE CODE IS NOT RELEASE READY. THIS NOTE SHALL BE REMOVED ONCE THE CODE HAS BEEN FINALIZED AND IS DECLARED TO BE STABLE.**
 
 These are guidelines which describe the best way to implement the code in Truncheon. If the code quality meets the specified guidelines, the code in the pull request shall be reviewed (with changes requested possibly) and then merged with the main branch.
 
