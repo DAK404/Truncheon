@@ -263,7 +263,7 @@ echo "Hello World!"
 # It is generally a good idea to indicate to the interpreter that it has reached the end of the script file. Once it reaches "End Script", any command that follows will not be executed.
 End Script
 ```
-The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>">), which will redirect the user's input to the OS's interpreter.
+The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>"`), which will redirect the user's input to the OS's interpreter.
 
 Scripting as of now cannot execute other scripts when a script is already being run. This is to prevent any malicious abuse of the functionality. A future update may or may not implement features to run a script within another script safely.
 
