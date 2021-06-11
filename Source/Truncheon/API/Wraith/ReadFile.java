@@ -9,7 +9,7 @@ public final class ReadFile
 {
     File file = null;
 
-    public void ShowHelp(String helpFile)throws Exception
+    public void showHelp(String helpFile)throws Exception
     {
         try
         {
@@ -28,7 +28,13 @@ public final class ReadFile
         try
         {
             Console console = System.console();
-            file = new File( dir + console.readLine("Enter the name of the file to be read: "));
+            String fileName = console.readLine("Enter the name of the file to be read: ");
+            if(fileName.equals("") | fileName.equals(null))
+            {
+                System.out.println("Please enter a file name to open.");
+                return;
+            }
+            file = new File( dir + fileName);
             readFile();
             return;
         }

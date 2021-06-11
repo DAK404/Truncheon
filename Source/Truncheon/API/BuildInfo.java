@@ -7,7 +7,7 @@ public final class BuildInfo
         clearScreen();
         
         System.out.println("Truncheon Kernel 0.1.6_X");
-        System.out.println("Build Date: 28-May-2021");
+        System.out.println("Build Date: 28-May-2021\n\n");
     }
 
     public void clearScreen()
@@ -52,7 +52,7 @@ public final class BuildInfo
         System.out.println("Date        : 3-June-2021");
         System.out.println("Build ID    : 3.6.2021_0817_TRNCHN_X");
         System.out.println("OS          : " + System.getProperty("os.name"));
-        System.out.println("\n\nDescription :\nTruncheon is the successor of Mosaic,\nbut now focusing on simplifying the\nprogram to give back the power to the\ndevelopers and end users.\n\n");
+        System.out.println("\nDescription :\nTruncheon is the successor of Mosaic,\nbut now focusing on simplifying the\nprogram to give back the power to the\ndevelopers and end users.\n\n");
         System.gc();
         return;
     }

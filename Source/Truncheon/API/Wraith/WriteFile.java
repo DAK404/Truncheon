@@ -50,6 +50,11 @@ public final class WriteFile
             // TO-DO: Check the permissions if the users have priviliges to write to file.
 
             fileName = console.readLine("Enter the name of file to be saved: ");
+            if(fileName.equals("") | fileName.equals(null))
+            {
+                System.out.println("Filename cannot be left blank.");
+                return;
+            }
             File writeToFile = new File(dir+fileName);
             System.out.println("\nFile Saved At: " + writeToFile + "\n\n");
 

@@ -12,17 +12,17 @@ public final class Boot
             switch(Args[0])
             {
                 case "fastdbg":
-                        new Truncheon.Core.DebugMainMenu().mainMenuLogic();
+                        new Truncheon.Core.DebugMainMenu().debugProgram();
                         break;
 
                 case "normal":
                         new Truncheon.Core.Boot().bootLogic();
                         break;
 
-                default: 
+                default:
                         System.exit(101);
             }
-            
+
         }
         catch(Exception E)
         {
@@ -59,6 +59,9 @@ public final class Boot
                             break;
 
                         case "exit":
+                            System.exit(0);
+
+                        case "restart":
                             System.exit(0);
 
                         case "":

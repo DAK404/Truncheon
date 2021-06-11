@@ -41,7 +41,7 @@ class ProgramLauncher
                 *
                 * --- LAUNCHER EXIT TABLE ---
                 *
-                * NOTES: 
+                * NOTES:
                 *
                 * OBSERVE THAT THE PROCESS CREATION STATEMENTS ARE INSIDE THE WHILE LOOP.
                 * THIS IS IMPLEMENTED SO THAT WHEN THE PROGRAM EXITS AND ALTERS PARAMETERS,
@@ -69,14 +69,20 @@ class ProgramLauncher
 
                     case 1:
                             //Restart mode
+                            System.out.println("Program is restarting... Please wait.");
+                            Thread.sleep(2500);
                             break;
 
                     case 2:
                             //Error exit mode
+                            System.out.println("Program is exiting on an error.");
+                            Thread.sleep(2500);
                             System.exit(2);
 
                     case 3:
                             //Error restart mode
+                            System.out.println("Program is restarting due to an error... Please wait.");
+                            Thread.sleep(2500);
                             break;
 
                     case 4:
@@ -86,13 +92,6 @@ class ProgramLauncher
                     case 101:
                             //Invalid boot mode
                             System.exit(101);
-
-                    case 900:
-                            throw new Exception();
-
-                    case 150001:
-                            Args[1]="fastdbg";
-                            break;
 
                     default:
                             //Generic error output
