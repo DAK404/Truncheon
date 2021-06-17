@@ -7,7 +7,7 @@ include:
   - Readme.md
   - License.md
   - Index.md
-  - ./Documentation/EasyDocumentation/*/*.md
+  - ./Documentation/EasyDocumentation/Truncheon/Core/Boot.md
 
 theme: jekyll-theme-minimal
 logo: ./assets/Images/Logo.png
