@@ -7,7 +7,7 @@ include:
   - Readme.md
   - License.md
   - Index.md
-  - ./Documentation/Program_Documentation/index.html
+  - ./Documentation/EasyDocumentation/*/*.md
 
 theme: jekyll-theme-minimal
 logo: ./assets/Images/Logo.png
