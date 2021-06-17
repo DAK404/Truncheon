@@ -1,1 +1,0 @@
-All hashing and crypto APIs will be here

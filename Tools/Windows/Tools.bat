@@ -44,8 +44,8 @@ pause
 GOTO MENU
 
 :C_DOC
-dir /s /B &.java > sources.txt
-javadoc -d ../Documentation/Program_Documentation @sources.txt > DocumentationLog.log
+dir /s /B *.java > sources.txt
+javadoc -d ../Documentation/Program_Documentation -author -version @sources.txt > DocumentationLog.log
 del /s /q sources.txt
 echo Note: Documentation can be accessed via the "Index.html" in the root of project folder
 pause
