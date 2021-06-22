@@ -32,7 +32,7 @@ start "Truncheon: Release Build" java ProgramLauncher Truncheon normal
 GOTO MENU
 
 :DEBUG_N
-start "Truncheon: Debug Build" java DebugLauncher Truncheon normal
+start "Truncheon: Debug Build" java ProgramLauncher Truncheon fastdbg
 GOTO MENU
 
 :DEBUG
@@ -48,8 +48,8 @@ GOTO MENU
 
 :CLEAN_Prog
 @RD /s /q Truncheon
-@RD /s /q *.java
-@RD /s /q *.class
+@RD /s /q ./*.java
+@RD /s /q ./*.class
 ECHO Cleanup complete!
 pause
 GOTO MENU

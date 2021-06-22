@@ -5,25 +5,33 @@ CLS
 echo *****************************
 echo Truncheon Unified Toolset 2.0
 echo *****************************
-echo 1. Compile Program
-echo 2. Compile Launcher
-echo 3. Compile DebugLauncher
-echo 4. Compile Documentation
-echo 5. Open Command Prompt Here
-echo 6. Open Linux Shell Here
-echo 7. Open Toolset Help Page
-echo 8. Exit Toolset
+echo 1. Compile Program + Launcher
+echo 2. Compile Program
+echo 3. Compile Launcher
+echo 4. Compile DebugLauncher
+echo 5. Compile Documentation
+echo 6. Open Command Prompt Here
+echo 7. Open Linux Shell Here
+echo 8. Open Toolset Help Page
+echo 9. Exit Toolset
 echo *****************************
 echo.
-choice /N /C 12345678 /M "Enter an option [1-8] : "
-IF errorlevel == 8 GOTO :EOF
-IF errorlevel == 7 GOTO HELP
-IF errorlevel == 6 GOTO RUN_P2
-IF errorlevel == 5 GOTO RUN_P
-IF errorlevel == 4 GOTO C_DOC
-IF errorlevel == 3 GOTO C_DLNCH
-IF errorlevel == 2 GOTO C_LNCH
-IF errorlevel == 1 GOTO C_PRG
+choice /N /C 12345678 /M "Enter an option [1-9] : "
+IF errorlevel == 9 GOTO :EOF
+IF errorlevel == 8 GOTO HELP
+IF errorlevel == 7 GOTO RUN_P2
+IF errorlevel == 6 GOTO RUN_P
+IF errorlevel == 5 GOTO C_DOC
+IF errorlevel == 4 GOTO C_DLNCH
+IF errorlevel == 3 GOTO C_LNCH
+IF errorlevel == 2 GOTO C_PRG
+IF errorlevel == 1 GOTO C_ALL
+
+:C_ALL
+javac -d ../Binaries ./Truncheon/Core/Boot.java
+javac -d ../Binaries/ ProgramLauncher.java
+pause
+GOTO MENU
 
 :C_PRG
 javac -d ../Binaries ./Truncheon/Core/Boot.java

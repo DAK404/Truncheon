@@ -52,7 +52,7 @@ public final class Boot
      * Logic to accept the boot parameters and boot the program in the desired mode.
      * 
      * @param Args : Accept Program Arguments and boot modes
-     * @throws Exception : Accept general exceptions, which are not handled in the code logic.
+     * @throws Exception : Handle general exceptions during thrown during runtime.
      */
     public static void main(String[] Args)throws Exception
     {
@@ -79,6 +79,11 @@ public final class Boot
         }
     }
 
+    /**
+     * logic to access basic functions of the program.
+     * 
+     * @throws Exception : Handle general exceptions during thrown during runtime.
+     */
     private final void bootLogic()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();

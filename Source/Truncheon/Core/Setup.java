@@ -1,3 +1,26 @@
+/*
+
+----- PROGRAM DOCUMENTATION -----
+
+THIS PROGRAM IS UNDER DEVELOPMENT
+AND SHOULD NOT BE CONSIDERED
+RELEASE READY. FEATURES MAY BE
+BROKEN OR INCOMPLETE. COMPILE AND
+TEST AT YOUR OWN RISK.
+
+---------------------------------
+
+     --- Program Details ---     
+
+     Author  : DAK404
+     Date    : 17-June-2021
+     Version : 0.1.14
+
+     -----------------------
+
+*/
+
+
 package Truncheon.Core;
 
 import java.io.Console;
