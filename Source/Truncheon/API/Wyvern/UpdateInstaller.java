@@ -16,6 +16,9 @@ final class UpdateInstaller
 
     protected boolean install() 
     {
+        new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG START ---", "Logs/Update");
+        new Truncheon.API.Wraith.WriteFile().logToFile("Program Update Requested.", "Logs/Update");
+        new Truncheon.API.Wraith.WriteFile().logToFile("Attempting to install the the update file...", "Logs/Update");
         return new Truncheon.API.Wyvern.UpdateInstaller().unZipIt(INPUT_ZIP_FILE, OUTPUT_FOLDER);
     }
 
@@ -51,8 +54,11 @@ final class UpdateInstaller
                     continue;
                 }
 
-                System.out.println("[INFO] Installing : " + newFile.getAbsoluteFile()+"\r");
+                System.out.println("[INFO] Installing : " + newFile.getAbsoluteFile());
+                new Truncheon.API.Wraith.WriteFile().logToFile("File Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
+
                 
+
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
                 new File(newFile.getParent()).mkdirs();
@@ -69,11 +75,14 @@ final class UpdateInstaller
             zis.close();
             new File(INPUT_ZIP_FILE).delete();
             System.gc();
-            System.out.println("Install Successful.");
+            new Truncheon.API.Wraith.WriteFile().logToFile("[ ATTENTION ] : UPDATE INSTALL SUCCESSFUL!", "Logs/Update");
+            new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG END ---", "Logs/Update");
             return true;
         }
         catch (Exception ex)
         {
+            new Truncheon.API.Wraith.WriteFile().logToFile("[ ATTENTION ] : UPDATE INSTALL FAILED!", "Logs/Update");
+            new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG END ---", "Logs/Update");
             return false;
         }
     }
