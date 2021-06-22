@@ -24,8 +24,8 @@ public class Download
     {
         try
         {
-            System.out.println("Downloading update file from : https://github.com/DAK404/Truncheon/releases/latest/download/Truncheon.zip");
-            return downloadUsingNIO("https://github.com/DAK404/Truncheon/releases/latest/download/Truncheon.zip", "Update.zip");
+            System.out.println("Downloading update file from : https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip");
+            return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip", "Update.zip");
         }
         catch(Exception E)
         {
