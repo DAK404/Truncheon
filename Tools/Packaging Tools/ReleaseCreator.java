@@ -1,21 +1,25 @@
 import java.io.*;
 import java.util.*;
+import java.security.*;
+import java.util.zip.*;
 
 public class ReleaseCreator 
 {
     private boolean encrypt = false;
+    private List<String> fileList = new ArrayList<>();
 
-    
+    Console console=System.console();
     public static void main(String[] Args)throws Exception
     {
         new ReleaseCreator().logic();       
     }
 
-    private void logic()
+    private void logic()throws Exception
     {
-        Console console=System.console();
         while(isTestBuild() == false);
-
+        //cleanup
+        compressDirectory("./", "./Truncheon.zip");
+        checksumBuild();
     }
 
     private boolean isTestBuild()throws Exception
@@ -30,48 +34,73 @@ public class ReleaseCreator
         return true;
     }
 
-    private void createRelease(String parentDirectoryName)throws Exception
+    private void compressDirectory(String dir, String zipFile)throws Exception
     {
-        File fileToZip = new File("./");
-        FileOutputStream fos = new FileOutputStream("./Truncheon.zip");
-        ZipOutputStream zos = new ZipOutputStream(fos);
-        if (fileToZip == null || !fileToZip.exists()) 
-        {
-            return;
-        }
+        File directory = new File(dir);
+        getFileList(directory);
 
-        String zipEntryName = fileToZip.getName();
-        if (parentDirectoryName!=null && !parentDirectoryName.isEmpty()) 
+        try (FileOutputStream fos = new FileOutputStream(zipFile);
+             ZipOutputStream zos = new ZipOutputStream(fos)) 
         {
-            zipEntryName = parentDirectoryName + "/" + fileToZip.getName();
-        }
+            for (String filePath : fileList) {
+                System.out.println("Compressing: " + filePath);
 
-        if (fileToZip.isDirectory()) 
-        {
-            System.out.println("+" + zipEntryName);
-            for (File file : fileToZip.listFiles()) {
-                createRelease(zos, file, zipEntryName);
+                
+
+                // Creates a zip entry.
+                String name = filePath.substring(
+                    directory.getAbsolutePath().length() + 1,
+                    filePath.length());
+
+                ZipEntry zipEntry = new ZipEntry(name);
+                zos.putNextEntry(zipEntry);
+
+                // Read file content and write to zip output stream.
+                try (FileInputStream fis = new FileInputStream(filePath)) 
+                {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = fis.read(buffer)) > 0) 
+                        zos.write(buffer, 0, length);
+
+                    // Close the zip entry.
+                    zos.closeEntry();
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         } 
-        else 
+        catch (IOException e) 
         {
-            System.out.println("   " + zipEntryName);
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = new FileInputStream(fileToZip);
-            zos.putNextEntry(new ZipEntry(zipEntryName));
-            int length;
-            while ((length = fis.read(buffer)) > 0) {
-                zos.write(buffer, 0, length);
-            }
-            zos.closeEntry();
-            fis.close();
+            e.printStackTrace();
         }
     }
+
+    private void getFileList(File directory)
+    { 
+        File[] files = directory.listFiles();
+        if (files != null && files.length > 0) 
+        {
+            for (File file : files)
+            {
+                if (file.isFile()) 
+                    fileList.add(file.getAbsolutePath());
+                else
+                    getFileList(file);
+            }
+        }
+    }
+
 
     private void checksumBuild()throws Exception
     {
         String BuildHashMD5 = hashFile(new File("./Truncheon.zip"), "MD5");
         String BuildHashSHA = hashFile(new File("./Truncheon.zip"), "SHA3-256");
+
+        new File(BuildHashMD5+".md5").createNewFile();
+        new File(BuildHashSHA+".sha").createNewFile();
     }
 
     private void checksumFiles()throws Exception
@@ -79,11 +108,6 @@ public class ReleaseCreator
 
     }
 
-    private void checksumAlgorithms()throws Exception
-    {
-        
-    }
-    
     private final String convertByteArrayToHexString(byte[] arrayBytes)
     {
         StringBuffer stringBuffer = new StringBuffer();
@@ -102,9 +126,7 @@ public class ReleaseCreator
             int bytesRead = -1;
 
             while ((bytesRead = inputStream.read(bytesBuffer)) != -1)
-            {
-            digest.update(bytesBuffer, 0, bytesRead);
-            }
+                digest.update(bytesBuffer, 0, bytesRead);
 
             byte[] hashedBytes = digest.digest();
 
@@ -112,7 +134,7 @@ public class ReleaseCreator
         }
         catch (NoSuchAlgorithmException E)
         {
-            new Truncheon.API.ErrorHandler().handleException(E);
+            
         }
         return null;
     }

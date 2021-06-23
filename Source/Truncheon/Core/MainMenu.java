@@ -139,13 +139,12 @@ public final class MainMenu
             //If the login stasus is false, pass it on to decrement the login counter.
             if(loginStatus==false)
                 counterLogic();
+            else
+                count = 5;
 
             //Initialze the password and security key values to blank.
             password = "";
             securityKey = "";
-
-            //Initialize count back to 5 so that other functionalities can use the same counter.
-            count = 5;
 
             //Return the status back to the mainMenuLogic() method.
             return loginStatus;
