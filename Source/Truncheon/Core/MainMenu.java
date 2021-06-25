@@ -446,6 +446,12 @@ public final class MainMenu
                  * Prints the specified string on the screen.
                  */
                 case "echo":
+                if(cmd.length < 2)
+                {
+                    System.out.println("Echo Syntax: echo \"<string>\"");
+                    return;
+                }
+                
                 if(cmd[1].equalsIgnoreCase(null))
                 System.out.println("null");
                 else

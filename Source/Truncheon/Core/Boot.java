@@ -116,7 +116,7 @@ public final class Boot
                             System.exit(0);
 
                         case "restart":
-                            System.exit(0);
+                            System.exit(1);
 
                         case "":
                             break;
