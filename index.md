@@ -32,9 +32,9 @@ This program has powerful tools, APIs and security features which will help the 
 --- | --- 
 | Initial Release Date | TBA |
 | Latest Release Date | N/A |
-| Last Updated On | 13-April-2021 |
+| Last Updated On | 22-June-2021 |
 | Release Type | Alpha |
-| Program Documentation | [Not Available Yet](https://dak404.github.io/Truncheon/Documentation/index.html) |
+| Program Documentation | [Initial Documentation Available](https://dak404.github.io/Truncheon/Documentation/index.html) |
 
 ---
 
