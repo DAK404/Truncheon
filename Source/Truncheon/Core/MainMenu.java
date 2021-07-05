@@ -353,7 +353,7 @@ public final class MainMenu
                 else
                 {
                     scriptName = cmd[1];
-                    scriptEngine("./Trash/"+cmd[1] +".nScript");
+                    scriptEngine("./Users/"+username+"/"+cmd[1] +".nScript");
                     scriptName = "";
                 }
                 break;

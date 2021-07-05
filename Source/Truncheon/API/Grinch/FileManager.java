@@ -143,7 +143,7 @@ public class FileManager
                         System.out.println("Syntax:\n\nmove <directory_name><new_directory_name>\nmv <directory_name><new_directory_name>\n\nOR\n\nmove <filename> <new_filename>\nmv <filename> <new_filename>\n");
                         return true;
                     }
-                    copy_move_frontend(false, cmd[1], cmd[2]);
+                    copy_move_frontend(true, cmd[1], cmd[2]);
                     break;
 
                 default:
@@ -164,6 +164,7 @@ public class FileManager
         if(tPath.equals(".."))
         {
             prevDir();
+            System.gc();
             return;
         }
         
@@ -172,6 +173,7 @@ public class FileManager
             curDir=tPath;
         else
             System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.gc();
         return;
     }
 
@@ -185,6 +187,7 @@ public class FileManager
             System.out.println("[ WARNING ] : Permission Denied.");
             curDir="./Users/"+username+"/";
         }
+        System.gc();
         return;
     }
 
@@ -204,6 +207,7 @@ public class FileManager
             System.out.println("\n--- [ TREE VIEW ] ---\n");
             TreeHelper(0, tree);
             System.out.println();
+            System.gc();
             return;
         }
         catch(Exception E)
@@ -248,6 +252,7 @@ public class FileManager
         }
         else
             System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.gc();
         return;
     }
 
@@ -260,6 +265,7 @@ public class FileManager
                 new File(mkFile).mkdir();
             else
                 System.out.println("[ ERROR ] : The specified directory name already exists. Please try again.");
+            System.gc();
             return;
         }
         catch (Exception E)
@@ -284,6 +290,7 @@ public class FileManager
             }
             else
                 System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+            System.gc();
             return;
         }
         catch (Exception E)
@@ -313,6 +320,7 @@ public class FileManager
                 new File(oldFileName).renameTo(new File(newFileName));
             else
                 System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+            System.gc();            
             return;
         }
         catch (Exception E)
@@ -329,6 +337,7 @@ public class FileManager
             copy_move_helper(new File(curDir+source), new File(curDir+destination));
             if(move==true)
                 delHelper(new File(curDir+source));
+            System.gc();
             return;
         }
         catch(Exception E)
@@ -363,6 +372,8 @@ public class FileManager
                 in.close();
                 out.close();
             }
+            System.gc();
+            return;
         }
         catch(Exception E)
         {
