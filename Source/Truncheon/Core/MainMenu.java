@@ -468,8 +468,15 @@ public final class MainMenu
                 lockConsole();
                 break;
 
+                /**
+                 * 
+                 */
                 case "update":
                 new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
+                break;
+
+                case "grinch":
+                new Truncheon.API.Grinch.FileManager(username, name).fileManagerLogic();
                 break;
                 
                 /**
