@@ -34,7 +34,7 @@ public final class UpdateFrontEnd
                 System.out.println("Possible Solutions:\n- Retry the update.\n- Restart the network/routers and check the network connection stability.\n- Contact the Administrator for more information.\n-------------------------\n");
             }
             System.gc();
-            System.out.println("Press Enter to continue.");
+            System.out.println("Press ENTER to continue..");
             System.in.read();
             return;
         }

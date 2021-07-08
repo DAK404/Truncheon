@@ -146,6 +146,33 @@ public class FileManager
                     copy_move_frontend(true, cmd[1], cmd[2]);
                     break;
 
+                case "read":
+                    if(cmd.length < 2)
+                    {
+                        System.out.println("Syntax:\n\nread <filename>\n");
+                        return true;
+                    }
+                    new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], curDir);
+                    break;
+                
+                case "write":
+                    if(cmd.length < 2)
+                    {
+                        System.out.println("Syntax:\n\nwrite <filename>\n");
+                        return true;
+                    }
+                    new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], curDir);
+                    break;
+                
+                case "download":
+                    if(cmd.length < 3)
+                    {
+                        System.out.println("Syntax:\n\ndownload <URL> <filename>\n");
+                        return true;
+                    }
+                    new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], curDir+cmd[2]);
+                    break;
+
                 default:
                     System.out.println(input+" - Command not found.");
                     break;

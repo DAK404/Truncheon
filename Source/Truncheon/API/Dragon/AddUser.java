@@ -98,7 +98,7 @@ public final class AddUser
                             return;
 
                     default:
-                            console.readLine("Please enter a valid choice. Press enter to continue.");
+                            console.readLine("Please enter a valid choice. Press ENTER to continue..");
                             break;
                 }
             }
@@ -121,7 +121,7 @@ public final class AddUser
 
             //Show an account summary after a user has been created.
             displayDetails();
-            console.readLine("Press Enter to Continue.");
+            console.readLine("Press ENTER to continue..");
             return add();
         }
         catch(Exception E)
@@ -285,7 +285,7 @@ public final class AddUser
             pstmt.setString(6, ADM);
             pstmt.executeUpdate();
             conn.close();
-            console.readLine("The user \""+NAME+"\" was successfully created! Press enter to continue.");
+            console.readLine("The user \""+NAME+"\" was successfully created! Press ENTER to continue..");
             createDir();
             return true;
         }

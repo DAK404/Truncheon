@@ -68,7 +68,7 @@ public class ReleaseCreator
    
     private void createBuild()throws Exception
     {
-        File dir = new File("./");
+        File dir = new File("./Binaries");
         String zipDirName = "../Releases/Truncheon.zip";
 
         zipDirectory(dir, zipDirName);

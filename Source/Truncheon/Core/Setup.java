@@ -43,7 +43,7 @@ public class Setup
         createDirs();
         initializeDatabase();
         createAdminUser();
-        cleanup();
+        System.exit(1);
     }
 
     private final void showPrerequisites()throws Exception
@@ -84,8 +84,6 @@ public class Setup
 
     private final void initializeDatabase()
     {
-        //TODO : IMPORT THE FSAD TABLE AND IMPORT THE CURRENT DB IF EXISTS
-
         try
         {
             //Mud.db = Master User Database file
@@ -129,12 +127,5 @@ public class Setup
         {
             new Truncheon.API.ErrorHandler().handleException(E);
         }
-    }
-
-    private final void cleanup()
-    {
-        //remove unwanted files out of the directory
-        new Truncheon.API.BuildInfo().versionViewer();
-        System.gc();
     }
 }

@@ -1,6 +1,5 @@
 package Truncheon.API.Wraith;
 
-import java.io.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
@@ -23,12 +22,10 @@ public final class ReadFile
         }
     }
 
-    public void readUserFile(String dir)throws Exception
+    public void readUserFile(String fileName, String dir)throws Exception
     {
         try
         {
-            Console console = System.console();
-            String fileName = console.readLine("Enter the name of the file to be read: ");
             if(fileName.equals("") | fileName.equals(null))
             {
                 System.out.println("Please enter a file name to open.");
@@ -71,7 +68,7 @@ public final class ReadFile
             //After reading the file, close the streams opened.
             ob.close();
         }
-        System.out.println("Press Enter to Continue.");
+        System.out.println("Press ENTER to continue..");
         System.in.read();
         return;
     }

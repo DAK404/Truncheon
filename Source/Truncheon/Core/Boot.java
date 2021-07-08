@@ -60,10 +60,6 @@ public final class Boot
         {
             switch(Args[0])
             {
-                case "fastdbg":
-                        new Truncheon.Core.DebugMainMenu().debugProgram();
-                        break;
-
                 case "normal":
                         new Truncheon.Core.Boot().bootLogic();
                         break;

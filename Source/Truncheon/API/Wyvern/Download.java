@@ -10,14 +10,23 @@ public class Download
 {
     Console console=System.console();
 
-    public void downloadFrontEnd()
+    public boolean downloadFile(String URL, String fileName)throws Exception
     {
-        //Work in progress
-    }
+        try
+        {
+            if(URL.equalsIgnoreCase("") || fileName.equalsIgnoreCase("") || URL.equalsIgnoreCase(null) || fileName.equalsIgnoreCase(null))
+            {
+                System.out.println("[ ERROR ] : Invalid File Name. Enter a valid file name.");
+                return false;
+            }
 
-    public void downloadFrontEnd(String fileName)
-    {
-        //Work in Progress
+            return downloadUsingNIO(URL, fileName);
+        }
+        catch(Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return false;
     }
 
     public boolean downloadUpdate()throws Exception

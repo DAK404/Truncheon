@@ -6,8 +6,8 @@ public final class BuildInfo
     {
         clearScreen();
         
-        System.out.println("Nion: Truncheon v0.1.8T");
-        System.out.println("Build Date: 22-June-2021\n\n");
+        System.out.println("Nion: Truncheon v0.1.9T");
+        System.out.println("Build Date: 06-July-2021\n\n");
     }
 
     public void clearScreen()
@@ -47,10 +47,10 @@ public final class BuildInfo
         System.out.println("Nion: Truncheon\n_______________\n");
 
         System.out.println("Iteration   : 8");
-        System.out.println("Version     : 0.1.8T");
+        System.out.println("Version     : 0.1.9T");
         System.out.println("Kernel      : Synergy");
-        System.out.println("Date        : 22-June-2021");
-        System.out.println("Build ID    : 0.1.8T_22.6.2021_0817_TRNCHN");
+        System.out.println("Date        : 06-July-2021");
+        System.out.println("Build ID    : 0.1.9T_06.7.2021_1014_TRNCHN");
         System.out.println("OS          : " + System.getProperty("os.name"));
         System.out.println("\nDescription :\nTruncheon is the successor of Mosaic,\nbut now focusing on simplifying the\nprogram to give back the power to the\ndevelopers and end users.\n\n");
         System.gc();

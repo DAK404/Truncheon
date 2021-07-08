@@ -35,21 +35,18 @@ public final class WriteFile
         }
     }
 
-    public final void editFile(String dir)
+    public final void editFile(String fileName, String dir)
     {
         try
         {
             boolean appendFile = true;
-            String fileName = "", message = "";
+            String message = "";
 
-            System.out.println("Mosaic Text Editor 2.0");
+            System.out.println("Wraith Text Editor 1.5");
             System.out.println("______________________\n");
             
             Console console=System.console();
 
-            // TO-DO: Check the permissions if the users have priviliges to write to file.
-
-            fileName = console.readLine("Enter the name of file to be saved: ");
             if(fileName.equals("") | fileName.equals(null))
             {
                 System.out.println("Filename cannot be left blank.");
@@ -107,5 +104,6 @@ public final class WriteFile
         {
             new Truncheon.API.ErrorHandler().handleException(E);
         }
+        return;
     }
 }

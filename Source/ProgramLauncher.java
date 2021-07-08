@@ -115,7 +115,7 @@ class ProgramLauncher
             System.out.println("\n*****************************");
             System.out.println("!      STACK TRACE END      !");
             System.out.println("*****************************\n");
-            System.out.println("\nPress Enter To Continue.");
+            System.out.println("\nPress ENTER to continue..");
             System.in.read();
         }
     }

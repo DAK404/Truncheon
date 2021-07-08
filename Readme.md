@@ -25,7 +25,7 @@ Here are a few quick links to prerequisite software to help you get started righ
 
 **MANDATORY SOFTWARE**
 * [SQLite JDBC Driver](https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/)
-* [OpenJDK](https://jdk.java.net)
+* [OpenJDK](https://jdk.java.net) or any other JDK.
 
 **RECOMMENDED SOFTWARE/RESOURCES**
 * [Visual Studio Code](https://code.visualstudio.com/) or [Notepad++](https://notepad-plus-plus.org/) or a text editor of your choice!
@@ -40,7 +40,7 @@ Here are a few quick links to prerequisite software to help you get started righ
 * [License and Legal Information](License.md)
 * [Program Source Code](https://github.com/DAK404/Truncheon)
 * [Program Documentation](https://dak404.github.io/Truncheon/Documentation/index.html)
-* Download Latest Release (Coming Soon!)
+* [Latest Release](https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip)
 
 [Back To Top](#table-of-contents)
 
@@ -260,7 +260,7 @@ echo "Hello World!"
 # To run any other command that the user wishes, refer to the commands available in the main menu. Any command in the main menu can be written here to perform the desired task.
 # <Name_Of_Command>
 
-# It is generally a good idea to indicate to the interpreter that it has reached the end of the script file. Once it reaches "End Script", any command that follows will not be executed.
+# It is generally a good idea to indicate to the interpreter that it has reached the end of the script file. Once it reaches "End Script", any command after this command will not be executed.
 End Script
 ```
 The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>"`), which will redirect the user's input to the OS's interpreter.

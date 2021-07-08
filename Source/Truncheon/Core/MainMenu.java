@@ -318,7 +318,7 @@ public final class MainMenu
                  * continuing. Useful for reading long documents.
                  */
                 case "confirm":
-                System.out.println("\n\nPress Enter to Continue.");
+                System.out.println("\n\nPress ENTER to continue..");
                 System.in.read();
                 break;
                 
@@ -331,6 +331,10 @@ public final class MainMenu
                  */
                 case "script":
 
+                if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
+                {
+                    return;
+                }
                 //Check for the correct script syntax.
                 if(cmd.length <= 1)
                 {
@@ -477,6 +481,10 @@ public final class MainMenu
 
                 case "grinch":
                 new Truncheon.API.Grinch.FileManager(username, name).fileManagerLogic();
+                break;
+
+                case "pconfig":
+                new Truncheon.API.Minotaur.PolicyEditor().policyEditorLogic();
                 break;
                 
                 /**
