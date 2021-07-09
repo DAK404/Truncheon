@@ -16,7 +16,7 @@ echo 8. Open Toolset Help Page
 echo 9. Exit Toolset
 echo *****************************
 echo.
-choice /N /C 12345678 /M "Enter an option [1-9] : "
+choice /N /C 123456789 /M "Enter an option [1-9] : "
 IF errorlevel == 9 GOTO :EOF
 IF errorlevel == 8 GOTO HELP
 IF errorlevel == 7 GOTO RUN_P2
