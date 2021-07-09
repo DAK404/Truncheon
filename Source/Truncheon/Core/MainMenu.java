@@ -171,7 +171,7 @@ public final class MainMenu
             if(new File(fileName).exists() == false)
             {
                 //Return an error and pass the control back in case the file is not found.
-                System.out.println("[ ATTENTION ] : Script file "+fileName+".nScript has not been found.\nPlease check the directory of the script file and try again.");
+                System.out.println("[ ATTENTION ] : Script file "+fileName.replace(username, name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
 
@@ -357,7 +357,7 @@ public final class MainMenu
                 else
                 {
                     scriptName = cmd[1];
-                    scriptEngine("./Users/"+username+"/"+cmd[1] +".nScript");
+                    scriptEngine("./Users/"+username+"/"+cmd[1]+".nScript");
                     scriptName = "";
                 }
                 break;
