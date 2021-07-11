@@ -8,7 +8,7 @@ public final class ReadFile
 {
     File file = null;
 
-    public void showHelp(String helpFile)throws Exception
+    public final void showHelp(String helpFile)throws Exception
     {
         try
         {
@@ -22,7 +22,7 @@ public final class ReadFile
         }
     }
 
-    public void readUserFile(String fileName, String dir)throws Exception
+    public final void readUserFile(String fileName, String dir)throws Exception
     {
         try
         {

@@ -24,7 +24,7 @@ public class PolicyEditor
 
     }   
     
-    public void policyEditorLogic()throws Exception
+    public final void policyEditorLogic()throws Exception
     {
         if(authenticationLogic() == false)
         {
@@ -36,7 +36,7 @@ public class PolicyEditor
         return;
     }
 
-    private boolean authenticationLogic()
+    private final boolean authenticationLogic()
     {
         try
         {
@@ -60,7 +60,7 @@ public class PolicyEditor
         return false;
     }
 
-    private boolean checkAdminStatus(String u)throws Exception
+    private final boolean checkAdminStatus(String u)throws Exception
     {
         String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
         Connection conn = DriverManager.getConnection(url);
@@ -81,7 +81,7 @@ public class PolicyEditor
         return false;
     }
 
-    private void policyEditor()throws Exception
+    private final void policyEditor()throws Exception
     {
         
 
@@ -114,7 +114,7 @@ public class PolicyEditor
         }
     }
 
-    private void displaySettings()throws Exception
+    private final void displaySettings()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("         Minotaur Policy Editor 1.3         ");
@@ -132,7 +132,7 @@ public class PolicyEditor
         return;
     }
 
-    private void editPolicy()throws Exception
+    private final void editPolicy()throws Exception
     {
         displaySettings();
         do
@@ -146,7 +146,7 @@ public class PolicyEditor
         while(console.readLine("Do you want to modify another policy? [ Y | N ] > ").equalsIgnoreCase("y"));
     }
 
-    private void savePolicy(String policyName, String policyValue)throws Exception
+    private final void savePolicy(String policyName, String policyValue)throws Exception
     {
         props.setProperty(policyName, policyValue);
         FileOutputStream output = new FileOutputStream(fileName);
@@ -157,7 +157,7 @@ public class PolicyEditor
         return;
     }
 
-    private void resetPolicyFile()throws Exception
+    private final void resetPolicyFile()throws Exception
     {
         String [] resetValues = { "update", "download", "script", "filemanager"};
         for(int i = 0; i < resetValues.length; ++i)

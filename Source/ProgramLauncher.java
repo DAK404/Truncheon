@@ -52,16 +52,16 @@ class ProgramLauncher
                 */
 
                 //Spawn a ProcessBuilder called session_monitor to track the process's exit code
-                ProcessBuilder session_monitor=new ProcessBuilder("java", Args[0]+".Core.Boot", Args[1]);
+                ProcessBuilder sessionMonitor=new ProcessBuilder("java", Args[0]+".Core.Boot", Args[1]);
 
                 //Spawn a process with  called process_monitor to start the new process
-                Process process_monitor= session_monitor.inheritIO().start();
+                Process processMonitor= sessionMonitor.inheritIO().start();
 
                 //Wait for the process to complete its execution before it passes on to shunt logic
-                process_monitor.waitFor();
+                processMonitor.waitFor();
 
                 //Monitor the exit code of the process to perform certain actions based on the process exit code.
-                switch(process_monitor.exitValue())
+                switch(processMonitor.exitValue())
                 {
                     case 0:
                             //Normal exit mode
@@ -70,7 +70,6 @@ class ProgramLauncher
                     case 1:
                             //Restart mode
                             System.out.println("Program is restarting... Please wait.");
-                            Thread.sleep(2500);
                             break;
 
                     case 2:

@@ -60,31 +60,34 @@ public final class MainMenu
      * 
      * count : A variable which will hold the number of attempts remaining for the login and unlock console functionality.
      */
-    private byte count = 5;
+    private byte _count = 5;
+
+    private char _prompt = '*';
     
     /**
     * The following are the boolean datatype in this program:
     * 
-    * scriptMode : Denotes to the interpreter that a script is already running.
-    * admin : denotes to the interpreter that the user who has logged in is an administrator or not.
-    * pseudo : denotes to the interpreter that if a module is run with the admin privileges.
+    * _scriptMode : Denotes to the interpreter that a script is already running.
+    * _admin : denotes to the interpreter that the user who has logged in is an administrator or not.
+    * _pseudo : denotes to the interpreter that if a module is run with the admin privileges.
     */
-    private boolean scriptMode = false;
-    private boolean admin = false;
+    private boolean _scriptMode = false;
+    private boolean _admin = false;
     //private boolean pseudo = false;
 
     /**
      * The following are the String datatypes in this program.
      * 
-     * username : Holds the username of the authenticated user.
-     * name : Holds the name of the account holder authenticated.
-     * PIN : holds the unlock PIN, required to unlock the console.
-     * scriptName : holds the name of the script being currently run.
+     * _username : Holds the username of the authenticated user.
+     * _name : Holds the name of the account holder authenticated.
+     * _PIN : holds the unlock PIN, required to unlock the console.
+     * _scriptName : holds the name of the script being currently run.
      */
-    private String username="";
-    private String name = "";
-    private String PIN = "";
-    private String scriptName = "";
+    private String _username="";
+    private String _name = "";
+    private String _PIN = "";
+    private String _scriptName = "";
+    private String _privilegeStatus = "";
     
     
     Console console=System.console();
@@ -126,29 +129,41 @@ public final class MainMenu
             System.out.println("Login to Continue.\n");
 
             //Display the number of login attempts remaining.
-            System.out.println("Login Attempts Remaining: "+count+"\n");
+            System.out.println("Login Attempts Remaining: "+_count+"\n");
 
-            //Accept the Username, Password and SecurityKey in a hashed SHA3-256 format.
-            username = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Username: "));
-            String password = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-            String securityKey = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+            
 
             //Query the login details to check the credentials.
-            loginStatus = new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status();
+            loginStatus = challenge();
 
             //If the login stasus is false, pass it on to decrement the login counter.
             if(loginStatus==false)
                 counterLogic();
             else
-                count = 5;
-
-            //Initialze the password and security key values to blank.
-            password = "";
-            securityKey = "";
+                _count = 5;
 
             //Return the status back to the mainMenuLogic() method.
             return loginStatus;
             
+        }
+        catch(Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return false;
+    }
+
+    private final boolean challenge()
+    {
+        try
+        {
+            //Accept the Username, Password and SecurityKey in a hashed SHA3-256 format.
+            _username = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Username: "));
+            String password = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String securityKey = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+
+            System.gc();
+            return new Truncheon.API.Dragon.LoginAPI(_username, password, securityKey).status();
         }
         catch(Exception E)
         {
@@ -171,14 +186,14 @@ public final class MainMenu
             if(new File(fileName).exists() == false)
             {
                 //Return an error and pass the control back in case the file is not found.
-                System.out.println("[ ATTENTION ] : Script file "+fileName.replace(username, name)+" has not been found.\nPlease check the directory of the script file and try again.");
+                System.out.println("[ ATTENTION ] : Script file "+fileName.replace(_username, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
 
             //else begin executing the script.
 
             //Activate the script mode.
-            scriptMode = true;
+            _scriptMode = true;
 
             //Initialize a stream to read the given file.
             BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -205,7 +220,7 @@ public final class MainMenu
             br.close();
 
             //Deactivate the script mode.
-            scriptMode = false;
+            _scriptMode = false;
         }
         catch(Exception E)
         {
@@ -227,11 +242,11 @@ public final class MainMenu
         new Truncheon.API.BuildInfo().versionViewer();
 
         //Display if the user is an Administrator or not.
-        System.out.println("Administrator : " + admin);
+        System.out.println("User Privilege : " + _privilegeStatus);
 
         //Execute the menuLogic() method.
         while(true)
-            menuLogic(console.readLine(name+"@SYSTEM> "));
+            menuLogic(console.readLine(_name + "@SYSTEM" + _prompt + "> "));
     }
     
     /**
@@ -349,16 +364,16 @@ public final class MainMenu
                  * 
                  * DOCUMENTATION UNAVAILABLE.
                  */
-                if(scriptMode==true & scriptName.equals(cmd[1]))
+                if(_scriptMode==true & _scriptName.equals(cmd[1]))
                 {
-                    System.out.println(scriptName + " - Cannot Recursively Execute scripts.");
+                    System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
                     return;
                 }
                 else
                 {
-                    scriptName = cmd[1];
-                    scriptEngine("./Users/"+username+"/"+cmd[1]+".nScript");
-                    scriptName = "";
+                    _scriptName = cmd[1];
+                    scriptEngine("./Users/"+_username+"/"+cmd[1]+".nScript");
+                    _scriptName = "";
                 }
                 break;
                 
@@ -398,6 +413,7 @@ public final class MainMenu
                  */
                 case "clear":
                 new Truncheon.API.BuildInfo().versionViewer();
+                System.out.println("Administrator : " + _admin);
                 break;
                 
                  /**
@@ -479,12 +495,25 @@ public final class MainMenu
                 new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
                 break;
 
+                /**
+                 * 
+                 */
                 case "grinch":
-                new Truncheon.API.Grinch.FileManager(username, name).fileManagerLogic();
+                new Truncheon.API.Grinch.FileManager(_username, _name).fileManagerLogic();
                 break;
 
+                /**
+                 * 
+                 */
                 case "pconfig":
                 new Truncheon.API.Minotaur.PolicyEditor().policyEditorLogic();
+                break;
+
+                /**
+                 * 
+                 */
+                case "pseudo":
+                pseudo();
                 break;
                 
                 /**
@@ -519,10 +548,16 @@ public final class MainMenu
     private final void getUserDetails()throws Exception
     {
         //Retrieve the PIN, Name and admin status from the database and store it to the variables.
-        PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
-        name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
+        _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
+        _name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
+        _privilegeStatus = "Standard User";
         if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
-            admin=true;
+        {
+            _privilegeStatus = "Administrator";
+            _prompt = '#';
+            _admin=true;
+        }
+        
         System.gc();
     }
     
@@ -542,7 +577,7 @@ public final class MainMenu
         Connection conn = DriverManager.getConnection(url);
         
         PreparedStatement pstmt = conn.prepareStatement(command);
-        pstmt.setString(1, username);
+        pstmt.setString(1, _username);
         ResultSet rs = pstmt.executeQuery();
         
         String temp = rs.getString(info);
@@ -567,10 +602,8 @@ public final class MainMenu
         try
         {
             while(! (console.readLine("AFK@IDLE> ").equalsIgnoreCase("unlock") ));
-            while(! (new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Plase Authenticate with the Unlock PIN:\nPIN : ")).equals(PIN)))
-            {
+            while(! (new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Plase Authenticate with the Unlock PIN:\nPIN : ")).equals(_PIN)))
                 counterLogic();
-            }
             new Truncheon.API.BuildInfo().versionViewer();
             
             return;
@@ -588,15 +621,40 @@ public final class MainMenu
      * 
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
-    private void counterLogic()throws Exception
+    private final void counterLogic()throws Exception
     {
-        count--;
-        if(count <= 0)
+        _count--;
+        if(_count <= 0)
         {
             System.out.println("\n\n[ ERROR ] : Too many requests. Inputs blocked for 10 minutes.");
             Thread.sleep(600000);
-            count = 1;
+            _count = 1;
             console.readLine("Attempt has been rearmed. Please try again.");
+        }
+    }
+
+    private final void pseudo()
+    {
+        try
+        {
+            if(_admin == true)
+            {
+                System.out.println("Unable to run Pseudo: Administrator privileges already available.");
+                return;
+            }
+            else
+            {
+                if(challenge() == true && retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+                {
+                    _privilegeStatus = "Administrator";
+                    _admin = true;
+                    _prompt = '#';
+                }
+            }
+        }
+        catch(Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
         }
     }
 }

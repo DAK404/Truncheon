@@ -22,7 +22,7 @@ final class UpdateInstaller
         return new Truncheon.API.Wyvern.UpdateInstaller().unZipIt(INPUT_ZIP_FILE, OUTPUT_FOLDER);
     }
 
-    private boolean unZipIt(String zipFile, String outputFolder)
+    private final boolean unZipIt(String zipFile, String outputFolder)
     {
         byte[] buffer = new byte[1024];
         try

@@ -19,7 +19,7 @@ public class FileManager
         name = nm;
     }
 
-    public void fileManagerLogic()throws Exception
+    public final void fileManagerLogic()throws Exception
     {
         try
         {
@@ -41,7 +41,7 @@ public class FileManager
         }
     }
 
-    private boolean authenticationLogic()throws Exception
+    private final boolean authenticationLogic()throws Exception
     {
         try
         {
@@ -61,7 +61,7 @@ public class FileManager
         return false;
     }
 
-    private boolean fileManagerShell(String input)throws Exception
+    private final boolean fileManagerShell(String input)throws Exception
     {
         try
         {
@@ -186,7 +186,7 @@ public class FileManager
         return false;
     }
 
-    private void changeDir(String tPath)throws Exception
+    private final void changeDir(String tPath)throws Exception
     {
         if(tPath.equals(".."))
         {
@@ -204,7 +204,7 @@ public class FileManager
         return;
     }
 
-    private void prevDir()throws Exception
+    private final void prevDir()throws Exception
     {
         curDir = curDir.substring(0, curDir.length()-1);
         curDir = curDir.replace(curDir.substring(curDir.lastIndexOf('/'), curDir.length()), "/");
@@ -218,7 +218,7 @@ public class FileManager
         return;
     }
 
-    private boolean checkFile(String fName)throws Exception
+    private final boolean checkFile(String fName)throws Exception
     {
         if(new File(fName).exists() == false)
             return false;
@@ -226,7 +226,7 @@ public class FileManager
         return true;
     }
 
-    private void treeView()throws Exception
+    private final void treeView()throws Exception
     {
         try
         {
@@ -243,7 +243,7 @@ public class FileManager
         }
     }
 
-    private void TreeHelper(int indent, File file)
+    private final void TreeHelper(int indent, File file)
     {
         System.out.print("|");
 
@@ -261,7 +261,7 @@ public class FileManager
         }
     }
 
-    private void listFiles()throws Exception
+    private final void listFiles()throws Exception
     {
         //String format = "%1$-60s|%2$-50s|%3$-20s\n";
         String format = "%1$-50s|%2$-20s\n";
@@ -283,7 +283,7 @@ public class FileManager
         return;
     }
 
-    private void makeDir(String mkFile)throws Exception
+    private final void makeDir(String mkFile)throws Exception
     {
         try
         {
@@ -302,7 +302,7 @@ public class FileManager
         }
     }
 
-    private void del(String delFile)throws Exception
+    private final void del(String delFile)throws Exception
     {
         try
         {
@@ -327,7 +327,7 @@ public class FileManager
         }
     }
 
-    private void delHelper(File delfile)throws Exception
+    private final void delHelper(File delfile)throws Exception
     {
         if (delfile.listFiles() != null) 
         {
@@ -337,7 +337,7 @@ public class FileManager
         delfile.delete();
     }
 
-    private void rename(String oldFileName, String newFileName)throws Exception
+    private final void rename(String oldFileName, String newFileName)throws Exception
     {
         try
         {
@@ -357,7 +357,7 @@ public class FileManager
         }
     }
 
-    private void copy_move_frontend(boolean move, String source, String destination)throws Exception
+    private final void copy_move_frontend(boolean move, String source, String destination)throws Exception
     {
         try
         {
@@ -373,7 +373,7 @@ public class FileManager
         }
     }
 
-    private void copy_move_helper( File src, File dest ) throws Exception 
+    private final void copy_move_helper( File src, File dest ) throws Exception 
     {
         try
         {

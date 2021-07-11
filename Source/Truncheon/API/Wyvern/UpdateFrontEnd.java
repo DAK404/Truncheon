@@ -3,7 +3,7 @@ package Truncheon.API.Wyvern;
 public final class UpdateFrontEnd
 {
     
-    public void updateLogic() throws Exception 
+    public final void updateLogic() throws Exception 
     {
         try
         {
@@ -45,7 +45,7 @@ public final class UpdateFrontEnd
     }
 
 
-    private boolean download() throws Exception 
+    private final boolean download() throws Exception 
     {
         try 
         {
@@ -57,7 +57,7 @@ public final class UpdateFrontEnd
         }
     }
 
-    private boolean install() throws Exception {
+    private final boolean install() throws Exception {
         try 
         {
             return new Truncheon.API.Wyvern.UpdateInstaller().install();

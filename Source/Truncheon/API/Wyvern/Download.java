@@ -10,7 +10,7 @@ public class Download
 {
     Console console=System.console();
 
-    public boolean downloadFile(String URL, String fileName)throws Exception
+    public final boolean downloadFile(String URL, String fileName)throws Exception
     {
         try
         {
@@ -29,7 +29,7 @@ public class Download
         return false;
     }
 
-    public boolean downloadUpdate()throws Exception
+    public final boolean downloadUpdate()throws Exception
     {
         try
         {
@@ -43,7 +43,7 @@ public class Download
         return false;
     }
 
-    private boolean downloadUsingNIO(String urlStr, String file) throws Exception {
+    private final boolean downloadUsingNIO(String urlStr, String file) throws Exception {
         try 
         {
             URL website = new URL(urlStr);

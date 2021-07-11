@@ -2,7 +2,7 @@ package Truncheon.API;
 
 public final class BuildInfo
 {
-    public void versionViewer()
+    public final void versionViewer()
     {
         clearScreen();
         
@@ -10,7 +10,7 @@ public final class BuildInfo
         System.out.println("Build Date: 06-July-2021\n\n");
     }
 
-    public void clearScreen()
+    public final void clearScreen()
     {
         try
         {

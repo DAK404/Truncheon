@@ -23,7 +23,7 @@ public final class LoginAPI
 
     }
 
-    public boolean status()throws Exception
+    public final boolean status()throws Exception
     {
         try
         {
@@ -36,7 +36,7 @@ public final class LoginAPI
         }
     }
 
-    private boolean checkDetails()throws Exception
+    private final boolean checkDetails()throws Exception
     {
         Connection conn = null;
         try 
