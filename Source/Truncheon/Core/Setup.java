@@ -121,7 +121,7 @@ public class Setup
     {
         try
         {
-            new Truncheon.API.Dragon.AddUser(true, "Administrator", "Administrator").Setup();
+            new Truncheon.API.Dragon.AddUser().Setup();
         }
         catch(Exception E)
         {

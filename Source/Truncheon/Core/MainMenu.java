@@ -91,6 +91,9 @@ public final class MainMenu
     
     
     Console console=System.console();
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
     
     /**
      * Method which handles the login and mainmenu logics.
@@ -103,6 +106,7 @@ public final class MainMenu
         {
             while(login() == false);
             getUserDetails();
+            System.gc();
             menuShell();
         }
         catch(Exception E)
@@ -141,6 +145,8 @@ public final class MainMenu
                 counterLogic();
             else
                 _count = 5;
+
+            System.gc();
 
             //Return the status back to the mainMenuLogic() method.
             return loginStatus;
@@ -182,6 +188,7 @@ public final class MainMenu
     {
         try
         {
+            System.gc();
             //Check if the script file specifed exists.
             if(new File(fileName).exists() == false)
             {
@@ -204,8 +211,8 @@ public final class MainMenu
             //Read the script file, line by line.
             while ((scriptLine = br.readLine()) != null)
             {
-                //Check if the line is a comment in the script file.
-                if(scriptLine.toString().startsWith("#"))
+                //Check if the line is a comment or is blank in the script file and skip the line.
+                if(scriptLine.toString().startsWith("#") || scriptLine.equalsIgnoreCase(""))
                     continue;
 
                 //Check if End Script command is encountered, which will stop the execution of the script.
@@ -218,6 +225,7 @@ public final class MainMenu
 
             //Close the streams, run the garbage collector and clean.
             br.close();
+            System.gc();
 
             //Deactivate the script mode.
             _scriptMode = false;
@@ -240,6 +248,8 @@ public final class MainMenu
     {
         //Display the Program Information.
         new Truncheon.API.BuildInfo().versionViewer();
+        
+        System.gc();
 
         //Display if the user is an Administrator or not.
         System.out.println("User Privilege : " + _privilegeStatus);
@@ -261,6 +271,8 @@ public final class MainMenu
     {
         try
         {
+            System.gc();
+
             //String[] cmd = input.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
             /**
@@ -354,7 +366,7 @@ public final class MainMenu
                 if(cmd.length <= 1)
                 {
                     //Print the correct syntax if script syntax is malformed and return the program control.
-                    System.out.println("\nScript Syntax:\nscript <script_name/path>\n");
+                    System.out.println("\nScript Syntax:\n\nscript <script_name/path>\n");
                     return;
                 }
 
@@ -442,6 +454,12 @@ public final class MainMenu
                  * Opens the native OS's shell allow the user to execute the native OS's commands.
                  */
                 case "syshell":
+
+                if(challenge()==false)
+                {
+                    System.out.println("User Authentication failed. Cannot execute command \"syshell\"");
+                    return;
+                }
                 if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd").inheritIO().start().waitFor();
                 else
@@ -454,6 +472,11 @@ public final class MainMenu
                  * executes the specified operation in the native OS's shell.
                  */
                 case "sys":
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax\n\nsys <host_OS_command>");
+                    return;
+                }
                 if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", cmd[1]).inheritIO().start().waitFor();
                 else
@@ -515,6 +538,32 @@ public final class MainMenu
                 case "pseudo":
                 pseudo();
                 break;
+
+                case "usermgmt":
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nusermgmt <option>\n\nConsult the HELP file for more information.\n");
+                    return;
+                }
+                    switch(cmd[1].toLowerCase())
+                    {
+                        case "add":
+                            //add user functionality
+                            new Truncheon.API.Dragon.AddUser(_username, _name, _admin).addUserLogic();
+                            break;
+
+                        case "delete":
+                            //delete user functionality
+                            break;
+                        
+                        case "modify":
+                            //modify user
+                            break;
+
+                        default:
+                            System.out.println("Invalid option");
+                    }
+                    break;
                 
                 /**
                  * A default statement that will be executed when a command has not been found.
@@ -547,18 +596,31 @@ public final class MainMenu
      */
     private final void getUserDetails()throws Exception
     {
-        //Retrieve the PIN, Name and admin status from the database and store it to the variables.
-        _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
-        _name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
-        _privilegeStatus = "Standard User";
-        if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+        try
         {
-            _privilegeStatus = "Administrator";
-            _prompt = '#';
-            _admin=true;
+            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+            conn = DriverManager.getConnection(url);
+            //Retrieve the PIN, Name and admin status from the database and store it to the variables.
+            _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
+            _name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
+            _privilegeStatus = "Standard User";
+            if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+            {
+                _privilegeStatus = "Administrator";
+                _prompt = '#';
+                _admin=true;
+            }
+            
+            rs.close();
+            pstmt.close();
+            conn.close();
+
+            System.gc();
         }
-        
-        System.gc();
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
     }
     
     /**
@@ -573,19 +635,12 @@ public final class MainMenu
      */
     private final String retrieveInfo(String command, String info)throws Exception
     {
-        String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
-        Connection conn = DriverManager.getConnection(url);
-        
-        PreparedStatement pstmt = conn.prepareStatement(command);
+        pstmt = conn.prepareStatement(command);
         pstmt.setString(1, _username);
-        ResultSet rs = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
         
         String temp = rs.getString(info);
-        
-        rs.close();
-        pstmt.close();
-        conn.close();
-        
+
         System.gc();
         return temp;
     }
@@ -637,6 +692,7 @@ public final class MainMenu
     {
         try
         {
+            System.gc();
             if(_admin == true)
             {
                 System.out.println("Unable to run Pseudo: Administrator privileges already available.");
@@ -651,6 +707,7 @@ public final class MainMenu
                     _prompt = '#';
                 }
             }
+            System.gc();
         }
         catch(Exception E)
         {

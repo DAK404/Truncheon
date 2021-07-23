@@ -39,6 +39,7 @@ public final class LoginAPI
     private final boolean checkDetails()throws Exception
     {
         Connection conn = null;
+        boolean loginStatus = false;
         try 
         {
             conn = DriverManager.getConnection(url);
@@ -51,21 +52,23 @@ public final class LoginAPI
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) 
-            {
                 if (rs.getString("Username").equals(User) & rs.getString("Password").equals(Pass) & rs.getString("SecurityKey").equals(SecKey))
-                    return true;
-                else
-                    continue;
-            }
-            System.out.println("Incorrect Credentials, Please try again.");
+                    loginStatus = true;
+
+            if(loginStatus == false)
+                System.out.println("Incorrect Credentials, Please try again.");
+
             rs.close();
             conn.close();
-            return false;
+
+            System.gc();
+
+            return loginStatus;
         } 
         catch (Exception E) 
         {
             E.printStackTrace();
-            System.out.println("[ATTENTION] Incorrect Credentials. Please check details and try again.");
+            System.out.println("[ ATTENTION ] : Incorrect Credentials. Please check details and try again.");
             return false;
         }
     }

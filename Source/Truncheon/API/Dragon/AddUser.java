@@ -22,6 +22,7 @@ public final class AddUser
     private boolean Admin=false;
 
     private Console console = System.console();
+    Connection conn = null;
 
     public AddUser(String u, String n, boolean Administrator)
     {
@@ -33,14 +34,8 @@ public final class AddUser
         curUser=u;
     }
 
-    public AddUser(boolean Administrator, String u, String n)
+    public AddUser()
     {
-        if(Administrator==true)
-        {
-            Admin=true;
-        }
-        NAME=n;
-        UNM=u;
     }
 
     private final boolean GetCurrentCredentials()throws Exception
@@ -69,7 +64,12 @@ public final class AddUser
                     userType();
                 while (Details() == false);
             }
-            return;
+            if(add() == false)
+            {
+                System.out.println("Failed to perform requested operations.");
+                System.in.read();
+                return;
+            }
         }
         catch(Exception E)
         {
@@ -83,7 +83,7 @@ public final class AddUser
         {
             while(true)
             {
-
+                new Truncheon.API.BuildInfo().versionViewer();
                 System.out.println("[ ATTENTION ] : Do you want this account to be an Administrative account?");
                 System.out.println("An Administrator account has additional privileges compared to a standard user account.");
 
@@ -122,7 +122,7 @@ public final class AddUser
             //Show an account summary after a user has been created.
             displayDetails();
             console.readLine("Press ENTER to continue..");
-            return add();
+            return true;
         }
         catch(Exception E)
         {
@@ -152,7 +152,7 @@ public final class AddUser
         System.out.println("* Name must be in english, can contain alphabet and number combination");
         System.out.println("* Name must have a minimum of 2 characters or more.");
         System.out.println("* Name cannot contain spaces");
-        NAME=console.readLine("Account Name: ");
+        NAME=console.readLine("\nAccount Name: ");
         if(NAME.equals("") | NAME.equals(null) | (NAME.matches("^[a-zA-Z0-9]*$")==false) | NAME.equalsIgnoreCase("Administrator") | NAME.length()<2)
         {
             NAME="";
@@ -167,7 +167,7 @@ public final class AddUser
         displayDetails();
         System.out.println("\nUsername Policy\n");
         System.out.println("* Username cannot contain the word \"Administrator\"\n");
-        UNM  = console.readLine("Account Username: ");
+        UNM  = console.readLine("\nAccount Username: ");
         if(UNM.equals("") | UNM.contains("Administrator"))
         {
             UNM="";
@@ -184,7 +184,7 @@ public final class AddUser
         System.out.println("\nPassword Policy\n");
         System.out.println("* Password must be atleast 8 characters long.");
         System.out.println("* Password must be the same as the password confirmation\n");
-        PWD  = String.valueOf(console.readPassword("Account Password : "));
+        PWD  = String.valueOf(console.readPassword("\nAccount Password : "));
         String CPWD = String.valueOf(console.readPassword("Confirm Password : "));
         if(PWD.length() < 8 | ( PWD.equals(CPWD) == false ) )
         {
@@ -207,7 +207,7 @@ public final class AddUser
         displayDetails();
         System.out.println("\nSecurity Key Policy\n");
         System.out.println("* Security Key must be the same as the Security Key confirmation\n");
-        KEY  = String.valueOf(console.readPassword("Security Key : "));
+        KEY  = String.valueOf(console.readPassword("\nSecurity Key : "));
         String CKEY = String.valueOf(console.readPassword("Confirm Key  : "));
         if(KEY.equals(CKEY) == false)
         {
@@ -231,7 +231,7 @@ public final class AddUser
         System.out.println("\nPIN Policy\n");
         System.out.println("* PIN must be atleast 4 characters long.");
         System.out.println("* PIN must be the same as the PIN confirmation\n");
-        PIN  = String.valueOf(console.readPassword("Unlock PIN   : "));
+        PIN  = String.valueOf(console.readPassword("\nUnlock PIN   : "));
         String CPIN = String.valueOf(console.readPassword("Confirm PIN  : "));
         if(PIN.length() < 4 | ( PIN.equals(CPIN) == false ))
         {
@@ -269,12 +269,12 @@ public final class AddUser
 
     private final boolean add() throws Exception
     {
-
+        System.gc();
         String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
         try
         {
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url);
             String sql = "INSERT INTO FCAD(Name, Username, Password, SecurityKey, PIN, Administrator) VALUES(?,?,?,?,?,?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, NAME);
@@ -293,6 +293,7 @@ public final class AddUser
         {
             E.printStackTrace();
             System.out.println("Failed to create user. Please try again."); 
+            System.in.read();
             return false;
         }
     }
