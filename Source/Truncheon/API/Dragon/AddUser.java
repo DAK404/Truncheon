@@ -38,7 +38,7 @@ public final class AddUser
     {
     }
 
-    private final boolean GetCurrentCredentials()throws Exception
+    private final boolean authenticateUser()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
 
@@ -53,7 +53,7 @@ public final class AddUser
     {
         try
         {
-            if(GetCurrentCredentials()==false)
+            if(authenticateUser()==false)
             {
                 console.readLine();
                 return;

@@ -9,15 +9,15 @@ public final class LoginAPI
 {
     //a universal string to read the file
     
-    private String User, Pass, SecKey;
+    private String _User, _Pass, _SecKey;
 
     private String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
 
     public LoginAPI(String Us, String Pa, String SK)throws Exception
     {
-        User = Us;
-        Pass = Pa;
-        SecKey = SK;
+        _User = Us;
+        _Pass = Pa;
+        _SecKey = SK;
 
         Class.forName("org.sqlite.JDBC");
 
@@ -46,13 +46,13 @@ public final class LoginAPI
             String sql = "SELECT Username, Password, SecurityKey FROM FCAD WHERE Username = ? AND Password = ? AND SecurityKey = ?;";
             
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, User);
-            pstmt.setString(2, Pass);
-            pstmt.setString(3, SecKey);
+            pstmt.setString(1, _User);
+            pstmt.setString(2, _Pass);
+            pstmt.setString(3, _SecKey);
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) 
-                if (rs.getString("Username").equals(User) & rs.getString("Password").equals(Pass) & rs.getString("SecurityKey").equals(SecKey))
+                if (rs.getString("Username").equals(_User) & rs.getString("Password").equals(_Pass) & rs.getString("SecurityKey").equals(_SecKey))
                     loginStatus = true;
 
             if(loginStatus == false)

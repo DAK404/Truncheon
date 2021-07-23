@@ -346,7 +346,7 @@ public final class MainMenu
                  */
                 case "confirm":
                 System.out.println("\n\nPress ENTER to continue..");
-                System.in.read();
+                console.readLine();
                 break;
                 
                 /**
