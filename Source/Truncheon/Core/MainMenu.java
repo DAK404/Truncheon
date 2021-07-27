@@ -455,7 +455,7 @@ public final class MainMenu
                  */
                 case "syshell":
 
-                if(challenge()==false)
+                if(challenge() == false)
                 {
                     System.out.println("User Authentication failed. Cannot execute command \"syshell\"");
                     return;
@@ -539,6 +539,10 @@ public final class MainMenu
                 pseudo();
                 break;
 
+                case "__help":
+                new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Template.manual");
+                break;
+
                 case "usermgmt":
                 if(cmd.length < 2)
                 {
@@ -557,7 +561,7 @@ public final class MainMenu
                             break;
                         
                         case "modify":
-                            //modify user
+                            new Truncheon.API.Dragon.ModifyAccount(_username, _name, _PIN, _admin).modifyAccountLogic();
                             break;
 
                         default:

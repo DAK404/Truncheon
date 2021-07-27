@@ -1,5 +1,6 @@
 package Truncheon.API.Wraith;
 
+import java.io.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
@@ -13,7 +14,7 @@ public final class ReadFile
         try
         {
             file=new File("./Information/"+helpFile);
-            readFile();
+            readFile(true);
             return;
         }
         catch(Exception E)
@@ -32,7 +33,7 @@ public final class ReadFile
                 return;
             }
             file = new File( dir + fileName);
-            readFile();
+            readFile(false);
             return;
         }
         catch(Exception E)
@@ -41,10 +42,12 @@ public final class ReadFile
         }
     }
 
-    private final void readFile() throws Exception
+    private final void readFile(boolean helpMode) throws Exception
     {
         //A link to show the build info to the user's terminal
         new Truncheon.API.BuildInfo().versionViewer();
+
+        Console console=System.console();
 
         //A condition to check if the given file is found or not. This prevents exception, which may or may not disrupt the program.
 
@@ -61,15 +64,40 @@ public final class ReadFile
             //Initialize the string to be null
             String p = "";
 
-            //Logic to read the file line by line.
-            while ((p = ob.readLine()) != null)
-                System.out.println(p);
+            if(helpMode == false)
+            {
+                //Logic to read the file line by line.
+                while ((p = ob.readLine()) != null)
+                    System.out.println(p);
+            }
+            else
+            {
+                //Logic to read the help file.
+                while ((p = ob.readLine()) != null)
+                {
+                    if(p.equalsIgnoreCase("<end of page>"))
+                    {
+                        console.readLine("\nPress ENTER to Continue.");
+                        new Truncheon.API.BuildInfo().versionViewer();
+                        continue;
+                    }                    
+                    else if(p.equalsIgnoreCase("<end of help>"))
+                    {
+                        System.out.println("\n\nEnd of Help File.");
+                        break;
+                    }
+                    else if(p.toString().startsWith("#"))
+                        continue;
+                    
+                    System.out.println(p);
+                }
+            }
 
             //After reading the file, close the streams opened.
             ob.close();
         }
-        System.out.println("Press ENTER to continue..");
-        System.in.read();
+        console.readLine("Press ENTER to continue.");
+        new Truncheon.API.BuildInfo().versionViewer();
         return;
     }
 

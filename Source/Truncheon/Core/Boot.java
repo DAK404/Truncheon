@@ -85,6 +85,8 @@ public final class Boot
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Verifying Installation...");
         if(new File("./System").exists() == true & new File("./Users").exists() == true)
+        {
+            System.out.print("OK");
             if(new File("./System/Public/Truncheon").exists() == true & new File("./System/Private/Truncheon").exists() == true)
             {
                 Console console=System.console();
@@ -101,7 +103,7 @@ public final class Boot
                             break;
 
                         case "help":
-                            System.out.println("Available commands:\n\nlogin\nabout");
+                            //Implement help file reading functionality here.
                             break;
 
                         case "clear":
@@ -123,6 +125,7 @@ public final class Boot
                     }
                 }
             }
+        }
         new Truncheon.Core.Setup().setupLogic();
     }
 }
