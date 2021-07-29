@@ -53,6 +53,8 @@ public final class AddUser
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("usermgmt") == false)
+                return;
             if(authenticateUser()==false)
             {
                 console.readLine();

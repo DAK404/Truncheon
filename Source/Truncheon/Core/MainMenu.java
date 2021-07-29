@@ -186,6 +186,10 @@ public final class MainMenu
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
+                if(_admin == false)
+                    return;
+
             System.gc();
             //Check if the script file specifed exists.
             if(new File(fileName).exists() == false)
@@ -469,9 +473,15 @@ public final class MainMenu
                  * executes the specified operation in the native OS's shell.
                  */
                 case "sys":
+
                 if(cmd.length < 2)
                 {
                     System.out.println("Syntax\n\nsys <host_OS_command>");
+                    return;
+                }
+                if(challenge() == false)
+                {
+                    System.out.println("User Authentication failed. Cannot execute command \"syshell\"");
                     return;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
@@ -519,7 +529,7 @@ public final class MainMenu
                  * 
                  */
                 case "grinch":
-                new Truncheon.API.Grinch.FileManager(_username, _name).fileManagerLogic();
+                new Truncheon.API.Grinch.FileManager(_username, _name, _admin).fileManagerLogic();
                 break;
 
                 /**

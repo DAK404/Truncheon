@@ -27,6 +27,8 @@ public final class ReadFile
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("read") == false)
+                return;
             if(fileName.equals("") | fileName.equals(null))
             {
                 System.out.println("Please enter a file name to open.");

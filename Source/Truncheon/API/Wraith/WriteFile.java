@@ -39,6 +39,8 @@ public final class WriteFile
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("write") == false)
+                return;
             boolean appendFile = true;
             String message = "";
 

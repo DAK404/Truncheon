@@ -193,6 +193,9 @@ public final class ModifyAccount
     {
         try
         {
+            if(_admin == false)
+                return;
+
             String user = console.readLine("Enter the name of the user to " + status + ": ");
             if(user.equalsIgnoreCase("Administrator"))
             {

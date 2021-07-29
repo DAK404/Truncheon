@@ -14,6 +14,9 @@ public class Download
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("download") == false)
+                return false;
+                
             if(URL.equalsIgnoreCase("") || fileName.equalsIgnoreCase("") || URL.equalsIgnoreCase(null) || fileName.equalsIgnoreCase(null))
             {
                 System.out.println("[ ERROR ] : Invalid File Name. Enter a valid file name.");

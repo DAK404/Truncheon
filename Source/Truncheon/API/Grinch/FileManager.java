@@ -9,27 +9,34 @@ import java.io.OutputStream;
 
 public class FileManager 
 {
-    String username, name, curDir;
+    private String username, name, curDir;
+    private boolean _admin = false;
+
 
     Console console = System.console();
 
-    public FileManager(String usn, String nm)
+    public FileManager(String usn, String nm, boolean admin)
     {
         username = usn;
         name = nm;
+        _admin = admin;
     }
 
     public final void fileManagerLogic()throws Exception
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("update") == false)
+                if(_admin == false)
+                    return;
+
             if(authenticationLogic() == false)
             {
                 System.out.println("Authentication failed. Returning to main menu.");
                 Thread.sleep(5000);
                 return;
             }
-
+                                
             curDir="./Users/"+username+'/';
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Grinch File Manager 1.7");

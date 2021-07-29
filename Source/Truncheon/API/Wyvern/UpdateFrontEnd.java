@@ -7,6 +7,9 @@ public final class UpdateFrontEnd
     {
         try
         {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("update") == false)
+                return;
+
             new Truncheon.API.BuildInfo().about();
             System.out.println("------------------------\n[ Wyvern Updater 1.1.3 ]\n------------------------\n");
             System.out.println("[ ATTENTION ] : The program will download and install updates from the official repository.\n[  WARNING  ] : DO NOT TURN OFF THE SYSTEM, CHANGE NETWORK STATES OR CLOSE THIS PROGRAM.\nBY DOING THIS, YOU MIGHT RISK THE LOSS OF DATA OR PROGRAM INSTABILITY.\n\nSince this program takes minimal resources and time to install the update, please wait for\nthe update to complete and then perform other operations.\n\n[ ATTENTION ] : It is advised that the program should be restarted after applying the updates.\nThis will help in applying and reflecting the changes implemented in the new update.");
