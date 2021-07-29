@@ -550,7 +550,7 @@ public final class MainMenu
                             break;
 
                         case "delete":
-                            //delete user functionality
+                            new Truncheon.API.Dragon.DeleteUser(_username, _name).deleteUserLogic();
                             break;
                         
                         case "modify":

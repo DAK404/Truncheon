@@ -3,6 +3,7 @@ package Truncheon.API.Dragon;
 //import java libraries
 import java.io.File;
 import java.io.Console;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,7 +23,6 @@ public final class AddUser
     private boolean Admin=false;
 
     private Console console = System.console();
-    Connection conn = null;
 
     public AddUser(String u, String n, boolean Administrator)
     {
@@ -274,7 +274,7 @@ public final class AddUser
         try
         {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection(url);
+            Connection conn = DriverManager.getConnection(url);
             String sql = "INSERT INTO FCAD(Name, Username, Password, SecurityKey, PIN, Administrator) VALUES(?,?,?,?,?,?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, NAME);
@@ -284,6 +284,7 @@ public final class AddUser
             pstmt.setString(5, PIN);
             pstmt.setString(6, ADM);
             pstmt.executeUpdate();
+            pstmt.close();
             conn.close();
             console.readLine("The user \""+NAME+"\" was successfully created! Press ENTER to continue..");
             createDir();

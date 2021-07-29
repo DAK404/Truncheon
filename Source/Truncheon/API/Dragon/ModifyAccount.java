@@ -2,6 +2,10 @@ package Truncheon.API.Dragon;
 
 import java.io.Console;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
 public final class ModifyAccount
 {
     private String _user;
@@ -24,7 +28,11 @@ public final class ModifyAccount
     public final void modifyAccountLogic()throws Exception
     {
         System.gc();
-        authenticateUser();
+        if(authenticateUser() == false)
+        {
+            System.out.println("Incorrect Credentials. Access Denied.");
+            return;
+        }
         while(modifyAccountMenu() == true);
         //return;
     }
@@ -32,12 +40,11 @@ public final class ModifyAccount
     private final boolean authenticateUser()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
-
         System.out.println("[ ATTENTION ] : Please authenticate credentials before modifying account details.");
         System.out.println("Username: "+_name);
-        String CurrentPassword=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-        String Current_key=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
-        return new Truncheon.API.Dragon.LoginAPI(_user, CurrentPassword, Current_key).status();
+        String currentPassword=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+        String currentKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+        return new Truncheon.API.Dragon.LoginAPI(_user, currentPassword, currentKey).status();
     }
 
     private final boolean modifyAccountMenu()throws Exception
@@ -61,21 +68,26 @@ public final class ModifyAccount
                 break;
 
             case "psw":
-                //password changing logic
+                while(getPassword() == false);
+                updateValues("Password", _password, _user);
                 break;
 
             case "key":
-                //_key changing logic
+                while(getKey() == false);
+                updateValues("SecurityKey", _key, _user);
                 break;
 
             case "pin":
-                //pass on the pin cred changing logic
+                while(getPIN() == false);
+                updateValues("PIN", _pin, _user);
                 break;
 
             case "promote":
+                userStatusChange("promote");
                 break;
 
             case "demote":
+                userStatusChange("demote");
                 break;
             
             case "exit":
@@ -135,7 +147,7 @@ public final class ModifyAccount
     *
     * @throws Exception :  Throws any exception caught during runtime/execution
     */
-    private final boolean get_key()throws Exception
+    private final boolean getKey()throws Exception
     {
         displayDetails();
         System.out.println("\nSecurity _key Policy\n");
@@ -175,5 +187,60 @@ public final class ModifyAccount
         CPIN = "";
         _pin  = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(_pin);
         return true;
+    }
+
+    private void userStatusChange(String status)throws Exception
+    {
+        try
+        {
+            String user = console.readLine("Enter the name of the user to " + status + ": ");
+            if(user.equalsIgnoreCase("Administrator"))
+            {
+                System.out.println("Cannot promote or demote the user Administrator.");
+                return;
+            }
+            if(console.readLine("[ ATTENTION ] : ARE YOU SURE YOU WANT TO " + status.toUpperCase() + " " + user + "?").equalsIgnoreCase("y"))
+            {
+                user = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(user);
+                switch(status)
+                {
+                    case "promote":
+                    updateValues("Administrator", "Yes", user);
+                    break;
+
+                    case "demote":
+                    updateValues("Administrator", "No", user);
+                    break;
+                }
+            }
+            System.gc();
+        }
+        catch (Exception E) 
+        {
+            E.printStackTrace();
+        }
+    }
+
+    private void updateValues(String credential, String value, String targetUser)throws Exception
+    {
+        try
+        {
+            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            String sql = "UPDATE FCAD SET " + credential + " = ? WHERE Username = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, value);
+            pstmt.setString(2, targetUser);
+            pstmt.executeUpdate();
+            pstmt.close();
+            conn.close();
+            System.gc();
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
+            console.readLine();
+        }
     }
 }
