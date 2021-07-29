@@ -91,9 +91,7 @@ public final class MainMenu
     
     
     Console console=System.console();
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    
     
     /**
      * Method which handles the login and mainmenu logics.
@@ -425,7 +423,7 @@ public final class MainMenu
                  */
                 case "clear":
                 new Truncheon.API.BuildInfo().versionViewer();
-                System.out.println("Administrator : " + _admin);
+                System.out.println("Administrator : " + _privilegeStatus);
                 break;
                 
                  /**
@@ -436,8 +434,7 @@ public final class MainMenu
                  */
                 case "?":
                 case "help":
-                System.out.println("Available options:\n");
-                System.out.println("\nContextual Help\n- Script : Run a script in Truncheon Shell\n- Exit : Exit the program\n- Restart : Restart the program\n- Clear : Clear the screen\n- Help : Open this contextual Help\n- FeatureX : run a feature with X being the ID of the feature");
+                new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/MainMenu.manual");
                 break;
                 
                 /**
@@ -539,10 +536,6 @@ public final class MainMenu
                 pseudo();
                 break;
 
-                case "__help":
-                new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Template.manual");
-                break;
-
                 case "usermgmt":
                 if(cmd.length < 2)
                 {
@@ -602,22 +595,12 @@ public final class MainMenu
     {
         try
         {
-            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
-            conn = DriverManager.getConnection(url);
             //Retrieve the PIN, Name and admin status from the database and store it to the variables.
             _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
             _name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
             _privilegeStatus = "Standard User";
             if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
-            {
-                _privilegeStatus = "Administrator";
-                _prompt = '#';
-                _admin=true;
-            }
-            
-            rs.close();
-            pstmt.close();
-            conn.close();
+                elevateStatus();
 
             System.gc();
         }
@@ -639,11 +622,17 @@ public final class MainMenu
      */
     private final String retrieveInfo(String command, String info)throws Exception
     {
-        pstmt = conn.prepareStatement(command);
+        String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+        Connection conn = DriverManager.getConnection(url);
+        PreparedStatement pstmt = conn.prepareStatement(command);
         pstmt.setString(1, _username);
-        rs = pstmt.executeQuery();
+        ResultSet rs = pstmt.executeQuery();
         
         String temp = rs.getString(info);
+
+        rs.close();
+        pstmt.close();
+        conn.close();
 
         System.gc();
         return temp;
@@ -705,11 +694,7 @@ public final class MainMenu
             else
             {
                 if(challenge() == true && retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
-                {
-                    _privilegeStatus = "Administrator";
-                    _admin = true;
-                    _prompt = '#';
-                }
+                    elevateStatus();
             }
             System.gc();
         }
@@ -717,5 +702,12 @@ public final class MainMenu
         {
             new Truncheon.API.ErrorHandler().handleException(E);
         }
+    }
+
+    private void elevateStatus()
+    {
+        _privilegeStatus = "Administrator";
+        _admin = true;
+        _prompt = '!';
     }
 }

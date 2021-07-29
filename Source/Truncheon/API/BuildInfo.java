@@ -5,9 +5,11 @@ public final class BuildInfo
     public final void versionViewer()
     {
         clearScreen();
-        
-        System.out.println("Nion: Truncheon v0.1.9T");
-        System.out.println("Build Date: 06-July-2021\n\n");
+        System.out.println("///////////////////////\n");
+        System.out.println("    Nion: Truncheon    ");
+        System.out.println("     Version 0.2.0     \n");
+        System.out.println("///////////////////////");
+        System.out.println("\n! TEST BUILD !\n");
     }
 
     public final void clearScreen()

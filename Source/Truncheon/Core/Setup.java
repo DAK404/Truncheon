@@ -25,6 +25,9 @@ package Truncheon.Core;
 
 import java.io.Console;
 import java.io.File;
+import java.io.FileOutputStream;
+
+import java.util.Properties;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -32,7 +35,14 @@ import java.sql.DriverManager;
 
 public class Setup
 {
+    private boolean _legal = false;
+    private boolean _dirs = false;
+    private boolean _dbInit = false;
+    private boolean _policyInit = false;
+    private boolean _adminAccCreate = false;
+
     Console console = System.console();
+    Properties props = null;
 
     public final void setupLogic()throws Exception
     {
@@ -43,38 +53,55 @@ public class Setup
         createDirs();
         initializeDatabase();
         createAdminUser();
+        initializePolicy();
+
+        displayStatus();
+        System.out.println("\n===============\n\nSetup has been completed successfully! Would you like to check for a system update?\n[ ATTENTION ] : You will require an internet connection to check and download the updates.\n\n");
+        if(console.readLine().equalsIgnoreCase("y"))
+            new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
         System.exit(1);
     }
 
     private final void showPrerequisites()throws Exception
     {
-        //read the license File
-        System.out.println("Do you accept the Product License? [Y/N]");
+        new Truncheon.API.Wraith.ReadFile().showHelp("License.eula");
+        System.out.println("\nDo you accept the Product License? [Y/N]");
         if(console.readLine().toLowerCase().equalsIgnoreCase("y"))
-            //read the Readme File
-            //Read the changelog file
-            System.out.println("Accepted agreement placeholder");
+            //read changelog file
+            new Truncheon.API.Wraith.ReadFile().showHelp("changelog.txt");
         else
             System.exit(2);
+
+        _legal = true;
         return;
     }
 
     private final void createDirs()
     {
-        new Truncheon.API.BuildInfo().versionViewer();
-        System.out.println("Checking for previous installation and existing directories...");
-        String[] directoryList = {"./System", "./Users", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
-
-        for(int i = 0; i < directoryList.length; i++)
+        try
         {
-            File makeDir =  new File(directoryList[i]);
+            displayStatus();
+            new Truncheon.API.BuildInfo().versionViewer();
+            System.out.println("Checking for previous installation and existing directories...");
+            String[] directoryList = {"./System", "./Users", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
 
-            if(makeDir.exists() == false)
-                makeDir.mkdirs();
-            else
-                System.out.println("Folder " + directoryList[i]+ " Exists.");
+            for(int i = 0; i < directoryList.length; i++)
+            {
+                File makeDir =  new File(directoryList[i]);
+
+                if(makeDir.exists() == false)
+                    makeDir.mkdirs();
+                else
+                    System.out.println("Folder " + directoryList[i]+ " Exists.");
+            }
+
+            _dirs = true;
+            return;
         }
-        return;
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
     }
 
     /*private final void createFiles()
@@ -86,6 +113,7 @@ public class Setup
     {
         try
         {
+            displayStatus();
             //Mud.db = Master User Database file
             String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
 
@@ -109,6 +137,8 @@ public class Setup
             conn.close();
             System.out.println("Master User Database File has been initialized successfully!");
             System.gc();
+
+            _dbInit = true;
         }
         catch (Exception E)
         {
@@ -121,11 +151,71 @@ public class Setup
     {
         try
         {
+            displayStatus();
             new Truncheon.API.Dragon.AddUser().Setup();
+
+            _adminAccCreate = true;
         }
         catch(Exception E)
         {
             new Truncheon.API.ErrorHandler().handleException(E);
+        }
+    }
+
+    private void initializePolicy()throws Exception
+    {
+        try 
+        {
+            props = new Properties();
+            String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
+            for(int i = 0; i < resetValues.length; ++i)
+                initPolicyHelper(resetValues[i], "on");
+        } 
+        catch (Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
+    private void initPolicyHelper(String policyName, String policyValue)throws Exception
+    {
+        try
+        {
+            props.setProperty(policyName, policyValue);
+            FileOutputStream output = new FileOutputStream("./System/Private/Truncheon/Policy.burn");
+            props.storeToXML(output, "TruncheonSettings");
+            output.close();
+            System.gc();
+            _policyInit = true;
+            return;
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
+    private void displayStatus()throws Exception
+    {
+        try 
+        {
+            new Truncheon.API.BuildInfo().versionViewer();
+            System.out.println("SETUP CHECKLIST");
+            System.out.println("===============\n");
+            if(_legal == true)
+                System.out.println("1. Legal and Important Information    : COMPLETE");
+            if(_dirs == true)
+                System.out.println("2. Initialize Truncheon Dependencies  : COMPLETE");
+            if(_dbInit == true)
+                System.out.println("3. Initialize Database Files          : COMPLETE");
+            if(_policyInit == true)
+                System.out.println("4. Initialize Policies and BURN Files : COMPLETE");
+            if(_adminAccCreate == true)
+                System.out.println("5. Administrator account creation     : COMPLETE");
+        }
+        catch (Exception E)
+        {
+            E.printStackTrace();
         }
     }
 }
