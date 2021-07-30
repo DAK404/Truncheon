@@ -299,6 +299,50 @@ user@system*> wait 1000
 
 PAGE 18
 
+Scripting in Truncheon
+
+Truncheon shell supports the use of scripts. Scripting is easy, and can be 
+used to automate a few commands.
+
+The script will always end with an `End Script` line, denoting the end of
+the script file. Any statement that shall begin with # will be treated as
+a comment.
+
+The following block will demonstrate an example of a Nion script file.
+
+---------------------------------------------------------------------------
+Script File Extension : .nScript
+Script Engine         : Nion Script Engine
+Availability          : Administrator Policy configuration dependent
+---------------------------------------------------------------------------
+
+ # it is a good idea to clear the screen before executing a script file
+ clear
+
+ # print hello world onto the screen
+ echo "Hello World!"
+
+ # demonstrate the confirm functionality
+ echo "So this is how the `confim` functionality work in Truncheon"
+ confirm
+
+ # demonstrate the wait functionality
+ echo "Now wait for 5 seconds before moving on. Okay?"
+ wait 5000
+
+ # it is a good idea to denote its the end of file to the interpreter
+ # Any statements after the `End Script` line will not be executed
+ End Script
+
+ # demonstrate that this line will not be executed by interpreter
+ echo "This line is not printed onto the screen."
+
+---------------------------------------------------------------------------
+
+<end of page>
+
+PAGE 19
+
 =============
     NOTES    
 =============
@@ -313,6 +357,8 @@ Please contact the developers to notify any discrepency in the help files.
 please contact the developers and attach any relevant log files to notify about the 
 crash. The contact information is available with the readme file.
 
+- Scripts can be created with the Wraith Text Editor and can be read using the 
+Wraith File Reader.
 
 - END OF HELP DOCUMENT -
 <end of help>
