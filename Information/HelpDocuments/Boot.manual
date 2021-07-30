@@ -18,13 +18,117 @@ before logging into the MainMenu program.
 This will provide a limited feature-set to
 guest users.
 
-The following will describe the commands
-available for the guest users.
-
 <end of page>
 
 PAGE 2
 
-This is the end of the help file.
+==============
+   COMMANDS   
+==============
+
+Here are a list of commands available in the Boot program.
+
+----------       ----------------------------------------------------------------
+ COMMANDS        DESCRIPTION
+----------       ----------------------------------------------------------------
+ about           Displays the program information to the guest user
+ clear           Clears the output screen
+ exit            Exits the Truncheon Shell
+ ?/help          Displays this help file
+ login           Opens the MainMenu program with the login page
+ restart         Restarts the Truncheon Shell
+----------       ----------------------------------------------------------------
+
+The following will describe each module, syntax and an example usage to help the users
+to work with Truncheon easily.
+
+<end of page>
+
+PAGE 3
+
+-----------------------------
+COMMAND : about
+SYNTAX  : about
+EXAMPLE :
+
+guest@system> about
+<Displays the program details to the user>
+
+<end of page>
+
+PAGE 4
+
+-----------------------------
+COMMAND : clear
+SYNTAX  : clear
+EXAMPLE :
+
+guest@system> clear
+<clears the output screen>
+
+<end of page>
+
+PAGE 5
+
+-----------------------------
+COMMAND : exit
+SYNTAX  : exit
+EXAMPLE :
+
+guest@system> exit
+<exits the Truncheon Shell>
+
+<end of page>
+
+PAGE 6
+
+-----------------------------
+COMMAND : ?/help
+SYNTAX  : ?
+        : help
+EXAMPLE :
+
+guest@system> ?
+ OR
+guest@system> help
+<displays this help document>
+
+<end of page>
+
+PAGE 7
+
+-----------------------------
+COMMAND : login
+SYNTAX  : login
+EXAMPLE :
+
+guest@system> login
+<opens the MainMenu login>
+
+<end of page>
+
+PAGE 8
+
+-----------------------------
+COMMAND : restart
+SYNTAX  : restart
+EXAMPLE :
+
+guest@system> restart
+<restarts the Truncheon Shell>
+
+<end of page>
+
+PAGE 9
+
+=============
+    NOTES    
+=============
+
+-> Boot program provides the guest users a
+limited set of functionalities to work with.
+
+-> Additional functionalities can be accessed
+only after logging into the user shell.
 
 <end of help>

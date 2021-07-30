@@ -87,7 +87,7 @@ public final class MainMenu
     private String _name = "";
     private String _PIN = "";
     private String _scriptName = "";
-    private String _privilegeStatus = "";
+    private String _privilegeStatus = "Standard User";
     
     
     Console console=System.console();
@@ -455,10 +455,9 @@ public final class MainMenu
                  * Opens the native OS's shell allow the user to execute the native OS's commands.
                  */
                 case "syshell":
-
-                if(challenge() == false)
+                if(_admin == false)
                 {
-                    System.out.println("User Authentication failed. Cannot execute command \"syshell\"");
+                    System.out.println("Cannot execute syshell command as a standard user.");
                     return;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
@@ -476,12 +475,12 @@ public final class MainMenu
 
                 if(cmd.length < 2)
                 {
-                    System.out.println("Syntax\n\nsys <host_OS_command>");
+                    System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
                     return;
                 }
-                if(challenge() == false)
+                if(_admin == false)
                 {
-                    System.out.println("User Authentication failed. Cannot execute command \"syshell\"");
+                    System.out.println("Cannot execute sys command as a standard user.");
                     return;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
@@ -501,7 +500,6 @@ public final class MainMenu
                     System.out.println("Echo Syntax: echo \"<string>\"");
                     return;
                 }
-                
                 if(cmd[1].equalsIgnoreCase(null))
                 System.out.println("null");
                 else
@@ -608,7 +606,6 @@ public final class MainMenu
             //Retrieve the PIN, Name and admin status from the database and store it to the variables.
             _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
             _name = retrieveInfo("SELECT Name FROM FCAD WHERE Username = ? ;", "Name");
-            _privilegeStatus = "Standard User";
             if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
                 elevateStatus();
 

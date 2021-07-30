@@ -49,6 +49,7 @@ public class DeleteUser
 
     private final void deleteLogic()throws Exception
     {
+        new Truncheon.API.BuildInfo().versionViewer();
         if(console.readLine("Are you sure you want to delete your user account? ALL files and directories will be deleted!").equalsIgnoreCase("y"))
         {
             String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
@@ -62,6 +63,8 @@ public class DeleteUser
             conn.close();
             cleanUp();
             System.gc();
+
+            console.readLine("User deletion complete. Press ENTER to restart program.");
             System.exit(1);
         }
     }

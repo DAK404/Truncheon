@@ -7,9 +7,8 @@ public final class BuildInfo
         clearScreen();
         System.out.println("///////////////////////\n");
         System.out.println("    Nion: Truncheon    ");
-        System.out.println("     Version 0.2.0     \n");
-        System.out.println("///////////////////////");
-        System.out.println("\n! TEST BUILD !\n");
+        System.out.println("     Version 0.2.1     \n");
+        System.out.println("///////////////////////\n");
     }
 
     public final void clearScreen()

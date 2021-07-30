@@ -83,13 +83,17 @@ public final class Boot
     private final void bootLogic()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
-        System.out.println("Verifying Installation...");
+        System.out.println("BOOT CHECKLIST");
+        System.out.println("==============\n");
+
         if(new File("./System").exists() == true & new File("./Users").exists() == true)
         {
-            System.out.print("OK");
+            System.out.println("* Base Directories check : COMPLETE");
             if(new File("./System/Public/Truncheon").exists() == true & new File("./System/Private/Truncheon").exists() == true)
             {
+                System.out.println("* Truncheon Specific Directories check : COMPLETE ");
                 Console console=System.console();
+                System.out.println("\n==============\n");
                 while(true)
                 {
                     switch(console.readLine("guest@system> ").toLowerCase())
@@ -102,12 +106,13 @@ public final class Boot
                             new Truncheon.API.BuildInfo().about();
                             break;
 
+                        case "?":
                         case "help":
-                            //Implement help file reading functionality here.
+                            new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Boot.manual");
                             break;
 
                         case "clear":
-                            new Truncheon.API.BuildInfo().clearScreen();
+                            new Truncheon.API.BuildInfo().versionViewer();
                             break;
 
                         case "exit":
