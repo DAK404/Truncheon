@@ -9,7 +9,7 @@ import java.io.OutputStream;
 
 public class FileManager 
 {
-    private String username, name, curDir;
+    private String _user, _name, _curDir;
     private boolean _admin = false;
 
 
@@ -17,8 +17,8 @@ public class FileManager
 
     public FileManager(String usn, String nm, boolean admin)
     {
-        username = usn;
-        name = nm;
+        _user = usn;
+        _name = nm;
         _admin = admin;
     }
 
@@ -36,11 +36,11 @@ public class FileManager
                 Thread.sleep(5000);
                 return;
             }
-                                
-            curDir="./Users/"+username+'/';
+
+            _curDir="./Users/"+_user+'/';
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Grinch File Manager 1.7");
-            while(fileManagerShell(console.readLine(name+"@"+curDir.replace(username, name)+"]]: grinch ")) == true);
+            while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+"]]: grinch ")) == true);
         }
         catch(Exception E)
         {
@@ -55,11 +55,11 @@ public class FileManager
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
 
-            System.out.println("Username: " + name);
+            System.out.println("_user: " + _name);
             String password=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
             String securityKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
-            return new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status();
+            return new Truncheon.API.Dragon.LoginAPI(_user, password, securityKey).status();
         }
         catch(Exception E)
         {
@@ -159,7 +159,7 @@ public class FileManager
                         System.out.println("Syntax:\n\nread <filename>\n");
                         return true;
                     }
-                    new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], curDir);
+                    new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], _curDir);
                     break;
                 
                 case "write":
@@ -168,7 +168,7 @@ public class FileManager
                         System.out.println("Syntax:\n\nwrite <filename>\n");
                         return true;
                     }
-                    new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], curDir);
+                    new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], _curDir);
                     break;
                 
                 case "download":
@@ -177,7 +177,7 @@ public class FileManager
                         System.out.println("Syntax:\n\ndownload <URL> <filename>\n");
                         return true;
                     }
-                    new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], curDir+cmd[2]);
+                    new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], _curDir+cmd[2]);
                     break;
 
                 default:
@@ -202,9 +202,9 @@ public class FileManager
             return;
         }
         
-        tPath=curDir+tPath+"/";
+        tPath=_curDir+tPath+"/";
         if(checkFile(tPath)==true)
-            curDir=tPath;
+            _curDir=tPath;
         else
             System.out.println("[ ERROR ] : The specified file/directory does not exist.");
         System.gc();
@@ -213,13 +213,13 @@ public class FileManager
 
     private final void prevDir()throws Exception
     {
-        curDir = curDir.substring(0, curDir.length()-1);
-        curDir = curDir.replace(curDir.substring(curDir.lastIndexOf('/'), curDir.length()), "/");
+        _curDir = _curDir.substring(0, _curDir.length()-1);
+        _curDir = _curDir.replace(_curDir.substring(_curDir.lastIndexOf('/'), _curDir.length()), "/");
 
-        if(curDir.equals("./Users/"))
+        if(_curDir.equals("./Users/"))
         {
             System.out.println("[ WARNING ] : Permission Denied.");
-            curDir="./Users/"+username+"/";
+            _curDir="./Users/"+_user+"/";
         }
         System.gc();
         return;
@@ -237,7 +237,7 @@ public class FileManager
     {
         try
         {
-            File tree=new File(curDir);
+            File tree=new File(_curDir);
             System.out.println("\n--- [ TREE VIEW ] ---\n");
             TreeHelper(0, tree);
             System.out.println();
@@ -257,7 +257,7 @@ public class FileManager
         for (int i = 0; i < indent; ++i)
             System.out.print('-');
         
-        System.out.println(file.getName().replace(username, name + " [ USER ROOT DIRECTORY ]"));
+        System.out.println(file.getName().replace(_user, _name + " [ USER ROOT DIRECTORY ]"));
 
         if (file.isDirectory())
         {
@@ -272,15 +272,15 @@ public class FileManager
     {
         //String format = "%1$-60s|%2$-50s|%3$-20s\n";
         String format = "%1$-50s|%2$-20s\n";
-        if(checkFile(curDir)==true)
+        if(checkFile(_curDir)==true)
         {
-            File dPath=new File(curDir);
+            File dPath=new File(_curDir);
             System.out.println("\n");
             System.out.format(String.format(format, "File Name", "File Size [In KB]\n"));
             for(File file : dPath.listFiles()) 
             {
                 //System.out.format(String.format(format, file.getPath().replace(User,Name), file.getName().replace(User,Name), file.length()/1024+" KB"));
-                System.out.format(String.format(format, file.getName().replace(username, name), file.length()/1024+" KB"));
+                System.out.format(String.format(format, file.getName().replace(_user, _name), file.length()/1024+" KB"));
             }
             System.out.println();
         }
@@ -294,7 +294,7 @@ public class FileManager
     {
         try
         {
-            mkFile=curDir+mkFile+"/";
+            mkFile=_curDir+mkFile+"/";
             if(checkFile(mkFile)==false)
                 new File(mkFile).mkdir();
             else
@@ -313,7 +313,7 @@ public class FileManager
     {
         try
         {
-            delFile=curDir+delFile;
+            delFile=_curDir+delFile;
             if(checkFile(delFile)==true)
             {
                 File f=new File(delFile);
@@ -348,8 +348,8 @@ public class FileManager
     {
         try
         {
-            oldFileName = curDir + oldFileName;
-            newFileName = curDir + newFileName;
+            oldFileName = _curDir + oldFileName;
+            newFileName = _curDir + newFileName;
             if(checkFile(oldFileName)==true)
                 new File(oldFileName).renameTo(new File(newFileName));
             else
@@ -368,9 +368,9 @@ public class FileManager
     {
         try
         {
-            copy_move_helper(new File(curDir+source), new File(curDir+destination));
+            copy_move_helper(new File(_curDir+source), new File(_curDir+destination));
             if(move==true)
-                delHelper(new File(curDir+source));
+                delHelper(new File(_curDir+source));
             System.gc();
             return;
         }
