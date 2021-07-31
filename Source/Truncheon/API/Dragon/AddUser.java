@@ -123,7 +123,6 @@ public final class AddUser
 
             //Show an account summary after a user has been created.
             displayDetails();
-            console.readLine("Press ENTER to continue..");
             return true;
         }
         catch(Exception E)

@@ -88,10 +88,10 @@ public final class Boot
 
         if(new File("./System").exists() == true & new File("./Users").exists() == true)
         {
-            System.out.println("* Base Directories check : COMPLETE");
+            System.out.println("* Base Directories check       : COMPLETE");
             if(new File("./System/Public/Truncheon").exists() == true & new File("./System/Private/Truncheon").exists() == true)
             {
-                System.out.println("* Truncheon Specific Directories check : COMPLETE ");
+                System.out.println("* Truncheon Directories check  : COMPLETE");
                 Console console=System.console();
                 System.out.println("\n==============\n");
                 while(true)

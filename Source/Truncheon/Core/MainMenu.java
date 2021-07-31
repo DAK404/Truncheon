@@ -87,7 +87,7 @@ public final class MainMenu
     private String _name = "";
     private String _PIN = "";
     private String _scriptName = "";
-    private String _privilegeStatus = "Standard User";
+    private String _privilegeStatus = "Standard";
     
     
     Console console=System.console();
@@ -248,13 +248,9 @@ public final class MainMenu
      */
     private final void menuShell()throws Exception
     {
-        //Display the Program Information.
-        new Truncheon.API.BuildInfo().versionViewer();
-        
         System.gc();
 
-        //Display if the user is an Administrator or not.
-        System.out.println("User Privilege : " + _privilegeStatus);
+        mainMenuVerView();
 
         //Execute the menuLogic() method.
         while(true)
@@ -426,8 +422,7 @@ public final class MainMenu
                  * Clears the screen and prints the basic kernel information.
                  */
                 case "clear":
-                new Truncheon.API.BuildInfo().versionViewer();
-                System.out.println("Administrator : " + _privilegeStatus);
+                mainMenuVerView();
                 break;
                 
                  /**
@@ -463,7 +458,7 @@ public final class MainMenu
                 if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd").inheritIO().start().waitFor();
                 else
-                new ProcessBuilder("/bin/bash", "-c" , cmd[1]).inheritIO().start().waitFor();
+                new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
                 break;
                 
                 /**
@@ -716,5 +711,13 @@ public final class MainMenu
         _privilegeStatus = "Administrator";
         _admin = true;
         _prompt = '!';
+    }
+
+    private final void mainMenuVerView()throws Exception
+    {
+        new Truncheon.API.BuildInfo().versionViewer();
+        System.out.println("Account Type : " + _privilegeStatus + "\n");
+        if(new File("./System/Private/Truncheon/Policy.burn").exists() == false)
+            System.out.println("[ ATTENTION ] : POLICY FILE CORRUPT!\nPolicy File Reconfiguration Required!\n");
     }
 }

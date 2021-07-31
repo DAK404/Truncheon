@@ -360,5 +360,27 @@ crash. The contact information is available with the readme file.
 - Scripts can be created with the Wraith Text Editor and can be read using the 
 Wraith File Reader.
 
+- Sometimes, the following information may be displayed (especially when upgrading
+from an older version to the newer versions)
+
+-----------------------------------------------------------------------------------------
+Nion: Truncheon vX.X.X
+Build Date: XX-XXXX-XXXX
+
+[ ATTENTION ] : POLICY FILE CORRUPT!
+Policy File Reconfiguration Required!
+
+user@system*> _
+
+-----------------------------------------------------------------------------------------
+
+This will occur if the policy file is either missing or deleted. 
+An Administrator will need to reopen the Policy Configuration Tool to fix this error.
+But the Administrators will need to reconfigure the policies for all modules from the
+beginning.
+
+In case of subsequent deletion of the file regularly, please check if any system tools
+are interfering or removing the policy file.
+
 - END OF HELP DOCUMENT -
 <end of help>

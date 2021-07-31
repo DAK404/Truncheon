@@ -31,7 +31,7 @@ public final class BuildInfo
             
             else
                 //invokes bash to clear the screen
-                new ProcessBuilder("/bin/bash", "-c" ,"clear").inheritIO().start().waitFor();
+                new ProcessBuilder("/bin/bash", "-c" ,"reset").inheritIO().start().waitFor();
             
             System.out.flush();
             return;
