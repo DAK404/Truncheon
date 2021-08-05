@@ -49,8 +49,7 @@ public class PolicyEditor
 
             if(new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status() == true)
             {
-                if(checkAdminStatus(username) == true)
-                    return true;
+                return checkAdminStatus(username);
             }
         }
         catch(Exception E)

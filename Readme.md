@@ -126,7 +126,27 @@ Anyone with the source code can create their custom APIs. It is simple and easy!
 ## Quick Reference
 
 * API Package Nomenclature : `package Truncheon.API.<API_Package_Name>.<API_Subpackage_Name>`
-* API Calls Nomenclature : `new Truncheon.API.<API_PackageName>.<API_Subpackage_Name>`
+* API Calls Nomenclature : `new Truncheon.API.<API_PackageName>.<API_Subpackage_Name>.<API_Class_Name>(<arguments>).<API_Public_Method_Name>(<arguments>)`
+
+Example:
+
+* API Package : `Truncheon.API.HelloWorld.Print`
+
+* API Call : `new Truncheon.API.HelloWorld.Print.PrintHelloWorld(_user).printLogic("String");`
+
+```
+new Truncheon.API.HelloWorld.Print.PrintHelloWorld(_user).printLogic("String");
+^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+ a        b           c        d              e                     f
+
+ a : Keyword in Java for instantiating the API class's constructor and method
+ b : The package where the Truncheon APIs reside
+ c : The package name of the user defined API package
+ d : The package name of the user defined API sub-package
+ e : The constructor name of the API with arguments
+ f : The public method in the API to invoke the API functionality
+
+```
 
 ### Step 1 : Create Truncheon API
 
@@ -263,7 +283,7 @@ echo "Hello World!"
 # It is generally a good idea to indicate to the interpreter that it has reached the end of the script file. Once it reaches "End Script", any command after this command will not be executed.
 End Script
 ```
-The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>"`), which will redirect the user's input to the OS's interpreter.
+The user can also leverage on the available functionality of running the Native OS's commands by either using the `sys` command (Syntax: `sys "<native OS's commands>"`), which will redirect the user's input to the OS's interpreter. You can learn more about the `sys` and `syshell` commands using the EasyDocumentation System.
 
 Scripting as of now cannot execute other scripts when a script is already being run. This is to prevent any malicious abuse of the functionality. A future update may or may not implement features to run a script within another script safely.
 

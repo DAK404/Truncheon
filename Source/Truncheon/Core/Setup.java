@@ -10,7 +10,7 @@ TEST AT YOUR OWN RISK.
 
 ---------------------------------
 
-     --- Program Details ---     
+     --- Program Details ---
 
      Author  : DAK404
      Date    : 17-June-2021
@@ -25,7 +25,10 @@ package Truncheon.Core;
 
 import java.io.Console;
 import java.io.File;
+import java.io.OutputStream;
+import java.io.InputStream;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
 import java.util.Properties;
 
@@ -50,14 +53,17 @@ public class Setup
         new Truncheon.API.BuildInfo().versionViewer();
         console.readLine("Welcome to Truncheon! This program needs an initial configuration before using it. To begin the setup, press the Enter/Return key. Else press the Ctrl + C keys.\nWe recommend the Computer Administrator to setup Truncheon. Please contact your Administrator if you are a user and you're seeing this message.");
         showPrerequisites();
-        createDirs();
-        initializeDatabase();
-        createAdminUser();
+        if(checkMosaic()==false)
+        {
+            createDirs();
+            initializeDatabase();
+            createAdminUser();
+        }
         initializePolicy();
 
         displayStatus();
-        System.out.println("\n===============\n\nSetup has been completed successfully! Would you like to check for a system update?\n[ ATTENTION ] : You will require an internet connection to check and download the updates.\n\n");
-        if(console.readLine().equalsIgnoreCase("y"))
+        System.out.println("\n===============\n\nSetup Complete! Would you like to check for a system update?\n[ ATTENTION ] : You will require an internet connection to check and download the updates.\n");
+        if(console.readLine("> ").equalsIgnoreCase("y"))
             new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
         System.exit(1);
     }
@@ -76,6 +82,68 @@ public class Setup
         return;
     }
 
+    private final boolean checkMosaic()throws Exception
+    {
+        if(new File("./System/Private/Fractal.db").exists() == true)
+        {
+            System.out.println("[ ATTENTION ] : Mosaic Files have been found. Do you want to copy over existing data?");
+            if(console.readLine("[ Y | N ]\n> ").equalsIgnoreCase("Y"))
+                return mosaicSyncLogic();
+        }
+        return false;
+    }
+
+    private final boolean mosaicSyncLogic()
+    {
+        try 
+        {
+            new File("./System/Private/Truncheon").mkdir();
+
+            syncHelper(new File("./System/Private/Fractal.db"), new File("./System/Private/Truncheon/mud.db"));
+            syncHelper(new File("./Users/Mosaic"), new File("./Users/Truncheon"));
+                
+            System.gc();
+            return true;
+        }
+        catch (Exception E)
+        {
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return false;
+    }
+
+    private final void syncHelper(File src, File dest ) throws Exception 
+    {
+        try
+        {
+            if( src.isDirectory() )
+            {
+                dest.mkdirs();
+                for( File sourceChild : src.listFiles() ) 
+                {
+                    File destChild = new File( dest, sourceChild.getName() );
+                    syncHelper( sourceChild, destChild );
+                }
+            } 
+            else
+            {
+                InputStream in = new FileInputStream(src);
+                OutputStream out = new FileOutputStream(dest);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0)
+                    out.write(buf, 0, len);
+                in.close();
+                out.close();
+            }
+            System.gc();
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
     private final void createDirs()
     {
         try
@@ -83,7 +151,7 @@ public class Setup
             displayStatus();
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Checking for previous installation and existing directories...");
-            String[] directoryList = {"./System", "./Users", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
+            String[] directoryList = {"./System", "./Users/Truncheon", "./System/Public", "./System/Private", "./System/Public/Truncheon", "./System/Public/Truncheon/Logs", "./System/Private/Truncheon"};
 
             for(int i = 0; i < directoryList.length; i++)
             {
@@ -164,13 +232,13 @@ public class Setup
 
     private void initializePolicy()throws Exception
     {
-        try 
+        try
         {
             props = new Properties();
             String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
             for(int i = 0; i < resetValues.length; ++i)
                 initPolicyHelper(resetValues[i], "on");
-        } 
+        }
         catch (Exception E)
         {
             E.printStackTrace();
@@ -197,7 +265,7 @@ public class Setup
 
     private void displayStatus()throws Exception
     {
-        try 
+        try
         {
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("SETUP CHECKLIST");

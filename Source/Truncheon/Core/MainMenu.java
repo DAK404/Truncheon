@@ -252,6 +252,9 @@ public final class MainMenu
 
         mainMenuVerView();
 
+        if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript").exists() == true)
+            scriptEngine("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript");
+
         //Execute the menuLogic() method.
         while(true)
             menuLogic(console.readLine(_name + "@SYSTEM" + _prompt + "> "));
@@ -571,8 +574,8 @@ public final class MainMenu
                  * Default condition? Check the script or inputs again!
                  */
                 default:
-                System.out.println(input+" - Command not found.");
-                break;
+                    System.out.println(input+" - Command not found.");
+                    break;
             }
 
             System.gc();

@@ -37,10 +37,10 @@ public class FileManager
                 return;
             }
 
-            _curDir="./Users/"+_user+'/';
+            _curDir="./Users/Truncheon/"+_user+'/';
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Grinch File Manager 1.7");
-            while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+"]]: grinch ")) == true);
+            while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+">: ")) == true);
         }
         catch(Exception E)
         {
@@ -55,7 +55,7 @@ public class FileManager
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
 
-            System.out.println("_user: " + _name);
+            System.out.println("Username: " + _name);
             String password=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
             String securityKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
@@ -216,10 +216,10 @@ public class FileManager
         _curDir = _curDir.substring(0, _curDir.length()-1);
         _curDir = _curDir.replace(_curDir.substring(_curDir.lastIndexOf('/'), _curDir.length()), "/");
 
-        if(_curDir.equals("./Users/"))
+        if(_curDir.equals("./Users/Truncheon/"))
         {
             System.out.println("[ WARNING ] : Permission Denied.");
-            _curDir="./Users/"+_user+"/";
+            _curDir="./Users/Truncheon/"+_user+"/";
         }
         System.gc();
         return;

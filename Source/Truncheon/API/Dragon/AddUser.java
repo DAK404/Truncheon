@@ -306,7 +306,7 @@ public final class AddUser
         {
             String[] dirNames = {UNM, UNM+"/Scripts", UNM+"/Properties"};
             for(int i = 0; i < dirNames.length; i++)
-                new File("./Users/"+dirNames[i]).mkdir();
+                new File("./Users/Truncheon/"+dirNames[i]).mkdir();
         }
         catch(Exception E)
         {

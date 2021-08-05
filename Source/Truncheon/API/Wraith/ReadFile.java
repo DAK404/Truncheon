@@ -13,7 +13,7 @@ public final class ReadFile
     {
         try
         {
-            file=new File("./Information/"+helpFile);
+            file=new File("./Information/Truncheon/"+helpFile);
             readFile(true);
             return;
         }
