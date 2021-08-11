@@ -50,8 +50,7 @@ public class Setup
     public final void setupLogic()throws Exception
     {
         System.gc();
-        new Truncheon.API.BuildInfo().versionViewer();
-        console.readLine("Welcome to Truncheon! This program needs an initial configuration before using it. To begin the setup, press the Enter/Return key. Else press the Ctrl + C keys.\nWe recommend the Computer Administrator to setup Truncheon. Please contact your Administrator if you are a user and you're seeing this message.");
+        showSetupDetails();
         showPrerequisites();
         if(checkMosaic()==false)
         {
@@ -66,6 +65,36 @@ public class Setup
         if(console.readLine("> ").equalsIgnoreCase("y"))
             new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
         System.exit(1);
+    }
+
+    private final void showSetupDetails()throws Exception
+    {
+        new Truncheon.API.BuildInfo().versionViewer();
+        System.out.println("Nion: Truncheon");
+        System.out.println("\nWelcome to Truncheon!");
+        System.out.println("The Truncheon Shell needs to be initialized before it can be used.\nThe program cannot be used until the setup is complete.");
+        System.out.println("[ ATTENTION ] : DO NOT TURN OFF THE DEVICE, TERMINATE THE APPLICATION, DISCONNECT ANY DEVICES, DRIVES OR NETWORK ADAPTERS!\n");
+
+        System.out.println("--------------------------------------");
+        System.out.println("          - SETUP PROCEDURE -         ");
+        System.out.println("--------------------------------------");
+        System.out.println("A. Legal and Important Information");
+        System.out.println("\t1. EULA [ END USER LICENSE AGREEMENT ]");
+        System.out.println("\t2. Readme");
+        System.out.println("\t3. What's New!");
+        System.out.println("\t4. Contributors");
+        System.out.println("B. Check for Mosaic's Files");
+        System.out.println("\t1. Copy Database Files");
+        System.out.println("\t2. Copy User Files");
+        System.out.println("C. Create Truncheon Dependencies");
+        System.out.println("\t1. Create Truncheon Directories");
+        System.out.println("\t2. Create Multi User Database");
+        System.out.println("\t3. Initialize Administrator Account");
+        System.out.println("D. Initialize the System Name");
+        System.out.println("E. Initialize the Policy Files");
+        System.out.println("--------------------------------------");
+        System.out.println("\n\nPress Enter to continue, or press CTRL + C keys to exit the program.");
+        console.readLine("Available Options [ Press ENTER key | Press CTRL + C keys ]");
     }
 
     private final void showPrerequisites()throws Exception
@@ -234,7 +263,14 @@ public class Setup
     {
         try
         {
+            String sysName;
+            sysName = console.readLine("Enter the name of this system\n\nThis will be used to identify your system in the prompt. The default name is SYSTEM.\n\n> ");
+            if(sysName.equals("") || sysName.startsWith(" ") || sysName.equals(null))
+                sysName = "SYSTEM";
+            if(sysName.contains(" "))
+                sysName = sysName.replaceAll(" ", "");
             props = new Properties();
+            initPolicyHelper("SysName", sysName);
             String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
             for(int i = 0; i < resetValues.length; ++i)
                 initPolicyHelper(resetValues[i], "on");

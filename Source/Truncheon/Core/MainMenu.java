@@ -88,6 +88,7 @@ public final class MainMenu
     private String _PIN = "";
     private String _scriptName = "";
     private String _privilegeStatus = "Standard";
+    private String _sysName = "SYSTEM";
     
     
     Console console=System.console();
@@ -104,6 +105,7 @@ public final class MainMenu
         {
             while(login() == false);
             getUserDetails();
+            _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("SysName");
             System.gc();
             menuShell();
         }
@@ -255,9 +257,10 @@ public final class MainMenu
         if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript").exists() == true)
             scriptEngine("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript");
 
+        System.gc();
         //Execute the menuLogic() method.
         while(true)
-            menuLogic(console.readLine(_name + "@SYSTEM" + _prompt + "> "));
+            menuLogic(console.readLine(_name + "@" + _sysName + _prompt + "> "));
     }
     
     /**
@@ -638,7 +641,7 @@ public final class MainMenu
         rs.close();
         pstmt.close();
         conn.close();
-
+ 
         System.gc();
         return temp;
     }
@@ -654,8 +657,10 @@ public final class MainMenu
     {
         try
         {
-            while(! (console.readLine("AFK@IDLE> ").equalsIgnoreCase("unlock") ));
-            while(! (new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(console.readLine("Plase Authenticate with the Unlock PIN:\nPIN : ")).equals(_PIN)))
+            mainMenuVerView();
+            while(! (console.readLine("AFK@IDLE> ").equalsIgnoreCase("unlock") ))
+                mainMenuVerView();
+            while(! (new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("\nPlase Authenticate with the Unlock PIN:\nPIN : "))).equals(_PIN)))
                 counterLogic();
             new Truncheon.API.BuildInfo().versionViewer();
             
@@ -718,9 +723,11 @@ public final class MainMenu
 
     private final void mainMenuVerView()throws Exception
     {
+        System.gc();
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Account Type : " + _privilegeStatus + "\n");
         if(new File("./System/Private/Truncheon/Policy.burn").exists() == false)
             System.out.println("[ ATTENTION ] : POLICY FILE CORRUPT!\nPolicy File Reconfiguration Required!\n");
+        System.out.println("[ HINT ] : Type \'HELP\' to get the contextual help.\n");
     }
 }

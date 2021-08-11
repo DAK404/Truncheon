@@ -8,34 +8,51 @@ import java.util.Properties;
 public class PolicyEnforcement
 {
     public final boolean checkPolicy(String Policy)throws Exception
-	{
-		Console console = System.console();
-		try
-		{
-            boolean stat = false;
-			System.gc();
-			Properties prop = new Properties();
-			String propsFileName="./System/Private/Truncheon/Policy.burn";
-			FileInputStream configStream = new FileInputStream(propsFileName);
-			prop.loadFromXML(configStream);
-			if(prop.getProperty(Policy).equalsIgnoreCase("off"))
+    {
+        boolean stat = false;
+        Console console = System.console();
+        try
+        {
+            switch(retrivePolicyValue(Policy).toLowerCase())
             {
-				System.out.println("The Administrator has disabled this feature. Contact the Administrator for more information.\nPress ENTER to continue..");
-                console.readLine();
-            }
-			else if(prop.getProperty(Policy).equalsIgnoreCase("on"))
-				stat=true;
-			
-			configStream.close();
-            System.gc();
+                case "off":
+                    System.out.println("[ ATTENTION ] : This module access is denied due to the policy configuration.n\nPlease contact the system administrator for more information.");
+                    console.readLine();
+                    break;
+                
+                case "on":
+                    stat = true;
+                    break;
 
-			return stat;
-		}
-		catch(Exception E)
-		{
-			System.out.println("[ ATTENTION ] : This policy or module is either not configured or has an issue with it. Contact your administrator for more info.");
-            console.readLine();
-			return false;
-		}
-	}   
+                case "error":
+                    System.out.println("[ WARNING ] : Module Policy is not configured. Please contact the system admnistrator to initialize the policy.");
+                    console.readLine();
+                    break;
+            }
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
+        return stat;
+    }
+    
+    public final String retrivePolicyValue(String policyParameter)throws Exception
+    {
+        String policyValue = "";
+        try
+        {           
+            Properties prop = new Properties();
+            String propsFileName="./System/Private/Truncheon/Policy.burn";
+            FileInputStream configStream = new FileInputStream(propsFileName);
+            prop.loadFromXML(configStream);
+            policyValue = prop.getProperty(policyParameter);
+            configStream.close();
+        }
+        catch(Exception E)
+        {
+            policyValue = "Error";
+        }
+        return policyValue;
+    }
 }

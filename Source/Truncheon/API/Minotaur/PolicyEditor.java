@@ -158,6 +158,7 @@ public class PolicyEditor
 
     private final void resetPolicyFile()throws Exception
     {
+        savePolicy("SysName", "SYSTEM");
         String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
         for(int i = 0; i < resetValues.length; ++i)
             savePolicy(resetValues[i], "on");

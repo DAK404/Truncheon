@@ -38,15 +38,15 @@ import java.io.File;
  */
 public final class Boot
 {
+    private String _sysName;
 
     /**
     * Sole constructor. (For invocation by subclass constructors, typically implicit.)
     */
-    public Boot()
+    public Boot()throws Exception
     {
-
+        _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("SysName");
     }
-
 
     /**
      * Logic to accept the boot parameters and boot the program in the desired mode.
@@ -96,7 +96,7 @@ public final class Boot
                 System.out.println("\n==============\n");
                 while(true)
                 {
-                    switch(console.readLine("guest@system> ").toLowerCase())
+                    switch(console.readLine("~Guest@" + _sysName + "> ").toLowerCase())
                     {
                         case "login":
                             new Truncheon.Core.MainMenu().mainMenuLogic();
