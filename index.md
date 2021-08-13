@@ -16,11 +16,10 @@ Truncheon is a cross-platform shell. It has various APIs and programs which are 
 
 ---
 
-* Want to learn more? [Click Here](https://github.com/DAK404/Truncheon) to check the source code out!  
-* Want to develop your own application on top of Truncheon? [Click Here](Readme.md) to get started!  
-* Want to check out the program documentation? [Click Here](https://dak404.github.io/Truncheon/Documentation/index.html) to check the API and program documentation out!
-* Want to download the latest release? [Click Here](https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip) to download the latest build!
-* Want the latest compatible JRE for Truncheon? Check [this page](https://github.com/DAK404/Truncheon/releases/tag/JRE) out!
+* Interested to learn more about Truncheon? Take a look at the [Source Code](https://github.com/DAK404/Truncheon) and [Program Documentation](https://dak404.github.io/Truncheon/Documentation/index.html) here!
+* [Click Here](https://github.com/DAK404/Truncheon) to know how to develop your own application using Truncheon as a base!
+* Can't wait to delve into Truncheon? [Download](https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip) the latest build now!
+* Do you want to use Truncheon without JDK? [Download the JRE](https://github.com/DAK404/Truncheon/releases/tag/JRE) now!
 
 ---
 

@@ -30,10 +30,13 @@
         {% endif %}
 
         {% if site.show_downloads %}
+        <h4
         <ul class="downloads">
-          <li><a href="{{ site.github.zip_url }}">Download <strong>ZIP File</strong></a></li>
-          <li><a href="{{ site.github.tar_url }}">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="{{ site.github.repository_url }}">View On <strong>GitHub</strong></a></li>
+          <li><a href="{{ site.github.release_url }}">Download <strong>Latest Release</strong></a></li>
+          <li><a href="{{ site.github.jre_url }}">Download <strong>Compatible JRE</strong></a></li>
+          <li><a href="{{ site.github.src_url }}">Download <strong>Source Code</strong></a></li>
+          <li><a href="{{ site.github.doc_url }}">View <strong>Documentation</strong></a></li>
+          <li><a href="{{ site.github.repository_url }}">View Code On <strong>GitHub</strong></a></li>
         </ul>
         {% endif %}
       </header>
