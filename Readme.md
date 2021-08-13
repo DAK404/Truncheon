@@ -11,8 +11,8 @@
 4. [Building The Program](#building-the-program)
 5. [Working with APIs](#working-with-apis)
 6. [Creating custom APIs](#creating-custom-apis)
-7. [Nion Script Language](#nion-script-language)
-8. [Database and JDBC](#database-and-jdbc)
+7. [Database and JDBC](#database-and-jdbc)
+8. [Nion Script Language](#nion-script-language)
 9. [Contribution Etiquettes](#contribution-etiquettes)
 10. [Documentation](#documentation)
 11. [Contact Information](#contact-information)
@@ -108,14 +108,14 @@ The program and tools have contextual help built into them. In case you will nee
 
 There are several APIs which are present in Truncheon. These APIs can be used to create other modules and programs which can be used to extend the functionality of Truncheon. The APIs can also be used to create a custom application right on top of Truncheon, without having to re-implement a given functionality all over again.
 
-The API binaries can be found in the `./Truncheon/API` directory. These binary files, however, will not provide any useful information to the user about the API calls. The information for every API call in the program can be found in the (Program Documentation)[https://dak404.github.io/Truncheon/Documentation/index.html] or in the Easy Documentation which will provide more information for each class in the program. The implementation of the API is not described in the documentation.
+The API binaries can be found in the `./Truncheon/API` directory. These binary files, however, will not provide any useful information to the user about the API calls. The information for every API call in the program can be found in the [Program Documentation](https://dak404.github.io/Truncheon/Documentation/index.html) or in the Easy Documentation which will provide more information for each class in the program. The implementation of the API is not described in the documentation.
 
 The built-in APIs may require an authentication from the user to access it. Please do take care to use the Setup program in those cases.
 
 
 
 <span style="color:#e6b400">**NOTE:  
-The Truncheon APIs may be updated over time. Sometimes, there may be a change in the API call. Please refer to the documentation for information regarding the APIs. THE DEVELOPER(S) ARE NOT RESPONSIBLE FOR ANY APIs THAT ARE NOT FOUND IN THE (TRUNCHEON REPOSITORY)[https://github.com/DAK404/Truncheon]. CREATE AND USE 3RD PARTY APIs AT YOUR OWN RISK.**</span>
+The Truncheon APIs may be updated over time. Sometimes, there may be a change in the API call. Please refer to the documentation for information regarding the APIs. THE DEVELOPER(S) ARE NOT RESPONSIBLE FOR ANY APIs THAT ARE NOT FOUND IN THE [TRUNCHEON REPOSITORY](https://github.com/DAK404/Truncheon). CREATE AND USE 3RD PARTY APIs AT YOUR OWN RISK.**</span>
 
 ---
 
@@ -224,13 +224,13 @@ HelloWorld       : The program which contains the implementation inside the prin
 ```
 Easy and simple, right?
 
-Sometimes, an API may need to have a policy dependency to make sure that it works as intended. For this, please take care to use the (PolicyEnforcement.java)[https://dak404.github.io/Truncheon/Documentation/Truncheon/API/Minotaur/PolicyEnforcement.html]. This will help in checking if your API conforms to the Policies configured by the Administrators.
+Sometimes, an API may need to have a policy dependency to make sure that it works as intended. For this, please take care to use the [PolicyEnforcement.java](https://dak404.github.io/Truncheon/Documentation/Truncheon/API/Minotaur/PolicyEnforcement.html). This will help in checking if your API conforms to the Policies configured by the Administrators.
 
 <span style="color:#05e401">**Fun Fact!  
 The above examples can be executed by copying and pasting the source code provided above. By following the instructions correctly, you can create an example API which will print "Hello World!" on the screen, which can help you begin creating your own APIs for Truncheon.**</span>
 
 <span style="color:#FF0000">**ATTENTION:  
-APIs IMPLEMENTED IN TRUNCHEON HAVE BEEN TESTED. THE DEVELOPERS ARE NOT LIABLE FOR THE DAMAGES, MALFUNCTION OF DEVICES OR LOSS OF DATA FROM THE MISUSE OF PROGRAM APIs. PLEASE REFER TO THE [LICENSE](License.md) FOR MORE INFORMATION. THIS PROGRAM IS OPEN-SOURCE AND YOU CAN ALWAYS ACCESS THE SOURCE CODE (HERE)[https://github.com/DAK404/Truncheon)**</span> 
+APIs IMPLEMENTED IN TRUNCHEON HAVE BEEN TESTED. THE DEVELOPERS ARE NOT LIABLE FOR THE DAMAGES, MALFUNCTION OF DEVICES OR LOSS OF DATA FROM THE MISUSE OF PROGRAM APIs. PLEASE REFER TO THE [LICENSE](License.md) FOR MORE INFORMATION. THIS PROGRAM IS OPEN-SOURCE AND YOU CAN ALWAYS ACCESS THE SOURCE CODE [HERE](https://github.com/DAK404/Truncheon)**</span> 
 
 <span style="color:#e6b400">**NOTE:  
 DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READABLE LANGUAGE WHICH, EITHER, HAS A LINK PROVIDED TO CODE OR IS SHIPPED WITH THE PROGRAM.**</span>
@@ -243,7 +243,7 @@ DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READ
 
 Truncheon uses the SQLite 3 JDBC system. The SQLite 3 driver is a type 4 driver which will not require any pre-requisite installation of any software. The SQLite JDBC driver is shipped with Truncheon by default.
 
-The database used in Truncheon is called MUD, which stands for Multi-User Database. This same database can be imported easily from a prior installation from Mosaic which will reduce the burden of re-creating users and their data migration. This functionality has been called `MosaicSync`, which can be found in the (Setup.java)[https://dak404.github.io/Truncheon/Documentation/Truncheon/Core/Setup.html] program.
+The database used in Truncheon is called MUD, which stands for Multi-User Database. This same database can be imported easily from a prior installation from Mosaic which will reduce the burden of re-creating users and their data migration. This functionality has been called `MosaicSync`, which can be found in the [Setup.java](https://dak404.github.io/Truncheon/Documentation/Truncheon/Core/Setup.html) program.
 
 The database functionalities bundled in Truncheon include the following:
 
