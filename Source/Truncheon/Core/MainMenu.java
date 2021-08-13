@@ -105,7 +105,7 @@ public final class MainMenu
         {
             while(login() == false);
             getUserDetails();
-            _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("SysName");
+            _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("sysname");
             System.gc();
             menuShell();
         }

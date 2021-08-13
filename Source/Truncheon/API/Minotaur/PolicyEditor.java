@@ -137,7 +137,7 @@ public class PolicyEditor
         do
         {
             String pName = console.readLine("Enter the name of the policy : ").toLowerCase();
-            String pValue = console.readLine("Enter the value for the policy : ").toLowerCase();
+            String pValue = console.readLine("Enter the value for the policy : ");
             System.out.println("Saving Policy...");
             savePolicy(pName, pValue);
             System.gc();
@@ -158,7 +158,9 @@ public class PolicyEditor
 
     private final void resetPolicyFile()throws Exception
     {
-        savePolicy("SysName", "SYSTEM");
+        System.out.println(new File("./System/Private/Truncheon/Policy.BURN").delete());
+        Thread.sleep(3000);
+        savePolicy("sysname", "SYSTEM");
         String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
         for(int i = 0; i < resetValues.length; ++i)
             savePolicy(resetValues[i], "on");

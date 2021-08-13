@@ -45,7 +45,7 @@ public final class Boot
     */
     public Boot()throws Exception
     {
-        _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("SysName");
+        _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("sysname");
     }
 
     /**

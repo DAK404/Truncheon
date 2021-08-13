@@ -270,7 +270,7 @@ public class Setup
             if(sysName.contains(" "))
                 sysName = sysName.replaceAll(" ", "");
             props = new Properties();
-            initPolicyHelper("SysName", sysName);
+            initPolicyHelper("sysname", sysName);
             String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
             for(int i = 0; i < resetValues.length; ++i)
                 initPolicyHelper(resetValues[i], "on");

@@ -26,6 +26,7 @@ Here are a few quick links to prerequisite software to help you get started righ
 **MANDATORY SOFTWARE**
 * [SQLite JDBC Driver](https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/)
 * [OpenJDK](https://jdk.java.net) or any other JDK.
+* [JRE For Truncheon](https://github.com/DAK404/Truncheon/releases/tag/JRE)
 
 **RECOMMENDED SOFTWARE/RESOURCES**
 * [Visual Studio Code](https://code.visualstudio.com/) or [Notepad++](https://notepad-plus-plus.org/) or a text editor of your choice!
@@ -94,7 +95,7 @@ The program can be built by using the following steps:
 3. Choose the desired option as displayed.
 4. Builds will be in the `./Binaries` directory.
 5. \<Optional\> You can copy `RunTools.bat` or `RunTools.sh` from `./Tools` directory and paste it in `./Binaries`.
-6. \<Optional\> Run the Batch file or shell script and follow the on screen instructions OR run the program by using the command `java ProgramLauncher \<kernelName\> \<BootMode\>
+6. \<Optional\> Run the Batch file or shell script and follow the on screen instructions OR run the program by using the command `java ProgramLauncher <kernelName> <BootMode>`
 
 <span style="color:#05e401">**Fun Fact!  
 The program and tools have contextual help built into them. In case you will need to refer to the same, you can always type `help` anywhere in the prompt or choose the help option if available.**</span>
@@ -105,17 +106,16 @@ The program and tools have contextual help built into them. In case you will nee
 
 # Working With APIs
 
-APIs are built-in programs which help to implement other programs without rewriting certain parts of code repeatedly. APIs also abstracts the implementation of a given functionality, presenting the essential data to the **custom module developers**. This makes it simple to build programs on top of Truncheon easily.
+There are several APIs which are present in Truncheon. These APIs can be used to create other modules and programs which can be used to extend the functionality of Truncheon. The APIs can also be used to create a custom application right on top of Truncheon, without having to re-implement a given functionality all over again.
 
-API source code is found in the `./Source/Truncheon/API` directory. The APIs provided out of the box contain all essential programs to be used by external modules and programs. Additional APIs can be written and called as desired by the developers. (See [Creating Custom APIs](#creating-custom-apis))
+The API binaries can be found in the `./Truncheon/API` directory. These binary files, however, will not provide any useful information to the user about the API calls. The information for every API call in the program can be found in the (Program Documentation)[https://dak404.github.io/Truncheon/Documentation/index.html] or in the Easy Documentation which will provide more information for each class in the program. The implementation of the API is not described in the documentation.
 
-The API documentation will provide information how to leverage the API, while not providing the implementation of the API itself. However, there are comments in the program code which will help in improving, modifying and developing alternatives to the implementation.
+The built-in APIs may require an authentication from the user to access it. Please do take care to use the Setup program in those cases.
 
-However, the program documentation will contain the details about the implementation of every program in Truncheon. This will ensure that other people interested to work on/modify the program will have a good idea about the working of the program.
+
 
 <span style="color:#e6b400">**NOTE:  
-AS THE PROGRAM IS UPDATED IN THE FUTURE, THE IMPLEMENTAION MAY/MAY NOT CHANGE. SOMETIMES, WHEN THERE IS A NEW VERSION OF THE PROGRAM, THE API CALLS MAY/MAY NOT HAVE CHANGED. THIS WOULD MEAN THAT THE PROGRAMS BUILT ON TOP OF TRUNCHEON WILL BE AFFECTED IF NOT UPDATED. BY USING 3RD PARTY MODULES AND PROGRAMS IN TRUNCHEON, THE AUTHORS OF THE PROGRAMS ARE NOT RESPONSIBLE IN ANY WAY TO ANY DATA LOSS OR DAMAGES.  
-ANY CHANGES TO THE API CALLS ARE TO BE TRACKED AND TO BE UPDATED REGULARLY BY THE MODULE DEVELOPERS, WHEN POSSIBLE, TO AVOID ANY ISSUES.**</span>
+The Truncheon APIs may be updated over time. Sometimes, there may be a change in the API call. Please refer to the documentation for information regarding the APIs. THE DEVELOPER(S) ARE NOT RESPONSIBLE FOR ANY APIs THAT ARE NOT FOUND IN THE (TRUNCHEON REPOSITORY)[https://github.com/DAK404/Truncheon]. CREATE AND USE 3RD PARTY APIs AT YOUR OWN RISK.**</span>
 
 ---
 
@@ -224,11 +224,13 @@ HelloWorld       : The program which contains the implementation inside the prin
 ```
 Easy and simple, right?
 
+Sometimes, an API may need to have a policy dependency to make sure that it works as intended. For this, please take care to use the (PolicyEnforcement.java)[https://dak404.github.io/Truncheon/Documentation/Truncheon/API/Minotaur/PolicyEnforcement.html]. This will help in checking if your API conforms to the Policies configured by the Administrators.
+
 <span style="color:#05e401">**Fun Fact!  
 The above examples can be executed by copying and pasting the source code provided above. By following the instructions correctly, you can create an example API which will print "Hello World!" on the screen, which can help you begin creating your own APIs for Truncheon.**</span>
 
 <span style="color:#FF0000">**ATTENTION:  
-APIS IMPLEMENTED IN THE OFFICIAL RELEASES OF TRUNCHEON IS TESTED. THE USER IS LIABLE FOR THE LOSS OF DATA OR ANY DAMAGES OR MALFUNCTION THAT ARISES FROM THE USE OF THE PROGRAM APIS. MORE REGARDING THIS IN THE [LICENSE](License.md) FILE. THAT BEING SAID, THE PROGRAM FEATURES AND APIS ARE THOROUGHLY CHECKED AND TESTED. FUTURE UPDATES MAY INCLUDE CHANGES TO THE API IMPLEMENTATION AND/OR TO THE API CALLS. ANY PROGRAM BUILT ON TOP OF TRUNCHEON MAY NEED TO UPDATE THEIR PROGRAM TO ACCOMODATE THE CHANGES. THIS PROGRAM IS OPEN SOURCE AND THE LINK TO THE SOURCE CODE AND DOCUMENTATION IS GIVEN ABOVE.**</span> 
+APIs IMPLEMENTED IN TRUNCHEON HAVE BEEN TESTED. THE DEVELOPERS ARE NOT LIABLE FOR THE DAMAGES, MALFUNCTION OF DEVICES OR LOSS OF DATA FROM THE MISUSE OF PROGRAM APIs. PLEASE REFER TO THE [LICENSE](License.md) FOR MORE INFORMATION. THIS PROGRAM IS OPEN-SOURCE AND YOU CAN ALWAYS ACCESS THE SOURCE CODE (HERE)[https://github.com/DAK404/Truncheon)**</span> 
 
 <span style="color:#e6b400">**NOTE:  
 DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READABLE LANGUAGE WHICH, EITHER, HAS A LINK PROVIDED TO CODE OR IS SHIPPED WITH THE PROGRAM.**</span>
@@ -239,13 +241,19 @@ DEFINITION OF OPEN-SOURCE : PROGRAM SOURCE CODE WHICH IS WRITTEN IN A HUMAN READ
 
 # Database and JDBC
 
-**FEATURE UNDER DEVELOPMENT!**
+Truncheon uses the SQLite 3 JDBC system. The SQLite 3 driver is a type 4 driver which will not require any pre-requisite installation of any software. The SQLite JDBC driver is shipped with Truncheon by default.
 
-Truncheon uses the SQLite 3 JDBC system to work with the databases. It also has built in APIs to interface with the JDBC system in a more simplified format for the user defined APIs and modules to leverage functionalities easily.
+The database used in Truncheon is called MUD, which stands for Multi-User Database. This same database can be imported easily from a prior installation from Mosaic which will reduce the burden of re-creating users and their data migration. This functionality has been called `MosaicSync`, which can be found in the (Setup.java)[https://dak404.github.io/Truncheon/Documentation/Truncheon/Core/Setup.html] program.
 
-The Dragon API is one such example, which uses classes to create, delete, update credentials, login, pseudo, promote and demote a given user. All this is possible by using JDBC and the subsequent APIs used to interface with the JDBC easily.
+The database functionalities bundled in Truncheon include the following:
 
-Currently, the Dragon API has a feature to add a new user into the system, but has not been linked to the mainmenu since the feature is being tested and worked on. A future update shall enable the feature!
+* Create a new user
+* Delete the current user
+* Modify the credentials of the current user
+* Promote or demote a user status to an administrator from a standard account and vice versa.
+* Query the database if a user credentials are correct.
+
+The functionalities can be accessed using the `usermgmt` command in the `MainMenu.java` program. For more information on how the usermgmt works, please refer to the Easy Documentation to understand the usage.
 
 [Back To Top](#table-of-contents)
 
