@@ -17,5 +17,4 @@ show_downloads: true
 github:
   release_url: https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip
   jre_url: https://github.com/DAK404/Truncheon/releases/tag/JRE
-  src_url: https://github.com/DAK404/Truncheon
   doc_url: https://dak404.github.io/Truncheon/Documentation/index.html

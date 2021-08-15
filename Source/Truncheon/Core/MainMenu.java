@@ -200,6 +200,11 @@ public final class MainMenu
                 System.out.println("[ ATTENTION ] : Script file "+fileName.replace(_username, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
+            if(fileName.equalsIgnoreCase(""))
+            {
+                System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
+                return;
+            }
 
             //else begin executing the script.
 
@@ -361,11 +366,6 @@ public final class MainMenu
                  * soon.
                  */
                 case "script":
-
-                if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
-                {
-                    return;
-                }
                 //Check for the correct script syntax.
                 if(cmd.length <= 1)
                 {
@@ -388,7 +388,7 @@ public final class MainMenu
                 else
                 {
                     _scriptName = cmd[1];
-                    scriptEngine("./Users/"+_username+"/"+cmd[1]+".nScript");
+                    scriptEngine("./Users/Truncheon/"+_username+"/"+cmd[1]+".nScript");
                     _scriptName = "";
                 }
                 break;
@@ -528,6 +528,11 @@ public final class MainMenu
                  * 
                  */
                 case "grinch":
+                if(cmd.length > 1)
+                {
+                    new Truncheon.API.Grinch.FileManager(_username, _name, _admin).fileManagerLogic(cmd[1]);
+                    break;
+                }
                 new Truncheon.API.Grinch.FileManager(_username, _name, _admin).fileManagerLogic();
                 break;
 

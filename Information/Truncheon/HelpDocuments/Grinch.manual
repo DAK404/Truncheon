@@ -1,17 +1,52 @@
-******************************************
-* NION HELP AND DOCUMENTATION SYSTEM 3.0 *
-******************************************
+============================================
+|  NION HELP AND DOCUMENTATION SYSTEM 3.0  |
+|==========================================|
+| Updated: 30-July-2021 0342 +0530         |
+| Time to Read : 30 Minutes                |
+============================================
 
---- PAGE 1 ---
+PAGE 1
 
-This is a sample help file that can be read. 
+==============
+ Introduction
+==============
 
-This is page 1. Page numbers are optional.
+Grinch File Manager is a built in tool which will
+help users to manage their files. The file manager
+will support scripting which will help in automating
+file management easily. Grinch File Manager has 
+commands which are compatible on most systems.
 
 <end of page>
 
---- PAGE 2 ---
+PAGE 2
 
-This is the end of the help file.
+==============
+   COMMANDS   
+==============
 
-<end of help>
+Here are a list of commands available in the Grinch File Manager.
+
+----------       ----------------------------------------------------------------
+ COMMANDS        DESCRIPTION
+----------       ----------------------------------------------------------------
+ about           Displays the program information to the guest user
+ clear           Clears the output screen
+ exit            Exits the Truncheon Shell
+ ?/help          Displays this help file
+ login           Opens the MainMenu program with the login page
+ restart         Restarts the Truncheon Shell
+----------       ----------------------------------------------------------------
+
+clear
+cd
+ls
+exit
+mkdir
+rm
+rename
+cp/copy
+mv/move
+read
+write
+download

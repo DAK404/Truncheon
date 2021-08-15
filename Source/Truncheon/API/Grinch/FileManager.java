@@ -2,6 +2,8 @@ package Truncheon.API.Grinch;
 
 import java.io.Console;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -9,8 +11,9 @@ import java.io.OutputStream;
 
 public class FileManager 
 {
-    private String _user, _name, _curDir;
+    private String _user, _name, _curDir, _scriptName;
     private boolean _admin = false;
+    private boolean _scriptMode = false;
 
 
     Console console = System.console();
@@ -48,6 +51,77 @@ public class FileManager
         }
     }
 
+    public final void fileManagerLogic(String sName)throws Exception
+    {
+        try
+        {
+            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
+                if(_admin == false)
+                    return;
+
+            System.gc();
+            //Check if the script file specifed exists.
+            if(new File("./Users/Truncheon/"+_user+"/"+sName+".gScript").exists() == false)
+            {
+                //Return an error and pass the control back in case the file is not found.
+                System.out.println("[ ATTENTION ] : Script file "+sName.replace(_user, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
+                return;
+            }
+            if(sName.equalsIgnoreCase(""))
+            {
+                System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
+                return;
+            }
+
+            if(authenticationLogic() == false)
+            {
+                System.out.println("Authentication failed. Returning to main menu.");
+                Thread.sleep(5000);
+                return;
+            }
+
+            _curDir="./Users/Truncheon/"+_user+'/';
+            _scriptName = "./Users/Truncheon/"+_user+"/"+sName+".gScript";
+
+            //else begin executing the script.
+
+            //Activate the script mode.
+            _scriptMode = true;
+
+            //Initialize a stream to read the given file.
+            BufferedReader br = new BufferedReader(new FileReader(_scriptName));
+            
+            //Initialize a string to hold the contents of the script file being executed.
+            String scriptLine;
+
+            //Read the script file, line by line.
+            while ((scriptLine = br.readLine()) != null)
+            {
+                //Check if the line is a comment or is blank in the script file and skip the line.
+                if(scriptLine.toString().startsWith("#") || scriptLine.equalsIgnoreCase(""))
+                    continue;
+
+                //Check if End Script command is encountered, which will stop the execution of the script.
+                else if(scriptLine.equalsIgnoreCase("End Script"))
+                    break;
+
+                //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
+                fileManagerShell(scriptLine.toString());
+            }
+
+            //Close the streams, run the garbage collector and clean.
+            br.close();
+            System.gc();
+
+            //Deactivate the script mode.
+            _scriptMode = false;        
+        }
+        catch (Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
     private final boolean authenticationLogic()throws Exception
     {
         try
@@ -78,6 +152,34 @@ public class FileManager
 
             switch(cmd[0].toLowerCase())
             {
+                case "script":
+                //Check for the correct script syntax.
+                if(cmd.length <= 1)
+                {
+                    //Print the correct syntax if script syntax is malformed and return the program control.
+                    System.out.println("\nScript Syntax:\n\nscript <script_name/path>\n");
+                    break;
+                }
+
+                /**
+                 * 
+                 * --- FOR FURTHER ANALYSIS AND TESTING ---
+                 * 
+                 * DOCUMENTATION UNAVAILABLE.
+                 */
+                if(_scriptMode==true & _scriptName.equals(cmd[1]))
+                {
+                    System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
+                    break;
+                }
+                else
+                {
+                    _scriptName = cmd[1];
+                    fileManagerLogic("./Users/"+_user+"/"+cmd[1]+".gScript");
+                    _scriptName = "";
+                }
+                break;
+
                 case "exit":
                     new Truncheon.API.BuildInfo().versionViewer();  
                     return false;
@@ -93,7 +195,7 @@ public class FileManager
                     if(cmd.length < 2)
                     {
                         System.out.println("Syntax:\n\ncd <directory_name>\n\nOR\n\ncd ..\n");
-                        return true;
+                        break;
                     }
                     changeDir(cmd[1]);
                     break;
@@ -110,7 +212,7 @@ public class FileManager
                     if(cmd.length < 2)
                     {
                         System.out.println("Syntax:\n\nmkdir <directory_name>\n");
-                        return true;
+                        break;
                     }
                     makeDir(cmd[1]);
                     break;
@@ -119,7 +221,7 @@ public class FileManager
                     if(cmd.length < 2)
                     {
                         System.out.println("Syntax:\n\nrm <directory_name>\n\nOR\n\nrm <filename>\n");
-                        return true;
+                        break;
                     }
                     del(cmd[1]);
                     break;
@@ -128,7 +230,7 @@ public class FileManager
                     if(cmd.length < 3)
                     {
                         System.out.println("Syntax:\n\nrename <directory_name> <new_directory_name>\n\nOR\n\nrename <filename> <new_filename>\n");
-                        return true;
+                        break;
                     }
                     rename(cmd[1], cmd[2]);
                     break;
@@ -138,7 +240,7 @@ public class FileManager
                     if(cmd.length < 3)
                     {
                         System.out.println("Syntax:\n\ncopy <directory_name><new_directory_name>\ncp <directory_name><new_directory_name>\n\nOR\n\ncopy <filename> <new_filename>\ncp <filename> <new_filename>\n");
-                        return true;
+                        break;
                     }
                     copy_move_frontend(false, cmd[1], cmd[2]);
                     break;
@@ -148,7 +250,7 @@ public class FileManager
                     if(cmd.length < 3)
                     {
                         System.out.println("Syntax:\n\nmove <directory_name><new_directory_name>\nmv <directory_name><new_directory_name>\n\nOR\n\nmove <filename> <new_filename>\nmv <filename> <new_filename>\n");
-                        return true;
+                        break;
                     }
                     copy_move_frontend(true, cmd[1], cmd[2]);
                     break;
@@ -157,7 +259,7 @@ public class FileManager
                     if(cmd.length < 2)
                     {
                         System.out.println("Syntax:\n\nread <filename>\n");
-                        return true;
+                        break;
                     }
                     new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], _curDir);
                     break;
@@ -166,7 +268,7 @@ public class FileManager
                     if(cmd.length < 2)
                     {
                         System.out.println("Syntax:\n\nwrite <filename>\n");
-                        return true;
+                        break;
                     }
                     new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], _curDir);
                     break;
@@ -175,7 +277,7 @@ public class FileManager
                     if(cmd.length < 3)
                     {
                         System.out.println("Syntax:\n\ndownload <URL> <filename>\n");
-                        return true;
+                        break;
                     }
                     new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], _curDir+cmd[2]);
                     break;
@@ -192,7 +294,6 @@ public class FileManager
         }
         return false;
     }
-
     private final void changeDir(String tPath)throws Exception
     {
         if(tPath.equals(".."))
