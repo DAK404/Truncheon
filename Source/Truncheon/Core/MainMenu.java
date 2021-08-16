@@ -259,8 +259,8 @@ public final class MainMenu
 
         mainMenuVerView();
 
-        if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript").exists() == true)
-            scriptEngine("./Users/Truncheon/" + _username + "/Scripts/Startup.nScript");
+        if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.shx").exists() == true)
+            scriptEngine("./Users/Truncheon/" + _username + "/Scripts/Startup.shx");
 
         System.gc();
         //Execute the menuLogic() method.
@@ -388,7 +388,7 @@ public final class MainMenu
                 else
                 {
                     _scriptName = cmd[1];
-                    scriptEngine("./Users/Truncheon/"+_username+"/"+cmd[1]+".nScript");
+                    scriptEngine("./Users/Truncheon/"+_username+"/"+cmd[1]+".shx");
                     _scriptName = "";
                 }
                 break;

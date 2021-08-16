@@ -42,7 +42,7 @@ public class FileManager
 
             _curDir="./Users/Truncheon/"+_user+'/';
             new Truncheon.API.BuildInfo().versionViewer();
-            System.out.println("Grinch File Manager 1.7");
+            System.out.println("Grinch File Manager 1.9");
             while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+">: ")) == true);
         }
         catch(Exception E)
@@ -61,7 +61,7 @@ public class FileManager
 
             System.gc();
             //Check if the script file specifed exists.
-            if(new File("./Users/Truncheon/"+_user+"/"+sName+".gScript").exists() == false)
+            if(new File("./Users/Truncheon/"+_user+"/"+sName+".fmx").exists() == false)
             {
                 //Return an error and pass the control back in case the file is not found.
                 System.out.println("[ ATTENTION ] : Script file "+sName.replace(_user, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
@@ -469,7 +469,17 @@ public class FileManager
     {
         try
         {
-            copy_move_helper(new File(_curDir+source), new File(_curDir+destination));
+            if(checkFile(_curDir + source) == false)
+            {
+                System.out.println("The Source File Does Not Exist");
+                return;
+            }
+            if(checkFile(_curDir + destination) == false)
+            {
+                System.out.println("The Destination File Does Not Exist");
+                return;
+            }
+            copy_move_helper(new File(_curDir+source), new File(_curDir+destination+"/"+source));
             if(move==true)
                 delHelper(new File(_curDir+source));
             System.gc();
