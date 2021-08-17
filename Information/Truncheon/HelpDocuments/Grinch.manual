@@ -30,23 +30,104 @@ Here are a list of commands available in the Grinch File Manager.
 ----------       ----------------------------------------------------------------
  COMMANDS        DESCRIPTION
 ----------       ----------------------------------------------------------------
- about           Displays the program information to the guest user
+ cd              Changes the directory to the specified directory
+ copy/cp         Copies the files/directories to the target directory
  clear           Clears the output screen
+ download        Downloads the file from the specified URL
  exit            Exits the Truncheon Shell
  ?/help          Displays this help file
- login           Opens the MainMenu program with the login page
- restart         Restarts the Truncheon Shell
+ ls              lists the files and directories present in the specified path
+ mkdir           Create a directory in the current directory
+ move/mv         Moves the files/directories to the target directory
+ read            Read a specified file in the given directory
+ rename          Renames the specified file or directory to a new desired name
+ rm              Removes the specified file or directory
+ tree            Provides a tree view of the directory
+ write           Edit or create a new file, and write content into it
 ----------       ----------------------------------------------------------------
 
-clear
-cd
-ls
-exit
-mkdir
-rm
-rename
-cp/copy
-mv/move
-read
-write
-download
+The following will describe each command, syntax and an example usage to help the 
+users to work with Grinch File Manager easily.
+
+<end of page>
+
+PAGE 3
+
+-----------------------------
+COMMAND : cd
+SYNTAX  : cd <directory_name>
+        : cd ..
+EXAMPLE : 
+
+user@./Users/Truncheon/user/>: cd Scripts
+user@./Users/Truncheon/user/Scripts/>: _
+ OR
+user@./Users/Truncheon/user/Scripts/>: cd .. 
+user@./Users/Truncheon/user/>: _
+
+-----------------------------
+
+NOTES: 
+
+* When the user is at the root of user's directory,
+ie "./Users/Truncheon/<username>/", they cannot 
+traverse to the directories above that level. This
+restriction has been implemented for the safety
+of userdata and accidental data loss.
+
+Ex.
+
+user@./Users/Truncheon/user/>: cd ..
+[ WARNING ] : Permission Denied.
+ 
+* When trying to cd to a non-existent directory, an
+error shall be displayed.
+
+Ex.
+
+user@./Users/Truncheon/user/>: cd aaa
+[ ERROR ] : The specified file/directory does not exist.
+
+-----------------------------
+<end of page>
+
+PAGE 4
+
+-----------------------------
+COMMAND : copy/cp
+SYNTAX  : copy <directory_name><new_directory_name>
+        : cp <directory_name><new_directory_name>
+        : copy <filename> <new_filename>
+        : cp <filename> <new_filename>
+
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: copy Hello.txt TestFolder
+user@./Users/Truncheon/user/>: _
+
+user@./Users/Truncheon/user/>: copy script1.fmx Scripts
+user@./Users/Truncheon/user/>: _
+
+-----------------------------
+<end of page>
+
+PAGE 6
+
+-----------------------------
+COMMAND :
+SYNTAX  : 
+EXAMPLE : 
+
+-----------------------------
+<end of page>
+
+PAGE 5
+
+-----------------------------
+COMMAND :
+SYNTAX  : 
+EXAMPLE : 
+
+-----------------------------
+<end of page>
+<end of help>

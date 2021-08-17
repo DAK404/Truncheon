@@ -175,14 +175,31 @@ public class FileManager
                 else
                 {
                     _scriptName = cmd[1];
-                    fileManagerLogic("./Users/"+_user+"/"+cmd[1]+".gScript");
+                    fileManagerLogic("./Users/"+_user+"/"+cmd[1]+".fmx");
                     _scriptName = "";
                 }
+                break;
+
+                case "echo":
+                if(cmd.length < 2)
+                {
+                    System.out.println("Echo Syntax: echo \"<string>\"");
+                    break;
+                }
+                if(cmd[1].equalsIgnoreCase(null))
+                System.out.println("null");
+                else
+                System.out.println(cmd[1]);
                 break;
 
                 case "exit":
                     new Truncheon.API.BuildInfo().versionViewer();  
                     return false;
+
+                case "?":
+                case "help":
+                    new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Grinch.manual");
+                    break;
 
                 case "":
                     break;

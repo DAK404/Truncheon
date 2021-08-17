@@ -473,15 +473,14 @@ public final class MainMenu
                  * executes the specified operation in the native OS's shell.
                  */
                 case "sys":
-
-                if(cmd.length < 2)
-                {
-                    System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
-                    return;
-                }
                 if(_admin == false)
                 {
                     System.out.println("Cannot execute sys command as a standard user.");
+                    return;
+                }
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
                     return;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
