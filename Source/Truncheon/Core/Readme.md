@@ -20,3 +20,5 @@ FILL IN INFO AS REQUIRED
 ### **ISSUES**
 
 ---
+
+Please check the GitHub issues to determine the updated set of issues.
