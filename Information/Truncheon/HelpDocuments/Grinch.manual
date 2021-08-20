@@ -114,19 +114,96 @@ user@./Users/Truncheon/user/>: _
 PAGE 6
 
 -----------------------------
-COMMAND :
-SYNTAX  : 
+COMMAND : clear
+SYNTAX  : clear
 EXAMPLE : 
+
+user@./Users/Truncheon/user/>: clear
+<screen cleared>
 
 -----------------------------
 <end of page>
 
-PAGE 5
+PAGE 7
 
 -----------------------------
-COMMAND :
-SYNTAX  : 
-EXAMPLE : 
+COMMAND : download
+SYNTAX  : download <URL> <filename>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: download https://media.giphy.com/media/Ju7l5y9osyymQ/giphy.gif ClickMe.gif
+
+-----------------------------
+<end of page>
+
+PAGE 8
+
+-----------------------------
+COMMAND : exit
+SYNTAX  : exit
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: exit
+user@SYSTEM*> _
+
+-----------------------------
+<end of page>
+
+PAGE 9
+
+-----------------------------
+COMMAND : ?/help
+SYNTAX  : help
+        : ?
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: help
+ OR
+user@./Users/Truncheon/user/>: ?
+
+<displays this help file>
+
+-----------------------------
+<end of page>
+
+PAGE 10
+
+-----------------------------
+COMMAND : ls
+SYNTAX  : ls
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: ls
+<lists the contents of the directories>
+
+-----------------------------
+<end of page>
+
+PAGE 11
+
+-----------------------------
+COMMAND : mkdir
+SYNTAX  : mkdir <directory_name>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: mkdir Hello
+<Creates the directory "Hello">
+
+-----------------------------
+<end of page>
+
+PAGE 12
+
+-----------------------------
+COMMAND : move/mv
+SYNTAX  : move <directory_name><new_directory_name>
+        : mv <directory_name><new_directory_name>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: move abc def
+ OR
+user@./Users/Truncheon/user/>: mv abc def
+<moves file/folder abc to def> 
 
 -----------------------------
 <end of page>
