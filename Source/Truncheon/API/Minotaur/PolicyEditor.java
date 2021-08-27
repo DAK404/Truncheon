@@ -26,14 +26,13 @@ public class PolicyEditor
     
     public final void policyEditorLogic()throws Exception
     {
-        if(authenticationLogic() == false)
+        if(! authenticationLogic())
         {
             System.out.println("Authentication failed. Returning to main menu.");
                 Thread.sleep(5000);
                 return;
         }
         policyEditor();
-        return;
     }
 
     private final boolean authenticationLogic()
@@ -47,7 +46,7 @@ public class PolicyEditor
             String password=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
             String securityKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
-            if(new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status() == true)
+            if(new Truncheon.API.Dragon.LoginAPI(username, password, securityKey).status())
             {
                 return checkAdminStatus(username);
             }
@@ -75,9 +74,7 @@ public class PolicyEditor
 
         System.gc();
 
-        if(temp.equalsIgnoreCase("Yes"))
-            return true;
-        return false;
+        return temp.equalsIgnoreCase("Yes");
     }
 
     private final void policyEditor()throws Exception
@@ -87,7 +84,7 @@ public class PolicyEditor
         while(true)
         {
             props = new Properties();
-            if(new File(fileName).exists() == false)
+            if(! new File(fileName).exists())
             resetPolicyFile();
             displaySettings();
             switch(console.readLine("[ MODIFY | RESET | HELP | EXIT ]\n\nPolicyEditor)> ").toLowerCase())
@@ -128,7 +125,6 @@ public class PolicyEditor
         props.list(System.out);
         System.out.println("\n--------------------------------------------\n");
         System.gc();
-        return;
     }
 
     private final void editPolicy()throws Exception
@@ -153,7 +149,6 @@ public class PolicyEditor
         output.close();
         System.out.println("Policy " + policyName + " has been saved successfully.");
         System.gc();
-        return;
     }
 
     private final void resetPolicyFile()throws Exception
@@ -164,6 +159,5 @@ public class PolicyEditor
         String [] resetValues = { "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
         for(int i = 0; i < resetValues.length; ++i)
             savePolicy(resetValues[i], "on");
-        return;
     }
 }

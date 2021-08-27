@@ -28,16 +28,16 @@ PAGE 2
 
 Here are a list of commands available in the Boot program.
 
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
  COMMANDS        DESCRIPTION
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
  about           Displays the program information to the guest user
  clear           Clears the output screen
  exit            Exits the Truncheon Shell
  ?/help          Displays this help file
  login           Opens the MainMenu program with the login page
  restart         Restarts the Truncheon Shell
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
 
 The following will describe each module, syntax and an example usage to help the users
 to work with Truncheon easily.
@@ -54,6 +54,8 @@ EXAMPLE :
 guest@system> about
 <Displays the program details to the user>
 
+-----------------------------
+
 <end of page>
 
 PAGE 4
@@ -66,6 +68,8 @@ EXAMPLE :
 guest@system> clear
 <clears the output screen>
 
+-----------------------------
+
 <end of page>
 
 PAGE 5
@@ -77,6 +81,8 @@ EXAMPLE :
 
 guest@system> exit
 <exits the Truncheon Shell>
+
+-----------------------------
 
 <end of page>
 
@@ -93,6 +99,8 @@ guest@system> ?
 guest@system> help
 <displays this help document>
 
+-----------------------------
+
 <end of page>
 
 PAGE 7
@@ -107,6 +115,8 @@ guest@system> login
 
 <end of page>
 
+-----------------------------
+
 PAGE 8
 
 -----------------------------
@@ -119,6 +129,8 @@ guest@system> restart
 
 <end of page>
 
+-----------------------------
+
 PAGE 9
 
 =============
@@ -130,5 +142,7 @@ limited set of functionalities to work with.
 
 -> Additional functionalities can be accessed
 only after logging into the user shell.
+
+-----------------------------
 
 <end of help>

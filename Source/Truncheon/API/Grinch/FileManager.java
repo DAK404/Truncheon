@@ -11,7 +11,10 @@ import java.io.OutputStream;
 
 public class FileManager 
 {
-    private String _user, _name, _curDir, _scriptName;
+    private String _user;
+    private String _name;
+    private String _curDir;
+    private String _scriptName;
     private boolean _admin = false;
     private boolean _scriptMode = false;
 
@@ -29,11 +32,10 @@ public class FileManager
     {
         try
         {
-            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("update") == false)
-                if(_admin == false)
-                    return;
+            if( !_admin  && ! (new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("filemanager")) )
+                return;
 
-            if(authenticationLogic() == false)
+            if(! authenticationLogic())
             {
                 System.out.println("Authentication failed. Returning to main menu.");
                 Thread.sleep(5000);
@@ -42,8 +44,8 @@ public class FileManager
 
             _curDir="./Users/Truncheon/"+_user+'/';
             new Truncheon.API.BuildInfo().versionViewer();
-            System.out.println("Grinch File Manager 1.9");
-            while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+">: ")) == true);
+            System.out.println("Grinch File Manager 1.10.0");
+            while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+">: ")));
         }
         catch(Exception E)
         {
@@ -55,28 +57,29 @@ public class FileManager
     {
         try
         {
-            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
-                if(_admin == false)
-                    return;
+            if( ! _admin  && !(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script")))
+                return;
 
             System.gc();
+            if(sName == null || sName.equalsIgnoreCase("") || sName.startsWith(" ") || new File(sName).isDirectory() )
+            {
+                System.out.println("[ ERROR ] : The name of the script file is invalid.");
+                return;
+            }
+
             //Check if the script file specifed exists.
-            if(new File("./Users/Truncheon/"+_user+"/"+sName+".fmx").exists() == false)
+            if( ! (new File("./Users/Truncheon/"+_user+"/"+sName+".fmx").exists()) )
             {
                 //Return an error and pass the control back in case the file is not found.
                 System.out.println("[ ATTENTION ] : Script file "+sName.replace(_user, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
-            if(sName.equalsIgnoreCase(""))
-            {
-                System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
-                return;
-            }
+            
 
-            if(authenticationLogic() == false)
+            if(! authenticationLogic())
             {
                 System.out.println("Authentication failed. Returning to main menu.");
-                Thread.sleep(5000);
+                Thread.sleep(2500);
                 return;
             }
 
@@ -98,7 +101,7 @@ public class FileManager
             while ((scriptLine = br.readLine()) != null)
             {
                 //Check if the line is a comment or is blank in the script file and skip the line.
-                if(scriptLine.toString().startsWith("#") || scriptLine.equalsIgnoreCase(""))
+                if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
                     continue;
 
                 //Check if End Script command is encountered, which will stop the execution of the script.
@@ -106,7 +109,7 @@ public class FileManager
                     break;
 
                 //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
-                fileManagerShell(scriptLine.toString());
+                fileManagerShell(scriptLine);
             }
 
             //Close the streams, run the garbage collector and clean.
@@ -167,7 +170,7 @@ public class FileManager
                  * 
                  * DOCUMENTATION UNAVAILABLE.
                  */
-                if(_scriptMode==true & _scriptName.equals(cmd[1]))
+                if(_scriptMode & _scriptName.equals(cmd[1]))
                 {
                     System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
                     break;
@@ -259,7 +262,7 @@ public class FileManager
                         System.out.println("Syntax:\n\ncopy <directory_name><new_directory_name>\ncp <directory_name><new_directory_name>\n\nOR\n\ncopy <filename> <new_filename>\ncp <filename> <new_filename>\n");
                         break;
                     }
-                    copy_move_frontend(false, cmd[1], cmd[2]);
+                    copyMove(false, cmd[1], cmd[2]);
                     break;
                     
                 case "mv":
@@ -269,7 +272,7 @@ public class FileManager
                         System.out.println("Syntax:\n\nmove <directory_name><new_directory_name>\nmv <directory_name><new_directory_name>\n\nOR\n\nmove <filename> <new_filename>\nmv <filename> <new_filename>\n");
                         break;
                     }
-                    copy_move_frontend(true, cmd[1], cmd[2]);
+                    copyMove(true, cmd[1], cmd[2]);
                     break;
 
                 case "read":
@@ -311,6 +314,7 @@ public class FileManager
         }
         return false;
     }
+
     private final void changeDir(String tPath)throws Exception
     {
         if(tPath.equals(".."))
@@ -320,18 +324,17 @@ public class FileManager
             return;
         }
         
-        tPath=_curDir+tPath+"/";
-        if(checkFile(tPath)==true)
+        tPath = _curDir + tPath + "/";
+        if(checkFile(tPath))
             _curDir=tPath;
         else
             System.out.println("[ ERROR ] : The specified file/directory does not exist.");
         System.gc();
-        return;
     }
 
     private final void prevDir()throws Exception
     {
-        _curDir = _curDir.substring(0, _curDir.length()-1);
+        _curDir = _curDir.substring(0, _curDir.length() - 1);
         _curDir = _curDir.replace(_curDir.substring(_curDir.lastIndexOf('/'), _curDir.length()), "/");
 
         if(_curDir.equals("./Users/Truncheon/"))
@@ -340,15 +343,11 @@ public class FileManager
             _curDir="./Users/Truncheon/"+_user+"/";
         }
         System.gc();
-        return;
     }
 
     private final boolean checkFile(String fName)throws Exception
     {
-        if(new File(fName).exists() == false)
-            return false;
-
-        return true;
+        return new File(fName).exists();
     }
 
     private final void treeView()throws Exception
@@ -357,10 +356,9 @@ public class FileManager
         {
             File tree=new File(_curDir);
             System.out.println("\n--- [ TREE VIEW ] ---\n");
-            TreeHelper(0, tree);
+            treeViewHelper(0, tree);
             System.out.println();
             System.gc();
-            return;
         }
         catch(Exception E)
         {
@@ -368,7 +366,7 @@ public class FileManager
         }
     }
 
-    private final void TreeHelper(int indent, File file)
+    private final void treeViewHelper(int indent, File file)
     {
         System.out.print("|");
 
@@ -382,7 +380,7 @@ public class FileManager
             File[] files = file.listFiles();
 
             for (int i = 0; i < files.length; ++i)
-                TreeHelper(indent + 2, files[i]);
+                treeViewHelper(indent + 2, files[i]);
         }
     }
 
@@ -390,7 +388,7 @@ public class FileManager
     {
         //String format = "%1$-60s|%2$-50s|%3$-20s\n";
         String format = "%1$-50s|%2$-20s\n";
-        if(checkFile(_curDir)==true)
+        if(checkFile(_curDir))
         {
             File dPath=new File(_curDir);
             System.out.println("\n");
@@ -405,15 +403,14 @@ public class FileManager
         else
             System.out.println("[ ERROR ] : The specified file/directory does not exist.");
         System.gc();
-        return;
     }
 
     private final void makeDir(String mkFile)throws Exception
     {
         try
         {
-            mkFile=_curDir+mkFile+"/";
-            if(checkFile(mkFile)==false)
+            mkFile=_curDir+mkFile + "/";
+            if(! checkFile(mkFile))
                 new File(mkFile).mkdir();
             else
                 System.out.println("[ ERROR ] : The specified directory name already exists. Please try again.");
@@ -432,10 +429,10 @@ public class FileManager
         try
         {
             delFile=_curDir+delFile;
-            if(checkFile(delFile)==true)
+            if(! checkFile(delFile))
             {
                 File f=new File(delFile);
-                if(f.isDirectory()==true)
+                if(f.isDirectory())
                     delHelper(f);
                 else
                     f.delete();
@@ -443,7 +440,6 @@ public class FileManager
             else
                 System.out.println("[ ERROR ] : The specified file/directory does not exist.");
             System.gc();
-            return;
         }
         catch (Exception E)
         {
@@ -468,12 +464,11 @@ public class FileManager
         {
             oldFileName = _curDir + oldFileName;
             newFileName = _curDir + newFileName;
-            if(checkFile(oldFileName)==true)
+            if(checkFile(oldFileName))
                 new File(oldFileName).renameTo(new File(newFileName));
             else
                 System.out.println("[ ERROR ] : The specified file/directory does not exist.");
             System.gc();            
-            return;
         }
         catch (Exception E)
         {
@@ -482,22 +477,22 @@ public class FileManager
         }
     }
 
-    private final void copy_move_frontend(boolean move, String source, String destination)throws Exception
+    private final void copyMove(boolean move, String source, String destination)throws Exception
     {
         try
         {
-            if(checkFile(_curDir + source) == false)
+            if(! checkFile(_curDir + source))
             {
                 System.out.println("The Source File Does Not Exist");
                 return;
             }
-            if(checkFile(_curDir + destination) == false)
+            if(! checkFile(_curDir + destination))
             {
                 System.out.println("The Destination File Does Not Exist");
                 return;
             }
-            copy_move_helper(new File(_curDir+source), new File(_curDir+destination+"/"+source));
-            if(move==true)
+            copyMoveHelper(new File(_curDir+source), new File(_curDir+destination + "/" + source));
+            if(move)
                 delHelper(new File(_curDir+source));
             System.gc();
             return;
@@ -508,7 +503,7 @@ public class FileManager
         }
     }
 
-    private final void copy_move_helper( File src, File dest ) throws Exception 
+    private final void copyMoveHelper( File src, File dest ) throws Exception 
     {
         try
         {
@@ -518,7 +513,7 @@ public class FileManager
                 for( File sourceChild : src.listFiles() ) 
                 {
                     File destChild = new File( dest, sourceChild.getName() );
-                    copy_move_helper( sourceChild, destChild );
+                    copyMoveHelper( sourceChild, destChild );
                 }
             } 
             else
@@ -535,7 +530,6 @@ public class FileManager
                 out.close();
             }
             System.gc();
-            return;
         }
         catch(Exception E)
         {

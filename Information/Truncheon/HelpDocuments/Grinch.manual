@@ -27,12 +27,12 @@ PAGE 2
 
 Here are a list of commands available in the Grinch File Manager.
 
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
  COMMANDS        DESCRIPTION
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
  cd              Changes the directory to the specified directory
- copy/cp         Copies the files/directories to the target directory
  clear           Clears the output screen
+ copy/cp         Copies the files/directories to the target directory
  download        Downloads the file from the specified URL
  exit            Exits the Truncheon Shell
  ?/help          Displays this help file
@@ -44,7 +44,7 @@ Here are a list of commands available in the Grinch File Manager.
  rm              Removes the specified file or directory
  tree            Provides a tree view of the directory
  write           Edit or create a new file, and write content into it
-----------       ----------------------------------------------------------------
+----------      ----------------------------------------------------------------
 
 The following will describe each command, syntax and an example usage to help the 
 users to work with Grinch File Manager easily.
@@ -92,6 +92,19 @@ user@./Users/Truncheon/user/>: cd aaa
 <end of page>
 
 PAGE 4
+
+-----------------------------
+COMMAND : clear
+SYNTAX  : clear
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: clear
+<clears the screen>
+
+-----------------------------
+<end of page>
+
+PAGE 5
 
 -----------------------------
 COMMAND : copy/cp
@@ -207,4 +220,167 @@ user@./Users/Truncheon/user/>: mv abc def
 
 -----------------------------
 <end of page>
+
+PAGE 13
+
+-----------------------------
+COMMAND : read
+SYNTAX  : read <filename>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: read abc
+<reads the file named abc>
+
+-----------------------------
+<end of page>
+
+PAGE 14
+
+-----------------------------
+COMMAND : rename
+SYNTAX  : rename <directory_name> <new_directory_name>
+        : rename <filename> <new_filename>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: rename abc def
+<renames the directory/file called abc to def>
+
+-----------------------------
+<end of page>
+
+PAGE 15
+
+-----------------------------
+COMMAND : rm
+SYNTAX  : rm <directory/file name>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: rm abc
+<removes the directory/file called abc>
+
+-----------------------------
+<end of page>
+
+PAGE 16
+
+-----------------------------
+COMMAND : tree
+SYNTAX  : tree
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: tree
+
+--- [ TREE VIEW ] ---
+
+|user [ USER ROOT DIRECTORY ]
+|--Scripts
+
+-----------------------------
+<end of page>
+
+PAGE 17
+
+-----------------------------
+COMMAND : write
+SYNTAX  : write <filename>
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: write abc.txt
+<opens the Wraith File Editor>
+
+-----------------------------
+<end of page>
+
+
+PAGE 
+
+-----------------------------
+COMMAND : 
+SYNTAX  : 
+EXAMPLE :
+
+user@./Users/Truncheon/user/>: 
+
+-----------------------------
+<end of page>
+
+PAGE 18A
+
+Scripting in Grinch
+
+- Grinch File manager has a script engine which can be used to automate
+file operations.
+
+- The script will always end with an `End Script` line, denoting the end of
+the script file. Any statement that shall begin with # will be treated as
+a comment.
+
+Continued in the next page...
+
+<end of page>
+
+PAGE 18B
+
+The following block will demonstrate an example of a Nion script file.
+
+---------------------------------------------------------------------------
+Script File Extension : .fmx
+Script Engine         : GHOST Script Engine
+Availability          : Administrator Policy configuration dependent
+---------------------------------------------------------------------------
+
+ # it is a good idea to clear the screen before executing a script file
+ clear
+
+ # print hello world onto the screen
+ echo "Hello World!"
+
+ # demonstrate the confirm functionality
+ echo "Creating a new directory..."
+ mkdir abc
+
+ # demonstrate the wait functionality
+ ls
+
+ #show the tree view of the directory
+ tree
+
+ # create a folder def
+ mkdir def
+
+ # copy abc to def
+ cp abc def
+
+ # change directory to def
+ cd def
+
+ # display the contents of def
+ ls
+
+ # create a folder ghi in def
+ mkdir ghi
+
+ # move ghi to abc
+ mv ghi abc
+ 
+ # display the contents of def
+ ls
+
+ # return back to root folder
+ cd ..
+
+ # remove the folder def
+ rm def
+
+ # it is a good idea to denote its the end of file to the interpreter
+ # Any statements after the `End Script` line will not be executed
+ End Script
+
+ # demonstrate that this line will not be executed by interpreter
+ echo "This line is not printed onto the screen."
+
+---------------------------------------------------------------------------
+
+<end of page>
+
 <end of help>

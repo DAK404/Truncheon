@@ -52,7 +52,7 @@ public class Setup
         System.gc();
         showSetupDetails();
         showPrerequisites();
-        if(checkMosaic()==false)
+        if(! checkMosaic())
         {
             createDirs();
             initializeDatabase();
@@ -101,19 +101,18 @@ public class Setup
     {
         new Truncheon.API.Wraith.ReadFile().showHelp("License.eula");
         System.out.println("\nDo you accept the Product License? [Y/N]");
-        if(console.readLine().toLowerCase().equalsIgnoreCase("y"))
+        if(console.readLine().equalsIgnoreCase("y"))
             //read changelog file
             new Truncheon.API.Wraith.ReadFile().showHelp("changelog.txt");
         else
             System.exit(2);
 
         _legal = true;
-        return;
     }
 
     private final boolean checkMosaic()throws Exception
     {
-        if(new File("./System/Private/Fractal.db").exists() == true)
+        if(new File("./System/Private/Fractal.db").exists())
         {
             System.out.println("[ ATTENTION ] : Mosaic Files have been found. Do you want to copy over existing data?");
             if(console.readLine("[ Y | N ]\n> ").equalsIgnoreCase("Y"))
@@ -186,14 +185,13 @@ public class Setup
             {
                 File makeDir =  new File(directoryList[i]);
 
-                if(makeDir.exists() == false)
+                if(! makeDir.exists())
                     makeDir.mkdirs();
                 else
                     System.out.println("Folder " + directoryList[i]+ " Exists.");
             }
 
             _dirs = true;
-            return;
         }
         catch(Exception E)
         {
@@ -241,7 +239,6 @@ public class Setup
         {
             new Truncheon.API.ErrorHandler().handleException(E);
         }
-        return;
     }
 
     private final void createAdminUser()throws Exception
@@ -249,7 +246,7 @@ public class Setup
         try
         {
             displayStatus();
-            new Truncheon.API.Dragon.AddUser().Setup();
+            new Truncheon.API.Dragon.AddUser().setupAdminUser();
 
             _adminAccCreate = true;
         }
@@ -265,7 +262,7 @@ public class Setup
         {
             String sysName;
             sysName = console.readLine("Enter the name of this system\n\nThis will be used to identify your system in the prompt. The default name is SYSTEM.\n\n> ");
-            if(sysName.equals("") || sysName.startsWith(" ") || sysName.equals(null))
+            if(sysName == null || sysName.equals("") || sysName.startsWith(" "))
                 sysName = "SYSTEM";
             if(sysName.contains(" "))
                 sysName = sysName.replaceAll(" ", "");
@@ -291,7 +288,6 @@ public class Setup
             output.close();
             System.gc();
             _policyInit = true;
-            return;
         }
         catch(Exception E)
         {
@@ -306,15 +302,15 @@ public class Setup
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("SETUP CHECKLIST");
             System.out.println("===============\n");
-            if(_legal == true)
+            if(_legal)
                 System.out.println("1. Legal and Important Information    : COMPLETE");
-            if(_dirs == true)
+            if(_dirs)
                 System.out.println("2. Initialize Truncheon Dependencies  : COMPLETE");
-            if(_dbInit == true)
+            if(_dbInit)
                 System.out.println("3. Initialize Database Files          : COMPLETE");
-            if(_policyInit == true)
+            if(_policyInit)
                 System.out.println("4. Initialize Policies and BURN Files : COMPLETE");
-            if(_adminAccCreate == true)
+            if(_adminAccCreate)
                 System.out.println("5. Administrator account creation     : COMPLETE");
         }
         catch (Exception E)

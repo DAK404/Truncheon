@@ -28,13 +28,12 @@ public final class ModifyAccount
     public final void modifyAccountLogic()throws Exception
     {
         System.gc();
-        if(authenticateUser() == false)
+        if(! authenticateUser())
         {
             System.out.println("Incorrect Credentials. Access Denied.");
             return;
         }
-        while(modifyAccountMenu() == true);
-        //return;
+        while(modifyAccountMenu());
     }
 
     private final boolean authenticateUser()throws Exception
@@ -56,7 +55,7 @@ public final class ModifyAccount
         System.out.println("* User Account Password");
         System.out.println("* User Account Security Key");
         System.out.println("* User Account PIN");
-        if(_admin==true)
+        if(_admin)
             System.out.println("* Promote an Account");
             System.out.println("* Demote an Account");
         System.out.println("* Exit\n");
@@ -68,17 +67,17 @@ public final class ModifyAccount
                 break;
 
             case "psw":
-                while(getPassword() == false);
+                while(! getPassword());
                 updateValues("Password", _password, _user);
                 break;
 
             case "key":
-                while(getKey() == false);
+                while(! getKey());
                 updateValues("SecurityKey", _key, _user);
                 break;
 
             case "pin":
-                while(getPIN() == false);
+                while(! getPIN());
                 updateValues("PIN", _pin, _user);
                 break;
 
@@ -106,21 +105,20 @@ public final class ModifyAccount
         System.gc();
         System.out.println("Administrator Account: "+_admin);
 
-        if(! (_name.equals(null) | _name.equals("")) )
+        if(! (_name == null | _name.equals("")) )
             System.out.println("Account Name : " + _name);
 
-        if(! (_user.equals(null) | _user.equals("")) )
+        if(! (_user == null | _user.equals("")) )
             System.out.println("Username     : " + _user);
 
-        if(! (_password.equals(null) | _password.equals("")) )
+        if(! (_password == null | _password.equals("")) )
             System.out.println("Password     : ********");
 
-        if(! (_key.equals(null) | _key.equals("")) )
+        if(! (_key == null | _key.equals("")) )
             System.out.println("Security Key : ********");
 
-        if(! (_pin.equals(null) | _pin.equals("")) )
+        if(! (_pin == null | _pin.equals("")) )
             System.out.println("Unlock PIN   : ****");
-        return;
     }
 
     private final boolean getPassword()throws Exception
@@ -131,7 +129,7 @@ public final class ModifyAccount
         System.out.println("* Password must be the same as the password confirmation\n");
         _password  = String.valueOf(console.readPassword("\nAccount Password : "));
         String C_password = String.valueOf(console.readPassword("Confirm Password : "));
-        if(_password.length() < 8 | ( _password.equals(C_password) == false ) )
+        if(_password.length() < 8 | ! ( _password.equals(C_password)) )
         {
             _password="";
             console.readLine("Password Policy not followed. Please try again which follows the Password Policy.");
@@ -154,7 +152,7 @@ public final class ModifyAccount
         System.out.println("* Security _key must be the same as the Security _key confirmation\n");
         _key  = String.valueOf(console.readPassword("\nSecurity _key : "));
         String C_key = String.valueOf(console.readPassword("Confirm _key  : "));
-        if(_key.equals(C_key) == false)
+        if(! _key.equals(C_key))
         {
             _key="";
             console.readLine("Security _key Policy not followed. Please try again which follows the Security _key Policy.");
@@ -178,7 +176,7 @@ public final class ModifyAccount
         System.out.println("* PIN must be the same as the PIN confirmation\n");
         _pin  = String.valueOf(console.readPassword("\nUnlock PIN   : "));
         String CPIN = String.valueOf(console.readPassword("Confirm PIN  : "));
-        if(_pin.length() < 4 | ( _pin.equals(CPIN) == false ))
+        if(_pin.length() < 4 | ! ( _pin.equals(CPIN)))
         {
             _pin="";
             console.readLine("PIN Policy not followed. Please use a valid PIN and try again.");
@@ -193,7 +191,7 @@ public final class ModifyAccount
     {
         try
         {
-            if(_admin == false)
+            if(! _admin)
                 return;
 
             String user = console.readLine("Enter the name of the user to " + status + ": ");

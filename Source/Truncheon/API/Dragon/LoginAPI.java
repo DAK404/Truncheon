@@ -9,7 +9,9 @@ public final class LoginAPI
 {
     //a universal string to read the file
     
-    private String _User, _Pass, _SecKey;
+    private String _User;
+    private String _Pass;
+    private String _SecKey;
 
     private String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
 
@@ -55,7 +57,7 @@ public final class LoginAPI
                 if (rs.getString("Username").equals(_User) & rs.getString("Password").equals(_Pass) & rs.getString("SecurityKey").equals(_SecKey))
                     loginStatus = true;
 
-            if(loginStatus == false)
+            if(! loginStatus)
                 System.out.println("Incorrect Credentials, Please try again.");
 
             rs.close();

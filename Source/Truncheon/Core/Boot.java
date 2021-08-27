@@ -86,10 +86,10 @@ public final class Boot
         System.out.println("BOOT CHECKLIST");
         System.out.println("==============\n");
 
-        if(new File("./System").exists() == true & new File("./Users").exists() == true)
+        if(new File("./System").exists() & new File("./Users").exists())
         {
             System.out.println("* Base Directories check       : COMPLETE");
-            if(new File("./System/Public/Truncheon").exists() == true & new File("./System/Private/Truncheon").exists() == true)
+            if(new File("./System/Public/Truncheon").exists() & new File("./System/Private/Truncheon").exists())
             {
                 System.out.println("* Truncheon Directories check  : COMPLETE");
                 Console console=System.console();

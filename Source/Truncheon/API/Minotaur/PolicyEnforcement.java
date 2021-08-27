@@ -28,6 +28,11 @@ public class PolicyEnforcement
                     System.out.println("[ WARNING ] : Module Policy is not configured. Please contact the system admnistrator to initialize the policy.");
                     console.readLine();
                     break;
+
+                default:
+                    System.out.println("[ ERROR ] : POLICY CONFIGURATION ERROR!.");
+                    console.readLine();
+                    break;
             }
         }
         catch(Exception E)

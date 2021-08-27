@@ -46,15 +46,6 @@ import java.sql.ResultSet;
  */
 public final class MainMenu
 {
-
-    /**
-    * Sole constructor. (For invocation by subclass constructors, typically implicit.)
-    */
-    public MainMenu()
-    {
-
-    }
-
     /**
      * The following are the numeric datatypes in this program:
      *
@@ -95,6 +86,13 @@ public final class MainMenu
     //Initialize the Console class for IO operations
     Console console=System.console();
 
+    /**
+    * Sole constructor. (For invocation by subclass constructors, typically implicit.)
+    */
+    public MainMenu()
+    {
+
+    }
 
     /**
      * Method which handles the login, information retrieval and the menu shell of the program
@@ -106,7 +104,7 @@ public final class MainMenu
         try
         {
             //By default, check the _count value and provive the user a chance to login to the program
-            while(login() == false && _count <= 5 && _count > 0);
+            while(! login() && _count <= 5 && _count > 0);
             /*
             * Retrieve the important information that the program requires.
             * See the method getUserDetails() for more information
@@ -149,7 +147,7 @@ public final class MainMenu
             loginStatus = challenge();
 
             //If the login stasus is false, pass it on to decrement the login counter.
-            if(loginStatus==false)
+            if(! loginStatus)
                 counterLogic();
             else
                 _count = 5;
@@ -193,22 +191,21 @@ public final class MainMenu
         try
         {
             //Verify is the script functionality is allowed by the Administrator policy
-            if(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script") == false)
+            if(! _admin && ! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script"))
             //bypass the policy if the user has the administrator permissions, either by pseudo or by account privileges
-                if(_admin == false)
-                    return;
+                return;
 
             System.gc();
 
             //Check if the script file specifed exists.
-            if(new File(fileName).exists() == false)
+            if(! new File(fileName).exists())
             {
 
                 //Return an error and pass the control back in case the file is not found.
                 System.out.println("[ ATTENTION ] : Script file "+fileName.replace(_username, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
-            if(fileName.equalsIgnoreCase(""))
+            if(fileName == null || fileName.equalsIgnoreCase("") || fileName.startsWith(" "))
             {
                 System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
                 return;
@@ -229,7 +226,7 @@ public final class MainMenu
             while ((scriptLine = br.readLine()) != null)
             {
                 //Check if the line is a comment or is blank in the script file and skip the line.
-                if(scriptLine.toString().startsWith("#") || scriptLine.equalsIgnoreCase(""))
+                if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
                     continue;
 
                 //Check if End Script command is encountered, which will stop the execution of the script.
@@ -237,7 +234,7 @@ public final class MainMenu
                     break;
 
                 //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
-                commandProcessor(scriptLine.toString());
+                commandProcessor(scriptLine);
             }
 
             //Close the streams, run the garbage collector and clean.
@@ -274,7 +271,7 @@ public final class MainMenu
 
         mainMenuVerView();
 
-        if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.shx").exists() == true)
+        if(new File("./Users/Truncheon/" + _username + "/Scripts/Startup.shx").exists())
             scriptEngine("./Users/Truncheon/" + _username + "/Scripts/Startup.shx");
 
         System.gc();
@@ -323,6 +320,10 @@ public final class MainMenu
             //process the command in the String Array.
             switch(cmd[0].toLowerCase())
             {
+                /*case "debug_mem_info":
+                debugMemoryInformation();
+                break;*/
+
                 /**
                  * Wait Functionality.
                  *
@@ -337,7 +338,7 @@ public final class MainMenu
                 {
                     //Print the correct syntax and return the control back.
                     System.out.println("\nWait Syntax:\nwait <timeout>\nWhere timeout is the number of milliseconds for the interpreter to wait.\n\n");
-                    return;
+                    break;
                 }
 
                 //Initialize the wait time as an int.
@@ -358,7 +359,6 @@ public final class MainMenu
                 {
                     //print the syntax and then return the control back.
                     System.out.println("\nWait Syntax:\nwait <timeout>\nWhere timeout is the number of milliseconds for the interpreter to wait.\n\n");
-                    return;
                 }
                 break;
 
@@ -386,7 +386,7 @@ public final class MainMenu
                 {
                     //Print the correct syntax if script syntax is malformed and return the program control.
                     System.out.println("\nScript Syntax:\n\nscript <script_name/path>\n");
-                    return;
+                    break;
                 }
 
                 /**
@@ -395,7 +395,7 @@ public final class MainMenu
                  *
                  * DOCUMENTATION UNAVAILABLE.
                  */
-                if(_scriptMode==true & _scriptName.equals(cmd[1]))
+                if(_scriptMode & _scriptName.equals(cmd[1]))
                 {
                     System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
                     return;
@@ -471,10 +471,10 @@ public final class MainMenu
                  * Opens the native OS's shell allow the user to execute the native OS's commands.
                  */
                 case "syshell":
-                if(_admin == false)
+                if(! _admin)
                 {
                     System.out.println("Cannot execute syshell command as a standard user.");
-                    return;
+                    break;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd").inheritIO().start().waitFor();
@@ -488,15 +488,15 @@ public final class MainMenu
                  * executes the specified operation in the native OS's shell.
                  */
                 case "sys":
-                if(_admin == false)
+                if(! _admin)
                 {
                     System.out.println("Cannot execute sys command as a standard user.");
-                    return;
+                    break;
                 }
                 if(cmd.length < 2)
                 {
                     System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
-                    return;
+                    break;
                 }
                 if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", cmd[1]).inheritIO().start().waitFor();
@@ -513,7 +513,7 @@ public final class MainMenu
                 if(cmd.length < 2)
                 {
                     System.out.println("Echo Syntax: echo \"<string>\"");
-                    return;
+                    break;
                 }
                 if(cmd[1].equalsIgnoreCase(null))
                 System.out.println("null");
@@ -581,7 +581,7 @@ public final class MainMenu
                 if(cmd.length < 2)
                 {
                     System.out.println("Syntax:\n\nusermgmt <option>\n\nConsult the HELP file for more information.\n");
-                    return;
+                    break;
                 }
                 switch(cmd[1].toLowerCase())
                 {
@@ -612,11 +612,7 @@ public final class MainMenu
                     System.out.println(input+" - Command not found.");
                     break;
             }
-
             System.gc();
-
-            //Return the program control to the previous method to receive new inputs.
-            return;
         }
         catch(Exception E)
         {
@@ -695,8 +691,6 @@ public final class MainMenu
             while(! (new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("\nPlase Authenticate with the Unlock PIN:\nPIN : "))).equals(_PIN)))
                 counterLogic();
             new Truncheon.API.BuildInfo().versionViewer();
-
-            return;
         }
         catch(Exception E)
         {
@@ -740,7 +734,7 @@ public final class MainMenu
             System.gc();
 
             //Check if the current user has the Administrator privileges.
-            if(_admin == true)
+            if(_admin)
             {
                 //Do nothing if the user has administrator privileges.
                 System.out.println("Unable to run Pseudo: Administrator privileges already available.");
@@ -749,7 +743,7 @@ public final class MainMenu
             else
             {
                 //Ask for the user to enter administrator credentials to elevate status
-                if(challenge() == true && retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+                if(challenge() && retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
                     elevateStatus();
             }
             System.gc();
@@ -782,8 +776,29 @@ public final class MainMenu
         System.gc();
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("Account Type : " + _privilegeStatus + "\n");
-        if(new File("./System/Private/Truncheon/Policy.burn").exists() == false)
+        if(! new File("./System/Private/Truncheon/Policy.burn").exists())
             System.out.println("[ ATTENTION ] : POLICY FILE CORRUPT!\nPolicy File Reconfiguration Required!\n");
         System.out.println("[ HINT ] : Type \'HELP\' to get the contextual help.\n");
     }
+
+    /*
+    private void debugMemoryInformation()
+	{
+		// get Runtime instance
+		Runtime instance = Runtime.getRuntime();
+		System.out.println("*****************************************");
+		System.out.println("      ---   DEBUG INFORMATION   ---      ");
+		System.out.println("*****************************************");
+		System.out.println("\n  - Heap utilization statistics -  \n ");
+		System.out.println(" [*]  Process ID   : " + ProcessHandle.current().pid());
+ 		// available memory
+		System.out.println(" [*]  Total Memory : " + instance.totalMemory()  + " Bytes");
+		// free memory
+		System.out.println(" [*]  Free Memory  : " + instance.freeMemory()  + " Bytes");
+		// used memory
+		System.out.println(" [*]  Used Memory  : " + (instance.totalMemory() - instance.freeMemory())  + " Bytes"); 
+		// Maximum available memory
+		System.out.println(" [*]  Max Memory   : " + instance.maxMemory()  + " Bytes");
+		System.out.println("\n*****************************************\n\n");
+	}*/
 }

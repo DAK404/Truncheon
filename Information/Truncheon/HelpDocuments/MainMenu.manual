@@ -81,6 +81,8 @@ but now focusing on simplifying the
 program to give back the power to the
 developers and end users.
 
+-----------------------------
+
 <end of page>
 
 PAGE 4
@@ -96,7 +98,9 @@ Nion: Truncheon vX.X.X
 Build Date: XX-XXXX-XXXX
 
 User Privilege : Standard
-user@system*>
+user@system*> _
+
+-----------------------------
 
 <end of page>
 
@@ -111,6 +115,8 @@ user@system*> confirm
 
 Press ENTER to continue.
 
+-----------------------------
+
 <end of page>
 
 PAGE 6
@@ -123,6 +129,8 @@ EXAMPLE :
 user@system*> echo "Hello World!"
 Hello World!
 
+-----------------------------
+
 <end of page>
 
 PAGE 7
@@ -133,6 +141,8 @@ SYNTAX  : exit
 EXAMPLE :
 
 user@system*> exit
+
+-----------------------------
 
 <end of page>
 
@@ -146,6 +156,8 @@ EXAMPLE :
 user@system*> grinch
 
 <opens the grinch module>
+
+-----------------------------
 
 <end of page>
 
@@ -163,6 +175,8 @@ user@system*> help
 
 <displays this help file>
 
+-----------------------------
+
 <end of page>
 
 PAGE 10
@@ -173,7 +187,9 @@ SYNTAX  : lock
 EXAMPLE :
 
 user@system*> lock
-AFK@IDLE> 
+AFK@IDLE> _
+
+-----------------------------
 
 <end of page>
 
@@ -188,6 +204,8 @@ user@system!> pconfig
 
 <opens Policy Configuration Tool>
 
+-----------------------------
+
 <end of page>
 
 PAGE 12
@@ -201,7 +219,9 @@ user@system*> pseudo
 Username: <user with Administrator privileges>
 Password:
 Security Key:
-user@system!>
+user@system!> _
+
+-----------------------------
 
 <end of page>
 
@@ -215,6 +235,8 @@ EXAMPLE :
 user@system*> restart
 
 <program restarts>
+
+-----------------------------
 
 <end of page>
 
@@ -232,6 +254,8 @@ user@system*> script "Scripts/HelloWorld"
 
 <executes script file "Hello World">
 
+-----------------------------
+
 <end of page>
 
 PAGE 15
@@ -243,6 +267,8 @@ EXAMPLE :
 
 user@system!> sys "echo Hello World"
 Hello World!
+
+-----------------------------
 
 <end of page>
 
@@ -256,6 +282,8 @@ EXAMPLE :
 user@system!> syshell
 
 <Host OS shell interface>
+
+-----------------------------
 
 <end of page>
 
@@ -282,6 +310,8 @@ user@system*> usermgmt delete
 user@system*> usermgmt modify
 <opens user manager to Modify user credentials>
 
+-----------------------------
+
 <end of page>
 
 PAGE 18
@@ -295,9 +325,11 @@ user@system*> wait 1000
 
 <shell waits for 1 second before executing other commands or receiving inputs>
 
+-----------------------------
+
 <end of page>
 
-PAGE 18
+PAGE 18A
 
 Scripting in Truncheon
 
@@ -308,11 +340,17 @@ The script will always end with an `End Script` line, denoting the end of
 the script file. Any statement that shall begin with # will be treated as
 a comment.
 
+Continued in the next page...
+
+<end of page>
+
+PAGE 18B
+
 The following block will demonstrate an example of a Nion script file.
 
 ---------------------------------------------------------------------------
-Script File Extension : .nScript
-Script Engine         : Nion Script Engine
+Script File Extension : .shx
+Script Engine         : GHOST Script Engine
 Availability          : Administrator Policy configuration dependent
 ---------------------------------------------------------------------------
 
@@ -383,4 +421,7 @@ In case of subsequent deletion of the file regularly, please check if any system
 are interfering or removing the policy file.
 
 - END OF HELP DOCUMENT -
+
+-----------------------------
+
 <end of help>

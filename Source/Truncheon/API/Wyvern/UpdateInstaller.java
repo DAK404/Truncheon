@@ -54,8 +54,8 @@ final class UpdateInstaller
                     continue;
                 }
 
-                System.out.println("[INFO] Installing : " + newFile.getAbsoluteFile());
-                new Truncheon.API.Wraith.WriteFile().logToFile("File Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
+                System.out.println("[INFO] Installed : " + newFile.getAbsoluteFile());
+                new Truncheon.API.Wraith.WriteFile().logToFile("Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
 
                 
 
