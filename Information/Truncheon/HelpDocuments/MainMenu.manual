@@ -30,9 +30,9 @@ PAGE 2
 
 Here are a list of commands available in the MainMenu program.
 
---------   ----------       ----------------------------------------------------------------
+--------   ----------      ----------------------------------------------------------------
  PROMPT     COMMANDS        DESCRIPTION
---------   ----------       ----------------------------------------------------------------
+--------   ----------      ----------------------------------------------------------------
     *       about           Prints the program information on the screen
     *       clear           Clears the screen
     *       confirm         Waits for a user input (used mostly in scripts)
@@ -49,7 +49,7 @@ Here are a list of commands available in the MainMenu program.
     !       syshell         Opens the Host OS's command line interface inside Truncheon
    */!      usermgmt        Opens the Dragon User Management Tool
     *       wait            Waits for the specified amount of time (used mostly in scripts)
---------   ----------       ----------------------------------------------------------------
+--------   ----------      ----------------------------------------------------------------
 
 The following will describe each module, syntax and an example usage to help the users
 to work with Truncheon easily.
