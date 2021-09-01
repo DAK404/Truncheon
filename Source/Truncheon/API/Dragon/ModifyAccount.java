@@ -103,7 +103,7 @@ public final class ModifyAccount
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.gc();
-        System.out.println("Administrator Account: "+_admin);
+        System.out.println("Administrator Account: " + _admin);
 
         if(! (_name == null | _name.equals("")) )
             System.out.println("Account Name : " + _name);

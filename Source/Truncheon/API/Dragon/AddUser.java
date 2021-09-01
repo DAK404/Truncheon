@@ -249,7 +249,7 @@ public final class AddUser
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.gc();
-        System.out.println("Administrator Account: "+ADM);
+        System.out.println("Administrator Account: " + ADM);
 
         if(! (NAME == null | NAME.equals("")) )
             System.out.println("Account Name : " + NAME);
@@ -286,17 +286,17 @@ public final class AddUser
             pstmt.executeUpdate();
             pstmt.close();
             conn.close();
+            System.gc();
             console.readLine("The user \"" + NAME + "\" was successfully created! Press ENTER to continue..");
             createDir();
             return true;
         }
         catch (Exception E)
         {
-            E.printStackTrace();
             System.out.println("Failed to create user. Please try again."); 
             System.in.read();
-            return false;
         }
+        return false;
     }
 
     private final void createDir()throws Exception

@@ -87,14 +87,6 @@ public final class MainMenu
     Console console=System.console();
 
     /**
-    * Sole constructor. (For invocation by subclass constructors, typically implicit.)
-    */
-    public MainMenu()
-    {
-
-    }
-
-    /**
      * Method which handles the login, information retrieval and the menu shell of the program
      *
      * @throws Exception : Handle general exceptions during thrown during runtime. : Handle general exceptions during thrown during runtime.
@@ -141,7 +133,7 @@ public final class MainMenu
             new Truncheon.API.BuildInfo().versionViewer();
 
             //Display the number of login attempts remaining.
-            System.out.println("Login Attempts Remaining: "+_count+"\n===========================\n");
+            System.out.println("Login Attempts Remaining: " + _count + "\n===========================\n");
 
             //Query the login details to check the credentials.
             loginStatus = challenge();
