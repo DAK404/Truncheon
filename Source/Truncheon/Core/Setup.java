@@ -1,25 +1,21 @@
 /*
-
------ PROGRAM DOCUMENTATION -----
-
-THIS PROGRAM IS UNDER DEVELOPMENT
-AND SHOULD NOT BE CONSIDERED
-RELEASE READY. FEATURES MAY BE
-BROKEN OR INCOMPLETE. COMPILE AND
-TEST AT YOUR OWN RISK.
-
----------------------------------
-
-     --- Program Details ---
-
-     Author  : DAK404
-     Date    : 17-June-2021
-     Version : 0.1.14
-
-     -----------------------
-
-*/
-
+ * ---------------!DISCLAIMER!--------------- *
+ *                                            *
+ *         THIS CODE IS RELEASE READY         *
+ *                                            *
+ *  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+ *   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+ *    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+ *     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+ *              ERRORS IN THE CODE.           *
+ *                                            *
+ *   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+ *    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+ *        DISTRIBUTING THE SOURCE CODE.       *
+ *   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+ *                                            *
+ * ------------------------------------------ *
+ */
 
 package Truncheon.Core;
 
@@ -41,7 +37,7 @@ import java.sql.DriverManager;
 
 /**
  * Program to set Truncheon up for the initial use.
- * 
+ *
  * Sets up the required directories, files and the database.
  * @version 0.8.67
  * @since 0.7.5
@@ -58,15 +54,15 @@ public class Setup
     private boolean _mosaicSetup = false;
 
     //Initialize the Console class for IO via the STDIN
-    Console console = System.console();
+    private Console console = System.console();
 
     //Initialize the Properties class to create the policy file and set the default policy values
     Properties props = null;
 
     /**
      * Logic which will help in setting up the program before first use.
-     * 
-     * Directories and files are created if they are not found 
+     *
+     * Directories and files are created if they are not found
      * or can be imported from a pre existsing installation from Mosaic.
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
@@ -90,7 +86,7 @@ public class Setup
             /*
              * If it does not exist, The program will then
              * create a new database and an Administrator account.
-             */            
+             */
             initializeDatabase();
             createAdminUser();
         }
@@ -112,7 +108,7 @@ public class Setup
 
     /**
      * Display the details of the setup program.
-     * 
+     *
      * The user will then know the steps of the setup program.
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
@@ -152,7 +148,7 @@ public class Setup
 
     /**
      * Show the legal documents, readme file, the changelog file and the credits file
-     * 
+     *
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
     private final void showPrerequisites()throws Exception
@@ -176,7 +172,7 @@ public class Setup
 
     /**
      * Checks if Mosaic is installed in the same directory already.
-     * 
+     *
      * @return boolean : returns true if found, else false.
      * @throws Exception
      */
@@ -195,26 +191,26 @@ public class Setup
             if(console.readLine("[ Y | N ]\n> ").equalsIgnoreCase("Y"))
                 _mosaicSetup = mosaicSyncLogic();
         }
-        //else return false to signify that the user will need a fresh start 
+        //else return false to signify that the user will need a fresh start
         return _mosaicSetup;
     }
 
     /**
      * Program to import the pre-existing Mosaic Database and User directories to Truncheon.
-     * 
-     * It skips the entire setup process and directly jumps to creating the policy files 
+     *
+     * It skips the entire setup process and directly jumps to creating the policy files
      * @return boolean : Returns the status of importing Mosaic information if found.
      */
     private final boolean mosaicSyncLogic()
     {
-        try 
+        try
         {
             //Copy over the database and rename it from Fractal.db to mud.db
             syncHelper(new File("./System/Private/Fractal.db"), new File("./System/Private/Truncheon/mud.db"));
 
             //Copy over the Mosaic user directories to the Truncheon user directories
             syncHelper(new File("./Users/Mosaic"), new File("./Users/Truncheon"));
-                
+
             System.gc();
 
             //return true to checkMosaic() that the synchronization was successful.
@@ -230,12 +226,12 @@ public class Setup
 
     /**
      * The helper program which helps in synchronizing Mosaic files with Truncheon
-     * 
+     *
      * @param src : The source directory/file to be copied
      * @param dest : The destination directory to the copied to
      * @throws Exception
      */
-    private final void syncHelper(File src, File dest ) throws Exception 
+    private final void syncHelper(File src, File dest ) throws Exception
     {
         try
         {
@@ -246,14 +242,14 @@ public class Setup
                 dest.mkdirs();
 
                 //Copy over the child directories and files to the destination, recursively
-                for( File sourceChild : src.listFiles() ) 
+                for( File sourceChild : src.listFiles() )
                 {
                     File destChild = new File( dest, sourceChild.getName() );
 
                     //Recurse through the entire directory
                     syncHelper( sourceChild, destChild );
                 }
-            } 
+            }
             //If the source is a file
             else
             {
@@ -325,17 +321,17 @@ public class Setup
         {
             //Display the setup program status
             displayStatus();
-            
+
             //Set the URL to save the database to
             String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
 
             //create a connection to the database
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
-            
+
             //Notify the user that the database file has been created successfully
             System.out.println("Master User Database File created successfully!");
-            
+
             //Create the table using the SQL statements and store it in a String.
             String sql = "CREATE TABLE IF NOT EXISTS FCAD (\n" +
                 "    UserID integer PRIMARY KEY,\n" +
@@ -359,7 +355,7 @@ public class Setup
 
             //Notify the user that the database has been initialized successfully, which can accommodate user data now.
             System.out.println("Master User Database File has been initialized successfully!");
-            
+
             //Set the database creation and table initialization as successful.
             _dbInit = true;
         }
@@ -371,7 +367,7 @@ public class Setup
 
     /**
      * Helps in creating the Administrator account.
-     * 
+     *
      * This is the default account which cannot be deleted or demoted.
      * @throws Exception
      */
@@ -387,14 +383,15 @@ public class Setup
             _adminAccCreate = true;
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
     }
 
     /**
      * Initializes the policies, by setting the Policy Names.
-     * 
+     *
      * Used to set the System name too.
      * Also sets the policy with the default value as 'on'
      * @throws Exception
@@ -412,7 +409,7 @@ public class Setup
             //In case of invalid inputs, the system shall revert back to the default system name 'SYSTEM'
             if(sysName == null || sysName.equals("") || sysName.startsWith(" "))
                 sysName = "SYSTEM";
-            
+
             //Remove all the spaces in the string
             if(sysName.contains(" "))
                 sysName = sysName.replaceAll(" ", "");
@@ -436,7 +433,7 @@ public class Setup
 
     /**
      * Helps in saving the policy to the BURN file.
-     * 
+     *
      * This helps in iterative implementation of saving a policy and its value.
      * @param policyName : The Name of the policy which is stored to the file
      * @param policyValue : The value of the policy stored to the file.
@@ -470,7 +467,7 @@ public class Setup
 
     /**
      * Display the status of the Setup.
-     * 
+     *
      * Generally signifies which section of the program has finished setting up.
      * @throws Exception
      */

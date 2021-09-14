@@ -1,25 +1,59 @@
+/*
+ * ---------------!DISCLAIMER!--------------- *
+ *                                            *
+ *         THIS CODE IS RELEASE READY         *
+ *                                            *
+ *  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+ *   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+ *    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+ *     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+ *              ERRORS IN THE CODE.           *
+ *                                            *
+ *   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+ *    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+ *        DISTRIBUTING THE SOURCE CODE.       *
+ *   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+ *                                            *
+ * ------------------------------------------ *
+ */
+
 package Truncheon.API.Dragon;
 
+//Import the required Java IO classes
 import java.io.Console;
 import java.io.File;
 
+//Import the required Java SQL classes
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-public class DeleteUser 
+/**
+ * 
+ */
+public class DeleteUser
 {
     private String _user;
     private String _name;
 
-    Console console = System.console();
+    private Console console = System.console();
 
+    /**
+     * 
+     * @param User
+     * @param Name
+     * @throws Exception
+     */
     public DeleteUser(String User, String Name)throws Exception
     {
         _user = User;
         _name = Name;
     }
 
+    /**
+     * 
+     * @throws Exception
+     */
     public void deleteUserLogic()throws Exception
     {
         if(_user.equalsIgnoreCase("Administrator"))
@@ -34,9 +68,14 @@ public class DeleteUser
             return;
         }
         deleteLogic();
-        
+
     }
 
+    /**
+     * 
+     * @return
+     * @throws Exception
+     */
     private final boolean authenticateUser()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
@@ -47,6 +86,10 @@ public class DeleteUser
         return new Truncheon.API.Dragon.LoginAPI(_user, currentPassword, currentKey).status();
     }
 
+    /**
+     * 
+     * @throws Exception
+     */
     private final void deleteLogic()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
@@ -69,30 +112,40 @@ public class DeleteUser
         }
     }
 
+    /**
+     * 
+     * @throws Exception
+     */
     private final void cleanUp()throws Exception
     {
-        try 
+        try
         {
             File f = new File("./Users/"+_user);
             if(f.exists())
             {
                 if(f.isDirectory())
-                    delHelper(f);
+                delHelper(f);
                 else
-                    f.delete();
-            }   
+                f.delete();
+            }
         }
         catch (Exception E)
         {
             E.printStackTrace();
         }
     }
+
+    /**
+     * 
+     * @param delfile
+     * @throws Exception
+     */
     private final void delHelper(File delfile)throws Exception
     {
-        if (delfile.listFiles() != null) 
+        if (delfile.listFiles() != null)
         {
-            for (File fock : delfile.listFiles()) 
-                delHelper(fock);
+            for (File fock : delfile.listFiles())
+            delHelper(fock);
         }
         delfile.delete();
     }

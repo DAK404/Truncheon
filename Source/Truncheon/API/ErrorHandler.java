@@ -4,15 +4,29 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.io.Console;
 
+/**
+ * Program to handle the exceptions and errors in the program
+ * 
+ * @version 0.7.42
+ * @since 0.5.3
+ * @author DAK404
+ */
 public final class ErrorHandler
 {
+    /**
+     * Logic to handle the exception caught by a program
+     * 
+     * @param E The exception caught
+     */
     public final void handleException(Exception E)
     {
         try
         {
             System.out.println("\n\n");
+            //Store the exception in a string format
             String Err = E.toString();
 
+            //Print the exception details
             System.err.println("--------------------------------");
             System.err.println("[ SYSTEM FAILURE - FATAL ERROR ]");
             System.err.println("--------------------------------");
@@ -22,6 +36,7 @@ public final class ErrorHandler
 
             System.err.println("\nThe following stack trace may indicate the cause of failure.");
 
+            //Print the stack trace, which caused the exception
             System.err.println("\n*****************************");
 			System.err.println("!    PROGRAM STACK TRACE    !");
 			System.err.println("*****************************\n");
@@ -30,6 +45,7 @@ public final class ErrorHandler
 			System.err.println("!       STACK TRACE END     !");
 			System.err.println("*****************************\n");
 
+            //Print the stack trace to a log file for debugging and error tracing
             System.out.println("\nThe above data will be written to a log file which can, optionally,\nbe uploaded to help the developers to solve any potential issues.");
 
             StringWriter sw = new StringWriter();
@@ -41,7 +57,11 @@ public final class ErrorHandler
             new Truncheon.API.Wraith.WriteFile().logToFile(sw.toString(), "Logs/ErrorLog");
             new Truncheon.API.Wraith.WriteFile().logToFile("End Of Stack Trace\n", "Logs/ErrorLog");
             Console console=System.console();
+
+            //Request for any user comments which can provide context for every exceptions caught
             System.err.println("\n[ OPTIONAL ] : Any relevant information to add to file?");
+
+            //save the comments to the log file causing the crashes and issues
             new Truncheon.API.Wraith.WriteFile().logToFile("User Comments: " + console.readLine("User Comments: ") + "\n", "Logs/ErrorLog");
 
             new Truncheon.API.Wraith.WriteFile().logToFile("--- ERROR REPORT ---\n\n", "Logs/ErrorLog");
@@ -53,10 +73,13 @@ public final class ErrorHandler
             System.err.println("\nError information has been written to log file successfully.");
             System.err.println("Program cannot be recovered to previous state. Unsaved data will be lost.\nPress enter to restart program.");
             System.in.read();
+
+            //Restart the program to start afresh
             System.exit(1);
         }
         catch(Exception Ex)
         {
+            //Catch any exceptions while handling an error
             Ex.printStackTrace();
             System.exit(0);
         }

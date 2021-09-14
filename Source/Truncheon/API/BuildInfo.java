@@ -1,12 +1,29 @@
 package Truncheon.API;
 
+/**
+ * Program to display the information of the current build
+ * 
+ * @version 0.3.1
+ * @since 0.0.1
+ * @author DAK404
+ */
 public final class BuildInfo
 {
+    /**The String Constant which holds the version number of the program*/
     public final String _version = "1.0.0";
+
+    /**The String Constant which holds the name of the kernel used*/
     public final String _kernel = "Synergy";
+
+    /**The String Constant which holds the Build ID of the program*/
     public final String _buildID = _version + "_11.08.2021_1944_TRNCHN";
+
+    /**The String Constant which holds the date compiled of the build*/
     public final String _buildDate = "11-August-2021";
 
+    /**
+     * Displays the basic program information on the screen
+     */
     public final void versionViewer()
     {
         clearScreen();
@@ -18,6 +35,9 @@ public final class BuildInfo
         //debugMemoryInformation();
     }
 
+    /**
+     * Clears the screen, dependent on the OS
+     */
     public final void clearScreen()
     {
         try
@@ -44,10 +64,17 @@ public final class BuildInfo
         }
         catch(Exception E)
         {
+            //Handle any exceptions thrown during runtime
             new Truncheon.API.ErrorHandler().handleException(E);
         }
     }
 
+    /**
+     * Displays detailed information about the program.
+     * 
+     * useful for extra information 
+     * @throws Exception
+     */
     public final void about()throws Exception
     {
         clearScreen();
@@ -63,7 +90,11 @@ public final class BuildInfo
         System.gc();
     }
 
-    /* private void debugMemoryInformation()
+    /**
+     * The Information about the memeory used when this API is called
+     */
+    /*
+    private void debugMemoryInformation()
     {
         // get Runtime instance
         Runtime instance = Runtime.getRuntime();

@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FileManager 
+public class FileManager
 {
     private String _user;
     private String _name;
@@ -19,7 +19,7 @@ public class FileManager
     private boolean _scriptMode = false;
 
 
-    Console console = System.console();
+    private Console console = System.console();
 
     public FileManager(String usn, String nm, boolean admin)
     {
@@ -33,7 +33,7 @@ public class FileManager
         try
         {
             if( !_admin  && ! (new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("filemanager")) )
-                return;
+            return;
 
             if(! authenticationLogic())
             {
@@ -49,6 +49,7 @@ public class FileManager
         }
         catch(Exception E)
         {
+            //Handle any exceptions thrown during runtime
             new Truncheon.API.ErrorHandler().handleException(E);
         }
     }
@@ -58,7 +59,7 @@ public class FileManager
         try
         {
             if( ! _admin  && !(new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("script")))
-                return;
+            return;
 
             System.gc();
             if(sName == null || sName.equalsIgnoreCase("") || sName.startsWith(" ") || new File(sName).isDirectory() )
@@ -67,33 +68,45 @@ public class FileManager
                 return;
             }
 
-            //Check if the script file specifed exists.
+            //Check if the script file specified exists.
             if( ! (new File("./Users/Truncheon/"+_user+"/"+sName+".fmx").exists()) )
             {
                 //Return an error and pass the control back in case the file is not found.
                 System.out.println("[ ATTENTION ] : Script file "+sName.replace(_user, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
                 return;
             }
-            
+
 
             if(! authenticationLogic())
             {
                 System.out.println("Authentication failed. Returning to main menu.");
-                Thread.sleep(2500);
+                Thread.sleep(1000);
                 return;
             }
 
             _curDir="./Users/Truncheon/"+_user+'/';
-            _scriptName = "./Users/Truncheon/"+_user+"/"+sName+".gScript";
+            _scriptName = "./Users/Truncheon/"+_user+"/"+sName+".fmx";
 
             //else begin executing the script.
+            executeScriptFile();
+            System.gc();
+        }
+        catch (Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
 
+    private final void executeScriptFile()throws Exception
+    {
+        try
+        {
             //Activate the script mode.
             _scriptMode = true;
 
             //Initialize a stream to read the given file.
             BufferedReader br = new BufferedReader(new FileReader(_scriptName));
-            
+
             //Initialize a string to hold the contents of the script file being executed.
             String scriptLine;
 
@@ -102,11 +115,11 @@ public class FileManager
             {
                 //Check if the line is a comment or is blank in the script file and skip the line.
                 if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
-                    continue;
+                continue;
 
                 //Check if End Script command is encountered, which will stop the execution of the script.
                 else if(scriptLine.equalsIgnoreCase("End Script"))
-                    break;
+                break;
 
                 //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
                 fileManagerShell(scriptLine);
@@ -114,12 +127,11 @@ public class FileManager
 
             //Close the streams, run the garbage collector and clean.
             br.close();
-            System.gc();
 
             //Deactivate the script mode.
-            _scriptMode = false;        
+            _scriptMode = false;
         }
-        catch (Exception E)
+        catch(Exception E)
         {
             E.printStackTrace();
         }
@@ -140,6 +152,7 @@ public class FileManager
         }
         catch(Exception E)
         {
+            //Handle any exceptions thrown during runtime
             new Truncheon.API.ErrorHandler().handleException(E);
         }
         return false;
@@ -151,7 +164,7 @@ public class FileManager
         {
             String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
             if(cmd.length > 1)
-                cmd[1] = cmd[1].replaceAll("\"", "");
+            cmd[1] = cmd[1].replaceAll("\"", "");
 
             switch(cmd[0].toLowerCase())
             {
@@ -165,11 +178,11 @@ public class FileManager
                 }
 
                 /**
-                 * 
-                 * --- FOR FURTHER ANALYSIS AND TESTING ---
-                 * 
-                 * DOCUMENTATION UNAVAILABLE.
-                 */
+                *
+                * --- FOR FURTHER ANALYSIS AND TESTING ---
+                *
+                * DOCUMENTATION UNAVAILABLE.
+                */
                 if(_scriptMode & _scriptName.equals(cmd[1]))
                 {
                     System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
@@ -196,120 +209,121 @@ public class FileManager
                 break;
 
                 case "exit":
-                    new Truncheon.API.BuildInfo().versionViewer();  
-                    return false;
+                new Truncheon.API.BuildInfo().versionViewer();
+                return false;
 
                 case "?":
                 case "help":
-                    new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Grinch.manual");
-                    break;
+                new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Grinch.manual");
+                break;
 
                 case "":
-                    break;
+                break;
 
                 case "clear":
-                    new Truncheon.API.BuildInfo().versionViewer();
-                    break;
+                new Truncheon.API.BuildInfo().versionViewer();
+                break;
 
                 case "cd":
-                    if(cmd.length < 2)
-                    {
-                        System.out.println("Syntax:\n\ncd <directory_name>\n\nOR\n\ncd ..\n");
-                        break;
-                    }
-                    changeDir(cmd[1]);
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\ncd <directory_name>\n\nOR\n\ncd ..\n");
                     break;
+                }
+                changeDir(cmd[1]);
+                break;
 
                 case "ls":
-                    listFiles();
-                    break;
+                listFiles();
+                break;
 
                 case "tree":
-                    treeView();
-                    break;
+                treeView();
+                break;
 
                 case "mkdir":
-                    if(cmd.length < 2)
-                    {
-                        System.out.println("Syntax:\n\nmkdir <directory_name>\n");
-                        break;
-                    }
-                    makeDir(cmd[1]);
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nmkdir <directory_name>\n");
                     break;
+                }
+                makeDir(cmd[1]);
+                break;
 
                 case "rm":
-                    if(cmd.length < 2)
-                    {
-                        System.out.println("Syntax:\n\nrm <directory_name>\n\nOR\n\nrm <filename>\n");
-                        break;
-                    }
-                    del(cmd[1]);
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nrm <directory_name>\n\nOR\n\nrm <filename>\n");
                     break;
+                }
+                del(cmd[1]);
+                break;
 
                 case "rename":
-                    if(cmd.length < 3)
-                    {
-                        System.out.println("Syntax:\n\nrename <directory_name> <new_directory_name>\n\nOR\n\nrename <filename> <new_filename>\n");
-                        break;
-                    }
-                    rename(cmd[1], cmd[2]);
+                if(cmd.length < 3)
+                {
+                    System.out.println("Syntax:\n\nrename <directory_name> <new_directory_name>\n\nOR\n\nrename <filename> <new_filename>\n");
                     break;
+                }
+                rename(cmd[1], cmd[2]);
+                break;
 
                 case "cp":
                 case "copy":
-                    if(cmd.length < 3)
-                    {
-                        System.out.println("Syntax:\n\ncopy <directory_name><new_directory_name>\ncp <directory_name><new_directory_name>\n\nOR\n\ncopy <filename> <new_filename>\ncp <filename> <new_filename>\n");
-                        break;
-                    }
-                    copyMove(false, cmd[1], cmd[2]);
+                if(cmd.length < 3)
+                {
+                    System.out.println("Syntax:\n\ncopy <directory_name><new_directory_name>\ncp <directory_name><new_directory_name>\n\nOR\n\ncopy <filename> <new_filename>\ncp <filename> <new_filename>\n");
                     break;
-                    
+                }
+                copyMove(false, cmd[1], cmd[2]);
+                break;
+
                 case "mv":
                 case "move":
-                    if(cmd.length < 3)
-                    {
-                        System.out.println("Syntax:\n\nmove <directory_name><new_directory_name>\nmv <directory_name><new_directory_name>\n\nOR\n\nmove <filename> <new_filename>\nmv <filename> <new_filename>\n");
-                        break;
-                    }
-                    copyMove(true, cmd[1], cmd[2]);
+                if(cmd.length < 3)
+                {
+                    System.out.println("Syntax:\n\nmove <directory_name><new_directory_name>\nmv <directory_name><new_directory_name>\n\nOR\n\nmove <filename> <new_filename>\nmv <filename> <new_filename>\n");
                     break;
+                }
+                copyMove(true, cmd[1], cmd[2]);
+                break;
 
                 case "read":
-                    if(cmd.length < 2)
-                    {
-                        System.out.println("Syntax:\n\nread <filename>\n");
-                        break;
-                    }
-                    new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], _curDir);
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nread <filename>\n");
                     break;
-                
+                }
+                new Truncheon.API.Wraith.ReadFile().readUserFile(cmd[1], _curDir);
+                break;
+
                 case "write":
-                    if(cmd.length < 2)
-                    {
-                        System.out.println("Syntax:\n\nwrite <filename>\n");
-                        break;
-                    }
-                    new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], _curDir);
+                if(cmd.length < 2)
+                {
+                    System.out.println("Syntax:\n\nwrite <filename>\n");
                     break;
-                
+                }
+                new Truncheon.API.Wraith.WriteFile().editFile(cmd[1], _curDir);
+                break;
+
                 case "download":
-                    if(cmd.length < 3)
-                    {
-                        System.out.println("Syntax:\n\ndownload <URL> <filename>\n");
-                        break;
-                    }
-                    new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], _curDir+cmd[2]);
+                if(cmd.length < 3)
+                {
+                    System.out.println("Syntax:\n\ndownload <URL> <filename>\n");
                     break;
+                }
+                new Truncheon.API.Wyvern.Download().downloadFile(cmd[1], _curDir+cmd[2]);
+                break;
 
                 default:
-                    System.out.println(input+" - Command not found.");
-                    break;
+                System.out.println(input+" - Command not found.");
+                break;
             }
             return true;
         }
         catch(Exception E)
         {
+            //Handle any exceptions thrown during runtime
             new Truncheon.API.ErrorHandler().handleException(E);
         }
         return false;
@@ -323,12 +337,12 @@ public class FileManager
             System.gc();
             return;
         }
-        
+
         tPath = _curDir + tPath + "/";
         if(checkFile(tPath))
-            _curDir=tPath;
+        _curDir=tPath;
         else
-            System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.out.println("[ ERROR ] : The specified file/directory does not exist.");
         System.gc();
     }
 
@@ -371,8 +385,8 @@ public class FileManager
         System.out.print("|");
 
         for (int i = 0; i < indent; ++i)
-            System.out.print('-');
-        
+        System.out.print('-');
+
         System.out.println(file.getName().replace(_user, _name + " [ USER ROOT DIRECTORY ]"));
 
         if (file.isDirectory())
@@ -380,7 +394,7 @@ public class FileManager
             File[] files = file.listFiles();
 
             for (int i = 0; i < files.length; ++i)
-                treeViewHelper(indent + 2, files[i]);
+            treeViewHelper(indent + 2, files[i]);
         }
     }
 
@@ -393,7 +407,7 @@ public class FileManager
             File dPath=new File(_curDir);
             System.out.println("\n");
             System.out.format(String.format(format, "File Name", "File Size [In KB]\n"));
-            for(File file : dPath.listFiles()) 
+            for(File file : dPath.listFiles())
             {
                 //System.out.format(String.format(format, file.getPath().replace(User,Name), file.getName().replace(User,Name), file.length()/1024+" KB"));
                 System.out.format(String.format(format, file.getName().replace(_user, _name), file.length()/1024+" KB"));
@@ -401,7 +415,7 @@ public class FileManager
             System.out.println();
         }
         else
-            System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.out.println("[ ERROR ] : The specified file/directory does not exist.");
         System.gc();
     }
 
@@ -411,9 +425,9 @@ public class FileManager
         {
             mkFile=_curDir+mkFile + "/";
             if(! checkFile(mkFile))
-                new File(mkFile).mkdir();
+            new File(mkFile).mkdir();
             else
-                System.out.println("[ ERROR ] : The specified directory name already exists. Please try again.");
+            System.out.println("[ ERROR ] : The specified directory name already exists. Please try again.");
             System.gc();
             return;
         }
@@ -433,12 +447,12 @@ public class FileManager
             {
                 File f=new File(delFile);
                 if(f.isDirectory())
-                    delHelper(f);
+                delHelper(f);
                 else
-                    f.delete();
+                f.delete();
             }
             else
-                System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+            System.out.println("[ ERROR ] : The specified file/directory does not exist.");
             System.gc();
         }
         catch (Exception E)
@@ -450,10 +464,10 @@ public class FileManager
 
     private final void delHelper(File delfile)throws Exception
     {
-        if (delfile.listFiles() != null) 
+        if (delfile.listFiles() != null)
         {
-            for (File fock : delfile.listFiles()) 
-                delHelper(fock);
+            for (File fock : delfile.listFiles())
+            delHelper(fock);
         }
         delfile.delete();
     }
@@ -465,10 +479,10 @@ public class FileManager
             oldFileName = _curDir + oldFileName;
             newFileName = _curDir + newFileName;
             if(checkFile(oldFileName))
-                new File(oldFileName).renameTo(new File(newFileName));
+            new File(oldFileName).renameTo(new File(newFileName));
             else
-                System.out.println("[ ERROR ] : The specified file/directory does not exist.");
-            System.gc();            
+            System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+            System.gc();
         }
         catch (Exception E)
         {
@@ -493,7 +507,7 @@ public class FileManager
             }
             copyMoveHelper(new File(_curDir+source), new File(_curDir+destination + "/" + source));
             if(move)
-                delHelper(new File(_curDir+source));
+            delHelper(new File(_curDir+source));
             System.gc();
             return;
         }
@@ -503,26 +517,26 @@ public class FileManager
         }
     }
 
-    private final void copyMoveHelper( File src, File dest ) throws Exception 
+    private final void copyMoveHelper( File src, File dest ) throws Exception
     {
         try
         {
             if( src.isDirectory() )
             {
                 dest.mkdirs();
-                for( File sourceChild : src.listFiles() ) 
+                for( File sourceChild : src.listFiles() )
                 {
                     File destChild = new File( dest, sourceChild.getName() );
                     copyMoveHelper( sourceChild, destChild );
                 }
-            } 
+            }
             else
             {
                 InputStream in = new FileInputStream(src);
                 OutputStream out = new FileOutputStream(dest);
                 byte[] buf = new byte[1024];
                 int len;
-                while ((len = in.read(buf)) > 0) 
+                while ((len = in.read(buf)) > 0)
                 {
                     out.write(buf, 0, len);
                 }

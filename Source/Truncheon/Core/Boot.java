@@ -1,24 +1,21 @@
 /*
-
------ PROGRAM DOCUMENTATION -----
-
-THIS PROGRAM IS UNDER DEVELOPMENT
-AND SHOULD NOT BE CONSIDERED
-RELEASE READY. FEATURES MAY BE
-BROKEN OR INCOMPLETE. COMPILE AND
-TEST AT YOUR OWN RISK.
-
----------------------------------
-
-     --- Program Details ---     
-
-     Author  : DAK404
-     Date    : 17-June-2021
-     Version : 0.1.14
-
-     -----------------------
-
-*/
+ * ---------------!DISCLAIMER!--------------- *
+ *                                            *
+ *         THIS CODE IS RELEASE READY         *
+ *                                            *
+ *  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+ *   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+ *    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+ *     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+ *              ERRORS IN THE CODE.           *
+ *                                            *
+ *   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+ *    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+ *        DISTRIBUTING THE SOURCE CODE.       *
+ *   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+ *                                            *
+ * ------------------------------------------ *
+ */
 
 
 package Truncheon.Core;
@@ -29,9 +26,9 @@ import java.io.File;
 
 /**
  * Program to start working with Truncheon.
- * 
+ *
  * It provides a basic functionality to a guest user to access important information and an option to login or quit.
- *  
+ *
  * @version 0.1.12
  * @since 0.0.1
  * @author DAK404
@@ -51,7 +48,7 @@ public final class Boot
 
     /**
      * Logic to accept the boot parameters and boot the program in the desired mode.
-     * 
+     *
      * @param Args : Accept Program Arguments and boot modes
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
@@ -69,7 +66,7 @@ public final class Boot
             switch(Args[0])
             {
                 /*
-                * Normal Mode : 
+                * Normal Mode :
                 * Boots directly into the program.
                 * ErrorHandler tries to handle exceptions.
                 */
@@ -87,14 +84,15 @@ public final class Boot
 
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
     }
 
     /**
      * logic to access basic functions of the program.
-     * 
+     *
      * @throws Exception : Handle general exceptions during thrown during runtime.
      */
     private final void bootLogic()throws Exception
@@ -114,7 +112,7 @@ public final class Boot
             {
                 //Display the pass status to the user
                 System.out.println("* Truncheon Directories check  : COMPLETE");
-                
+
                 //Begin the main logic of the boot program
                 Console console=System.console();
                 System.out.println("\n==============\n");
@@ -141,7 +139,7 @@ public final class Boot
                             new Truncheon.API.BuildInfo().about();
                             break;
 
-                        //Open the helpfile for the boot program. 
+                        //Open the helpfile for the boot program.
                         case "?":
                         case "help":
                             new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/Boot.manual");
@@ -156,7 +154,7 @@ public final class Boot
                         case "exit":
                             System.exit(0);
 
-                        //Restarts the program, sends exit code 1 to ProgramLauncher.                            
+                        //Restarts the program, sends exit code 1 to ProgramLauncher.
                         case "restart":
                             System.exit(1);
 

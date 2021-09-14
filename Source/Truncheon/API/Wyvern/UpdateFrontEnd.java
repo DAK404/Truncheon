@@ -41,9 +41,10 @@ public final class UpdateFrontEnd
             System.in.read();
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
     }
 
 

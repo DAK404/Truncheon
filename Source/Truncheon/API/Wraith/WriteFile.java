@@ -33,9 +33,10 @@ public final class WriteFile
             }
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
     }
 
     private boolean checkFileValidity(String fn)throws Exception
@@ -115,8 +116,9 @@ public final class WriteFile
             }
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
     }
 }

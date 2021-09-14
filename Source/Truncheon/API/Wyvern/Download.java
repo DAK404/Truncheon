@@ -26,9 +26,10 @@ public class Download
             return downloadUsingNIO(URL, fileName);
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
         return false;
     }
 
@@ -40,9 +41,10 @@ public class Download
             return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip", "Update.zip");
         }
         catch(Exception E)
-        {
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
+{
+    //Handle any exceptions thrown during runtime
+    new Truncheon.API.ErrorHandler().handleException(E);
+}
         return false;
     }
 
