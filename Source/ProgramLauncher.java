@@ -1,27 +1,32 @@
 /*
-
------ PROGRAM DOCUMENTATION -----
-
-THIS PROGRAM IS UNDER DEVELOPMENT
-AND SHOULD NOT BE CONSIDERED
-RELEASE READY. FEATURES MAY BE
-BROKEN OR INCOMPLETE. COMPILE AND
-TEST AT YOUR OWN RISK.
-
----------------------------------
-
-     --- Program Details ---     
-
-     Author  : DAK404
-     Date    : 17-June-2021
-     Version : 0.1.14
-
-     -----------------------
-
+* ---------------!DISCLAIMER!--------------- *
+*                                            *
+*         THIS CODE IS RELEASE READY         *
+*                                            *
+*  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+*   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+*    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+*     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+*              ERRORS IN THE CODE.           *
+*                                            *
+*   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+*    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+*        DISTRIBUTING THE SOURCE CODE.       *
+*   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+*                                            *
+* ------------------------------------------ *
 */
 
+/**
+ *
+ */
 class ProgramLauncher
 {
+    /**
+     *
+     * @param Args
+     * @throws Exception : Handle exceptions thrown during program runtime.
+     */
     public static void main(String[] Args)throws Exception
     {
         try
@@ -31,7 +36,6 @@ class ProgramLauncher
                 System.out.println("Cannot start the program launcher!\n\nSyntax: java ProgramLauncher <kernel_name> <boot_mode>\n");
                 System.exit(-1);
             }
-
 
             while(true)
             {
@@ -71,37 +75,38 @@ class ProgramLauncher
                 switch(processMonitor.exitValue())
                 {
                     case 0:
-                            //Normal exit mode
-                            System.exit(0);
+                    //Normal exit mode
+                    System.exit(0);
 
                     case 1:
-                            //Restart mode
-                            System.out.println("Program is restarting... Please wait.");
-                            break;
+                    //Restart mode
+                    System.out.println("Program is restarting... Please wait.");
+                    break;
 
                     case 2:
-                            //Error exit mode
-                            System.out.println("Program is exiting on an error.");
-                            Thread.sleep(2500);
-                            System.exit(2);
+                    //Error exit mode
+                    System.out.println("Program is exiting on an error.");
+                    Thread.sleep(2500);
+                    System.exit(2);
 
                     case 3:
-                            //Error restart mode
-                            System.out.println("Program is restarting due to an error... Please wait.");
-                            Thread.sleep(2500);
-                            break;
+                    //Error restart mode
+                    System.out.println("Program is restarting due to an error... Please wait.");
+                    Thread.sleep(2500);
+                    break;
 
                     case 4:
-                            Args[1]="safemode";
-                            break;
+                    Args[1]="safemode";
+                    break;
 
                     case 101:
-                            //Invalid boot mode
-                            System.exit(101);
+                    //Invalid boot mode
+                    System.out.println("Invalid Boot Mode Detected! Exiting Program...");
+                    System.exit(101);
 
                     default:
-                            //Generic error output
-                            System.exit(400);
+                    //Generic error output
+                    System.exit(400);
                 }
 
                 //Clean up resources after execution

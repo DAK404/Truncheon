@@ -1,5 +1,6 @@
 package Truncheon.API.Grinch;
 
+//Import the required Java IO classes
 import java.io.Console;
 import java.io.File;
 import java.io.BufferedReader;
@@ -9,6 +10,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+* Program which provides the file manager functionality
+*
+* @version 0.4.8
+* @since 0.2.9
+* @author DAK404
+*/
 public class FileManager
 {
     private String _user;
@@ -21,6 +29,21 @@ public class FileManager
 
     private Console console = System.console();
 
+    /**
+     * Constructor which will help in using the functionalities of the file manager
+     */
+    public FileManager()
+    {
+
+    }
+
+    /**
+    * Constructor to initialize the user details
+    *
+    * @param usn : The username of the account currently logged into the main menu
+    * @param nm : The name of the account currently logged into the main menu
+    * @param admin : The privileges of the account, determining if the user has admin rights
+    */
     public FileManager(String usn, String nm, boolean admin)
     {
         _user = usn;
@@ -28,21 +51,21 @@ public class FileManager
         _admin = admin;
     }
 
+    // ------------------------------------------------------------------------------------ //
+    //                                    PUBLIC METHODS                                    //
+    // ------------------------------------------------------------------------------------ //
+
+    /**
+    * The logic of the file manager
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     public final void fileManagerLogic()throws Exception
     {
         try
         {
-            if( !_admin  && ! (new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("filemanager")) )
-            return;
-
-            if(! authenticationLogic())
-            {
-                System.out.println("Authentication failed. Returning to main menu.");
-                Thread.sleep(5000);
-                return;
-            }
-
-            _curDir="./Users/Truncheon/"+_user+'/';
+            prerequisites();
+            
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Grinch File Manager 1.10.0");
             while(fileManagerShell(console.readLine(_name+"@"+_curDir.replace(_user, _name)+">: ")));
@@ -54,6 +77,11 @@ public class FileManager
         }
     }
 
+    /**
+    *
+    * @param sName
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     public final void fileManagerLogic(String sName)throws Exception
     {
         try
@@ -79,12 +107,11 @@ public class FileManager
 
             if(! authenticationLogic())
             {
-                System.out.println("Authentication failed. Returning to main menu.");
-                Thread.sleep(1000);
+                System.out.println("Authentication failed. Please try again with valid credentials.");
                 return;
             }
 
-            _curDir="./Users/Truncheon/"+_user+'/';
+            resetToHomeDir();
             _scriptName = "./Users/Truncheon/"+_user+"/"+sName+".fmx";
 
             //else begin executing the script.
@@ -97,6 +124,76 @@ public class FileManager
         }
     }
 
+    // ------------------------------------------------------------------------------------ //
+    //                                   PRIVATE METHODS                                    //
+    // ------------------------------------------------------------------------------------ //
+
+    // ************************************************************************************ //
+    //                                 LOGIN PROCEDURE START                                //
+    // ************************************************************************************ //
+
+    private void prerequisites()throws Exception
+    {
+        try
+        {
+            if( !_admin  && ! (new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("filemanager")) )
+            return;
+
+            if(! authenticationLogic())
+            {
+                System.out.println("Authentication failed. Cannot access Grinch.");
+                return;
+            }
+
+            resetToHomeDir();
+        }
+        catch(Exception E)
+        {
+
+        }
+    }
+
+
+    /**
+    * Logic to authenticate the user into the file manager module.
+    *
+    * @return boolean : Returns the status of the credential authentication 
+    * @throws Exception : Handle exceptions thrown during program runtime
+    */
+    private final boolean authenticationLogic()throws Exception
+    {
+        try
+        {
+            new Truncheon.API.BuildInfo().versionViewer();
+            System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
+
+            System.out.println("Username: " + _name);
+            String password=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String securityKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+
+            return new Truncheon.API.Dragon.LoginAPI(_user, password, securityKey).status();
+        }
+        catch(Exception E)
+        {
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return false;
+    }
+
+    // ************************************************************************************ //
+    //                                  LOGIN PROCEDURE END                                 //
+    // ************************************************************************************ //
+
+    // ************************************************************************************ //
+    //                                 SCRIPT HANDLING START                                //
+    // ************************************************************************************ //
+
+    /**
+    * Runs the script file when there is a script file as an argument
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void executeScriptFile()throws Exception
     {
         try
@@ -137,27 +234,20 @@ public class FileManager
         }
     }
 
-    private final boolean authenticationLogic()throws Exception
-    {
-        try
-        {
-            new Truncheon.API.BuildInfo().versionViewer();
-            System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
+    // ************************************************************************************ //
+    //                                  SCRIPT HANDLING END                                 //
+    // ************************************************************************************ //
 
-            System.out.println("Username: " + _name);
-            String password=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-            String securityKey=new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
+    // ************************************************************************************ //
+    //                                FILE MANAGER LOGIC START                              //
+    // ************************************************************************************ //
 
-            return new Truncheon.API.Dragon.LoginAPI(_user, password, securityKey).status();
-        }
-        catch(Exception E)
-        {
-            //Handle any exceptions thrown during runtime
-            new Truncheon.API.ErrorHandler().handleException(E);
-        }
-        return false;
-    }
-
+    /**
+    *
+    * @param input
+    * @return
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final boolean fileManagerShell(String input)throws Exception
     {
         try
@@ -168,6 +258,10 @@ public class FileManager
 
             switch(cmd[0].toLowerCase())
             {
+                case "home":
+                resetToHomeDir();
+                break;
+
                 case "script":
                 //Check for the correct script syntax.
                 if(cmd.length <= 1)
@@ -177,12 +271,6 @@ public class FileManager
                     break;
                 }
 
-                /**
-                *
-                * --- FOR FURTHER ANALYSIS AND TESTING ---
-                *
-                * DOCUMENTATION UNAVAILABLE.
-                */
                 if(_scriptMode & _scriptName.equals(cmd[1]))
                 {
                     System.out.println(_scriptName + " - Cannot Recursively Execute scripts.");
@@ -221,7 +309,7 @@ public class FileManager
                 break;
 
                 case "clear":
-                new Truncheon.API.BuildInfo().versionViewer();
+                new Truncheon.API.BuildInfo().clearScreen();
                 break;
 
                 case "cd":
@@ -234,7 +322,7 @@ public class FileManager
                 break;
 
                 case "ls":
-                listFiles();
+                ls();
                 break;
 
                 case "tree":
@@ -329,6 +417,19 @@ public class FileManager
         return false;
     }
 
+    // ************************************************************************************ //
+    //                                 FILE MANAGER LOGIC END                               //
+    // ************************************************************************************ //
+
+    // ************************************************************************************ //
+    //                             COMMAND PROCESSOR LOGIC START                            //
+    // ************************************************************************************ //
+
+    /**
+    *
+    * @param tPath
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void changeDir(String tPath)throws Exception
     {
         if(tPath.equals(".."))
@@ -346,6 +447,10 @@ public class FileManager
         System.gc();
     }
 
+    /**
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void prevDir()throws Exception
     {
         _curDir = _curDir.substring(0, _curDir.length() - 1);
@@ -354,16 +459,26 @@ public class FileManager
         if(_curDir.equals("./Users/Truncheon/"))
         {
             System.out.println("[ WARNING ] : Permission Denied.");
-            _curDir="./Users/Truncheon/"+_user+"/";
+            resetToHomeDir();
         }
         System.gc();
     }
 
+    /**
+    *
+    * @param fName
+    * @return
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final boolean checkFile(String fName)throws Exception
     {
         return new File(fName).exists();
     }
 
+    /**
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void treeView()throws Exception
     {
         try
@@ -380,6 +495,11 @@ public class FileManager
         }
     }
 
+    /**
+    *
+    * @param indent
+    * @param file
+    */
     private final void treeViewHelper(int indent, File file)
     {
         System.out.print("|");
@@ -398,19 +518,25 @@ public class FileManager
         }
     }
 
-    private final void listFiles()throws Exception
+    /**
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    private final void ls()throws Exception
     {
         //String format = "%1$-60s|%2$-50s|%3$-20s\n";
-        String format = "%1$-50s|%2$-20s\n";
+        String format = "%1$-32s| %2$-24s| %3$-10s\n";
+        String c = "-";
         if(checkFile(_curDir))
         {
             File dPath=new File(_curDir);
             System.out.println("\n");
-            System.out.format(String.format(format, "File Name", "File Size [In KB]\n"));
+            String disp = (String.format(format, "Directory/File Name", "File Size [In KB]","Type"));
+            System.out.println(disp + c.repeat(disp.length()) + "\n");
             for(File file : dPath.listFiles())
             {
                 //System.out.format(String.format(format, file.getPath().replace(User,Name), file.getName().replace(User,Name), file.length()/1024+" KB"));
-                System.out.format(String.format(format, file.getName().replace(_user, _name), file.length()/1024+" KB"));
+                System.out.format(String.format(format, file.getName().replace(_user, _name), file.length()/1024+" KB", file.isDirectory()?"Directory":"File"));
             }
             System.out.println();
         }
@@ -419,6 +545,11 @@ public class FileManager
         System.gc();
     }
 
+    /**
+    *
+    * @param mkFile
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void makeDir(String mkFile)throws Exception
     {
         try
@@ -438,12 +569,17 @@ public class FileManager
         }
     }
 
+    /**
+    *
+    * @param delFile
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void del(String delFile)throws Exception
     {
         try
         {
-            delFile=_curDir+delFile;
-            if(! checkFile(delFile))
+            delFile = _curDir+delFile;
+            if(checkFile(delFile))
             {
                 File f=new File(delFile);
                 if(f.isDirectory())
@@ -462,6 +598,11 @@ public class FileManager
         }
     }
 
+    /**
+    *
+    * @param delfile
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void delHelper(File delfile)throws Exception
     {
         if (delfile.listFiles() != null)
@@ -472,12 +613,19 @@ public class FileManager
         delfile.delete();
     }
 
+    /**
+    *
+    * @param oldFileName
+    * @param newFileName
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void rename(String oldFileName, String newFileName)throws Exception
     {
         try
         {
             oldFileName = _curDir + oldFileName;
             newFileName = _curDir + newFileName;
+            
             if(checkFile(oldFileName))
             new File(oldFileName).renameTo(new File(newFileName));
             else
@@ -491,6 +639,13 @@ public class FileManager
         }
     }
 
+    /**
+    *
+    * @param move
+    * @param source
+    * @param destination
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void copyMove(boolean move, String source, String destination)throws Exception
     {
         try
@@ -517,7 +672,13 @@ public class FileManager
         }
     }
 
-    private final void copyMoveHelper( File src, File dest ) throws Exception
+    /**
+    *
+    * @param src
+    * @param dest
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    public final void copyMoveHelper( File src, File dest ) throws Exception
     {
         try
         {
@@ -543,11 +704,23 @@ public class FileManager
                 in.close();
                 out.close();
             }
-            System.gc();
         }
         catch(Exception E)
         {
             E.printStackTrace();
         }
+        System.gc();
     }
+
+    /**
+     * 
+     */
+    private final void resetToHomeDir()
+    {
+        _curDir="./Users/Truncheon/"+_user+'/';
+    }
+
+    // ************************************************************************************ //
+    //                              COMMAND PROCESSOR LOGIC END                             //
+    // ************************************************************************************ //
 }

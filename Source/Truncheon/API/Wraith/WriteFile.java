@@ -1,15 +1,29 @@
 package Truncheon.API.Wraith;
 
-import java.util.*;
-import java.text.*;
+//Import the required Java IO classes
 import java.io.BufferedWriter;
 import java.io.Console;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 
+//Import the required Java Util classes
+import java.util.Date;
+
+//Import the required Java Text Formatting classes
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+
+/**
+*
+*/
 public final class WriteFile
 {
+    /**
+    *
+    * @param PrintToFile
+    * @param fileName
+    */
     public final void logToFile(String PrintToFile, String fileName)
     {
         try
@@ -33,12 +47,18 @@ public final class WriteFile
             }
         }
         catch(Exception E)
-{
-    //Handle any exceptions thrown during runtime
-    new Truncheon.API.ErrorHandler().handleException(E);
-}
+        {
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
     }
 
+    /**
+    *
+    * @param fn
+    * @return
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private boolean checkFileValidity(String fn)throws Exception
     {
         if(fn == null || fn.equals("") || fn.startsWith(" "))
@@ -49,12 +69,17 @@ public final class WriteFile
         return true;
     }
 
+    /**
+    *
+    * @param fileName
+    * @param dir
+    */
     public final void editFile(String fileName, String dir)
     {
         try
         {
             if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("write"))
-                return;
+            return;
 
             if(checkFileValidity(fileName))
             {
@@ -63,7 +88,7 @@ public final class WriteFile
 
                 System.out.println("Wraith Text Editor 1.5");
                 System.out.println("______________________\n");
-                
+
                 Console console=System.console();
 
                 File writeToFile = new File(dir + fileName);
@@ -75,28 +100,28 @@ public final class WriteFile
                     {
                         case "overwrite":
 
-                                appendFile = false;
-                                System.out.println("The new content will overwrite the previous content present in the file!");
-                                break;
+                        appendFile = false;
+                        System.out.println("The new content will overwrite the previous content present in the file!");
+                        break;
 
                         case "append":
 
-                                System.out.println("The new content will be added to the end of the file! Previous data will remain unchanged.");
-                                break;
+                        System.out.println("The new content will be added to the end of the file! Previous data will remain unchanged.");
+                        break;
 
                         case "return":
 
-                                return;
+                        return;
 
                         case "help":
 
-                                System.out.println("Work in Progress");
-                                break;
+                        System.out.println("Work in Progress");
+                        break;
 
                         default:
-                        
-                                System.out.println("Invalid choice. Exiting...");
-                                return;
+
+                        System.out.println("Invalid choice. Exiting...");
+                        return;
                     }
                 }
 
@@ -109,16 +134,16 @@ public final class WriteFile
                     message = console.readLine();
                 }
                 while( !(message.equals("<exit>")) );
-                
+
                 pr.close();
                 obj.close();
                 System.gc();
             }
         }
         catch(Exception E)
-{
-    //Handle any exceptions thrown during runtime
-    new Truncheon.API.ErrorHandler().handleException(E);
-}
+        {
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
     }
 }

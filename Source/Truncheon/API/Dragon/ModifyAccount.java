@@ -1,4 +1,12 @@
 /*
+*    ███    ██ ██  ██████  ███    ██        ████████ ██████  ██    ██ ███    ██  ██████ ██   ██ ███████  ██████  ███    ██
+*    ████   ██ ██ ██    ██ ████   ██ ██        ██    ██   ██ ██    ██ ████   ██ ██      ██   ██ ██      ██    ██ ████   ██
+*    ██ ██  ██ ██ ██    ██ ██ ██  ██           ██    ██████  ██    ██ ██ ██  ██ ██      ███████ █████   ██    ██ ██ ██  ██
+*    ██  ██ ██ ██ ██    ██ ██  ██ ██ ██        ██    ██   ██ ██    ██ ██  ██ ██ ██      ██   ██ ██      ██    ██ ██  ██ ██
+*    ██   ████ ██  ██████  ██   ████           ██    ██   ██  ██████  ██   ████  ██████ ██   ██ ███████  ██████  ██   ████
+*/
+
+/*
 * ---------------!DISCLAIMER!--------------- *
 *                                            *
 *         THIS CODE IS RELEASE READY         *
@@ -29,79 +37,76 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * Program to modify user credentials.
- * 
- * Provides an interface to Administrators to either promote or demote a user status.
- * 
- * @version 0.3.42
- * @since 0.1.0
- * @author DAK404
- */
+* Program to modify user credentials.
+*
+* Provides an interface to Administrators to either promote or demote a user status.
+*
+* @version 0.3.42
+* @since 0.1.0
+* @author DAK404
+*/
 public final class ModifyAccount
 {
     /**
-     * -----------------------------------
-     * |        STRING VARIABLES         |
-     * -----------------------------------
-     * 
-     * String Variables required by the program. 
-     * These are dependent to perform program operations.
-     */
+    * -----------------------------------
+    * |        STRING VARIABLES         |
+    * -----------------------------------
+    *
+    * String Variables required by the program.
+    * These are dependent to perform program operations.
+    */
 
     /**
-     * Variable to store the username
-     */
-    private String _user;
+    * Variable to store the username
+    */
+    private String _user = "";
 
     /**
-     * Variable to store the user account name
-     */
-    private String _name;
+    * Variable to store the user account name
+    */
+    private String _name = "";
 
     /**
-     * Variable to store the new password
-     */
-    private String _password;
+    * Variable to store the new password
+    */
+    private String _password = "";
 
     /**
-     * Variable to store the new Security Key
-     */
-    private String _key;
+    * Variable to store the new Security Key
+    */
+    private String _key = "";
 
     /**
-     * Variable to store the new PIN value
-     */
-    private String _pin;
+    * Variable to store the new PIN value
+    */
+    private String _pin = "";
 
     /**
-     * Variable to store the administrator privileges
-     */
-    private boolean _admin;
-    
+    * Variable to store the administrator privileges
+    */
+    private boolean _admin = false;
+
     /**
-     * Initialize the console class for Input operations
-     */
+    * Initialize the console class for Input operations
+    */
     private Console console = System.console();
-    
+
     /**
-    * Constructor which will initialize the username, name, pin and the administrator rights.
+    * Constructor which will initialize the username, name and the administrator rights.
     *
     * @param User : Receive the username from the program
-    * @param Name :
-    * @param Pin
-    * @param Admin
+    * @param Name : Receive the account name from the program
     */
-    public ModifyAccount(String User, String Name, String Pin, boolean Admin)
+    public ModifyAccount(String User, String Name)
     {
         _user = User;
         _name = Name;
-        _pin = Pin;
-        _admin = Admin;
     }
-    
+
     /**
-    * 
-    * @throws Exception
+    * The logic used by the program to modify the account credentials
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     public final void modifyAccountLogic()throws Exception
     {
@@ -111,14 +116,15 @@ public final class ModifyAccount
             System.out.println("Incorrect Credentials. Access Denied.");
             return;
         }
-        checkPrivileges();
+        initPrivileges();
         while(modifyAccountMenu());
     }
-    
+
     /**
+    * Authenticates the user by using the LoginAPI and returns the success
     * 
-    * @return
-    * @throws Exception
+    * @return boolean : The result of the user authentication challenge.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final boolean authenticateUser()throws Exception
     {
@@ -131,27 +137,17 @@ public final class ModifyAccount
     }
 
     /**
-     * 
-     * @throws Exception
-     */
-    private final void checkPrivileges()throws Exception
+    * Begins to check the Administrator privileges from the database and retrieves the PIN
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    private final void initPrivileges()throws Exception
     {
         try
         {
-            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
-            Connection conn = DriverManager.getConnection(url);
-            PreparedStatement pstmt = conn.prepareStatement("SELECT Administrator FROM FCAD WHERE Username = ? ;");
-            pstmt.setString(1, _user);
-            ResultSet rs = pstmt.executeQuery();
-            
-            if(rs.getString("Administrator").equals("Yes"))
-            _admin = true;
-            
-            rs.close();
-            pstmt.close();
-            conn.close();
-            
-            System.gc();
+            _pin = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
+            if( retrieveInfo("SELECT Administrator FROM FCAD WHERE Username = ? ;", "Administrator").equals("Yes") )
+                _admin = true;
         }
         catch(Exception E)
         {
@@ -159,14 +155,60 @@ public final class ModifyAccount
             new Truncheon.API.ErrorHandler().handleException(E);
         }
     }
-    
+
     /**
-    * 
-    * @return
-    * @throws Exception
+    * A helper method which will help the program to retrieve the information from the database.
+    *
+    * @param command : The statement that needs to be executed to retrieve information from the database.
+    * @param info : Specified the parameter that needs to be queried against the database such as Name, PIN, etc.
+    * @return String : Returns the string containing the data fetched from the database.
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    private final String retrieveInfo(String command, String info)throws Exception
+    {
+        String temp = "";
+        try
+        {
+            //Initialize the database connection
+            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+            Connection conn = DriverManager.getConnection(url);
+
+            //Execute the statement to retrieve the criteria specified by command (the SQL command) and info (the name of the column)
+            PreparedStatement pstmt = conn.prepareStatement(command);
+            pstmt.setString(1, _user);
+
+            //Store the result of the query in the resultset
+            ResultSet rs = pstmt.executeQuery();
+
+            //Store the value of the result after retrieving the value of the query
+            temp = rs.getString(info);
+
+            //close connections and cleanup memory space
+            rs.close();
+            pstmt.close();
+            conn.close();
+
+            System.gc();
+
+            //Return the result in the string format
+        }
+        catch(Exception E)
+        {
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
+        return temp;
+    }
+
+    /**
+    * The menu logic to handle the account details modification
+    *
+    * @return boolean : To indicate if the account modification program needs to stop
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final boolean modifyAccountMenu()throws Exception
     {
+        //Clear the screen and display the program information
         new Truncheon.API.BuildInfo().versionViewer();
         System.out.println("User Credential Modification Dashboard 1.0");
         System.out.println("------------------------------------------");
@@ -175,86 +217,91 @@ public final class ModifyAccount
         System.out.println("* User Account Password");
         System.out.println("* User Account Security Key");
         System.out.println("* User Account PIN");
-        if(_admin)
-        System.out.println("* Promote an Account");
-        System.out.println("* Demote an Account");
         System.out.println("* Exit\n");
         System.out.println("------------------------------------------");
-        System.out.println("\n[ HELP | PSW | KEY | PIN | EXIT ]\n");
+        System.out.println("[ HELP | PSW | KEY | PIN | EXIT ]");
+        System.out.println("------------------------------------------");
+        //Display the options for an administrator account to further modify the other account parameters
+        if(_admin)
+        {
+            System.out.println("\nAdministrator rights detected.\n");
+            System.out.println("------------------------------------------");
+            System.out.println(" ADMINISTRATOR ACCOUNT MANAGEMENT TOOLKIT ");
+            System.out.println("------------------------------------------");
+            System.out.println("\nEnter the account parameter to change value\n");
+            System.out.println("! Promote an Account");
+            System.out.println("! Demote an Account\n");
+            System.out.println("------------------------------------------");
+            System.out.println("[ PROMOTE | DEMOTE ]");
+            System.out.println("------------------------------------------");
+        }
+        System.out.println();
+
         switch(console.readLine(_name+"} ").toLowerCase())
         {
             case "":
             break;
-            
+
             case "?":
             case "help":
             new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/ModifyAccount.manual");
             break;
-            
+
             case "psw":
             while(! getPassword());
             updateValues("Password", _password, _user);
             break;
-            
+
             case "key":
             while(! getKey());
             updateValues("SecurityKey", _key, _user);
             break;
-            
+
             case "pin":
             while(! getPIN());
             updateValues("PIN", _pin, _user);
             break;
-            
+
             case "promote":
             userStatusChange("promote");
             break;
-            
+
             case "demote":
             userStatusChange("demote");
             break;
-            
+
             case "exit":
             return false;
-            
+
             default:
             System.out.println("Invalid option. Please try again.");
             break;
         }
         return true;
     }
-    
+
     /**
-     * 
-     * @throws Exception
-     */
+    *
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void displayDetails()throws Exception
     {
         new Truncheon.API.BuildInfo().versionViewer();
         System.gc();
+        System.out.println("===================");
+        System.out.println("- Account Details -");
+        System.out.println("===================\n");
         System.out.println("Administrator Account: " + _admin);
-        
-        if(! (_name == null | _name.equals("")) )
         System.out.println("Account Name : " + _name);
-        
-        if(! (_user == null | _user.equals("")) )
         System.out.println("Username     : " + _user);
-        
-        if(! (_password == null | _password.equals("")) )
-        System.out.println("Password     : ********");
-        
-        if(! (_key == null | _key.equals("")) )
-        System.out.println("Security Key : ********");
-        
-        if(! (_pin == null | _pin.equals("")) )
-        System.out.println("Unlock PIN   : ****");
+        System.out.println("\n===================");
     }
-    
+
     /**
-     * 
-     * @return
-     * @throws Exception
-     */
+    *
+    * @return
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final boolean getPassword()throws Exception
     {
         displayDetails();
@@ -273,11 +320,11 @@ public final class ModifyAccount
         _password  = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(_password);
         return true;
     }
-    
+
     /**
     * Method to receive the account Security _key.
     *
-    * @throws Exception :  Throws any exception caught during runtime/execution
+    * @throws Exception : Handle exceptions thrown during program runtime. :  Throws any exception caught during runtime/execution
     */
     private final boolean getKey()throws Exception
     {
@@ -296,11 +343,11 @@ public final class ModifyAccount
         _key  = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(_key);
         return true;
     }
-    
+
     /**
     * Method to receive the account Unlock PIN.
     *
-    * @throws Exception :  Throws any exception caught during runtime/execution
+    * @throws Exception : Handle exceptions thrown during program runtime. :  Throws any exception caught during runtime/execution
     */
     private final boolean getPIN()throws Exception
     {
@@ -320,34 +367,44 @@ public final class ModifyAccount
         _pin  = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(_pin);
         return true;
     }
-    
+
     /**
-     * 
-     * @param status
-     * @throws Exception
-     */
+    * The logic to promote or demote an account.
+    *
+    * @param status : The status denoting if the user account is to be promoted or demoted
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private void userStatusChange(String status)throws Exception
     {
         try
         {
+            //The functionality will not work if the account has a non administrator status
             if(! _admin)
             return;
-            
+
+            //Logic to either promote or demote the user.
             String user = console.readLine("Enter the name of the user to " + status + ": ");
+            
+            //Reject any attempts to promote or demote the user
             if(user.equalsIgnoreCase("Administrator"))
             {
                 System.out.println("Cannot promote or demote the user Administrator.");
                 return;
             }
-            if(console.readLine("[ ATTENTION ] : ARE YOU SURE YOU WANT TO " + status.toUpperCase() + " " + user + "?").equalsIgnoreCase("y"))
+
+            //Confirm if the user selected is to be promoted to or demoted from an account with administrator rights
+            if(console.readLine("[ ATTENTION ] : ARE YOU SURE YOU WANT TO " + status.toUpperCase() + " " + user + "? [ Y | N ]\n\n} ").equalsIgnoreCase("y"))
             {
+                //encode the selected user to a hashed format
                 user = new Truncheon.API.Minotaur.HAlgos().stringToSHA3_256(user);
+                
+                //Update the values in the database to reflect the changes
                 switch(status)
                 {
                     case "promote":
                     updateValues("Administrator", "Yes", user);
                     break;
-                    
+
                     case "demote":
                     updateValues("Administrator", "No", user);
                     break;
@@ -355,31 +412,39 @@ public final class ModifyAccount
             }
             System.gc();
         }
-        catch (Exception E) 
+        catch (Exception E)
         {
             E.printStackTrace();
         }
     }
-    
-   /**
+
+    /**
+    * The logic to update the values in the database to reflect the changes desired
     * 
-    * @param credential
-    * @param value
-    * @param targetUser
-    * @throws Exception
+    * @param credential : The credential parameter to be modified
+    * @param value : The value of the credential parameter
+    * @param targetUser : The user targeted to have the credential modified
+    * @throws Exception : Handle exceptions thrown during program runtime
     */
     private void updateValues(String credential, String value, String targetUser)throws Exception
     {
         try
         {
+            //Initialize and open the connection to database
             String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
+
+            //set the values to be updated in the database
             String sql = "UPDATE FCAD SET " + credential + " = ? WHERE Username = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, value);
             pstmt.setString(2, targetUser);
+
+            //Execute the update statement
             pstmt.executeUpdate();
+
+            //Close the streams and clean up memory allocated
             pstmt.close();
             conn.close();
             System.gc();

@@ -1,12 +1,18 @@
 package Truncheon.API.Wyvern;
 
+//Import the required Java IO classes
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+//Import the required Java Util classes
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+*
+*/
 final class UpdateInstaller
 {
     List <String> fileList;
@@ -14,7 +20,11 @@ final class UpdateInstaller
     private final String INPUT_ZIP_FILE = curDir + "/Update.zip";
     private final String OUTPUT_FOLDER = curDir;
 
-    protected boolean install() 
+    /**
+    *
+    * @return
+    */
+    protected boolean install()
     {
         new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG START ---", "Logs/Update");
         new Truncheon.API.Wraith.WriteFile().logToFile("Program Update Requested.", "Logs/Update");
@@ -22,6 +32,12 @@ final class UpdateInstaller
         return new Truncheon.API.Wyvern.UpdateInstaller().unZipIt(INPUT_ZIP_FILE, OUTPUT_FOLDER);
     }
 
+    /**
+    *
+    * @param zipFile
+    * @param outputFolder
+    * @return
+    */
     private final boolean unZipIt(String zipFile, String outputFolder)
     {
         byte[] buffer = new byte[1024];
@@ -29,8 +45,8 @@ final class UpdateInstaller
         {
             //create output directory is not exists
             File folder = new File(OUTPUT_FOLDER);
-            if (!folder.exists()) 
-                folder.mkdir();
+            if (!folder.exists())
+            folder.mkdir();
 
             System.gc();
             //get the zip file content
@@ -44,11 +60,11 @@ final class UpdateInstaller
                     ze = zis.getNextEntry();
                     continue;
                 }
-                
+
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
-                
-                if (newFile.exists()) 
+
+                if (newFile.exists())
                 {
                     newFile.delete();
                     continue;
@@ -57,16 +73,14 @@ final class UpdateInstaller
                 System.out.println("[INFO] Installed : " + newFile.getAbsoluteFile());
                 new Truncheon.API.Wraith.WriteFile().logToFile("Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
 
-                
-
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
                 new File(newFile.getParent()).mkdirs();
                 FileOutputStream fos = new FileOutputStream(newFile);
-                
+
                 int len;
-                while ((len = zis.read(buffer)) > 0) 
-                    fos.write(buffer, 0, len);
+                while ((len = zis.read(buffer)) > 0)
+                fos.write(buffer, 0, len);
 
                 fos.close();
                 ze = zis.getNextEntry();

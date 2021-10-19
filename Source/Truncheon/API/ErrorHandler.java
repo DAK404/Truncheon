@@ -1,5 +1,33 @@
+/*
+*    ███    ██ ██  ██████  ███    ██        ████████ ██████  ██    ██ ███    ██  ██████ ██   ██ ███████  ██████  ███    ██
+*    ████   ██ ██ ██    ██ ████   ██ ██        ██    ██   ██ ██    ██ ████   ██ ██      ██   ██ ██      ██    ██ ████   ██
+*    ██ ██  ██ ██ ██    ██ ██ ██  ██           ██    ██████  ██    ██ ██ ██  ██ ██      ███████ █████   ██    ██ ██ ██  ██
+*    ██  ██ ██ ██ ██    ██ ██  ██ ██ ██        ██    ██   ██ ██    ██ ██  ██ ██ ██      ██   ██ ██      ██    ██ ██  ██ ██
+*    ██   ████ ██  ██████  ██   ████           ██    ██   ██  ██████  ██   ████  ██████ ██   ██ ███████  ██████  ██   ████
+*/
+
+/*
+* ---------------!DISCLAIMER!--------------- *
+*                                            *
+*         THIS CODE IS RELEASE READY         *
+*                                            *
+*  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+*   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+*    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+*     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+*              ERRORS IN THE CODE.           *
+*                                            *
+*   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+*    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+*        DISTRIBUTING THE SOURCE CODE.       *
+*   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+*                                            *
+* ------------------------------------------ *
+*/
+
 package Truncheon.API;
 
+//Import the required Java IO classes
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.io.Console;
@@ -52,10 +80,14 @@ public final class ErrorHandler
 			PrintWriter pw = new PrintWriter(sw);
 			E.printStackTrace(pw);
 
-            new Truncheon.API.Wraith.WriteFile().logToFile("--- ERROR REPORT ---\n", "Logs/ErrorLog");
-            new Truncheon.API.Wraith.WriteFile().logToFile("Program Stack Trace\n", "Logs/ErrorLog");
-            new Truncheon.API.Wraith.WriteFile().logToFile(sw.toString(), "Logs/ErrorLog");
-            new Truncheon.API.Wraith.WriteFile().logToFile("End Of Stack Trace\n", "Logs/ErrorLog");
+            String temporary = """
+            --- ERROR REPORT ---
+            Program Stack Trace\n"""
+            + sw.toString() + """
+            End Of Stack Trace
+            """;
+
+            new Truncheon.API.Wraith.WriteFile().logToFile(temporary, "Logs/ErrorLog");
             Console console=System.console();
 
             //Request for any user comments which can provide context for every exceptions caught

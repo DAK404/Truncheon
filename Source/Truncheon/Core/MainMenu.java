@@ -1,31 +1,39 @@
 /*
- * ---------------!DISCLAIMER!--------------- *
- *                                            *
- *         THIS CODE IS RELEASE READY         *
- *                                            *
- *  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
- *   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
- *    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
- *     GITHUB IF YOU FIND ANY PROBLEMS OR     *
- *              ERRORS IN THE CODE.           *
- *                                            *
- *   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
- *    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
- *        DISTRIBUTING THE SOURCE CODE.       *
- *   (SEE LICENSE FILE FOR MORE INFORMATION)  *
- *                                            *
- * ------------------------------------------ *
- */
+*    ███    ██ ██  ██████  ███    ██        ████████ ██████  ██    ██ ███    ██  ██████ ██   ██ ███████  ██████  ███    ██
+*    ████   ██ ██ ██    ██ ████   ██ ██        ██    ██   ██ ██    ██ ████   ██ ██      ██   ██ ██      ██    ██ ████   ██
+*    ██ ██  ██ ██ ██    ██ ██ ██  ██           ██    ██████  ██    ██ ██ ██  ██ ██      ███████ █████   ██    ██ ██ ██  ██
+*    ██  ██ ██ ██ ██    ██ ██  ██ ██ ██        ██    ██   ██ ██    ██ ██  ██ ██ ██      ██   ██ ██      ██    ██ ██  ██ ██
+*    ██   ████ ██  ██████  ██   ████           ██    ██   ██  ██████  ██   ████  ██████ ██   ██ ███████  ██████  ██   ████
+*/
+
+/*
+* ---------------!DISCLAIMER!--------------- *
+*                                            *
+*         THIS CODE IS RELEASE READY         *
+*                                            *
+*  THIS CODE HAS BEEN CHECKED, REVIEWED AND  *
+*   TESTED. THIS CODE HAS NO KNOWN ISSUES.   *
+*    PLEASE REPORT OR OPEN A NEW ISSUE ON    *
+*     GITHUB IF YOU FIND ANY PROBLEMS OR     *
+*              ERRORS IN THE CODE.           *
+*                                            *
+*   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+*    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+*        DISTRIBUTING THE SOURCE CODE.       *
+*   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+*                                            *
+* ------------------------------------------ *
+*/
 
 package Truncheon.Core;
 
-//import Java IO packages and classes
+//Import the required Java IO classes
 import java.io.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 
-//Import the JDBC/SQL classes and packages
+//Import the required Java SQL classes
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -55,8 +63,8 @@ public final class MainMenu
     * The following are the boolean datatype in this program:
     *
     * _scriptMode : Denotes to the interpreter that a script is already running.
-    * _admin : denotes to the interpreter that the user who has logged in is an administrator or not.
-    * _pseudo : denotes to the interpreter that if a module is run with the admin privileges.
+    * _admin      : denotes to the interpreter that the user who has logged in is an administrator or not.
+    * _pseudo     : denotes to the interpreter that if a module is run with the admin privileges.
     */
     private boolean _scriptMode = false;
     private boolean _admin = false;
@@ -65,12 +73,12 @@ public final class MainMenu
     /**
     * The following are the String datatypes in this program.
     *
-    * _username : Holds the username of the authenticated user.
-    * _name : Holds the name of the account holder authenticated.
-    * _PIN : holds the unlock PIN, required to unlock the console.
-    * _scriptName : holds the name of the script being currently run.
+    * _username        : Stores the username of the authenticated user.
+    * _name            : Stores the name of the account holder authenticated.
+    * _PIN             : Stores the unlock PIN, required to unlock the console.
+    * _scriptName      : Stores the name of the script being currently run.
     * _privilegeStatus : The string displayed for the type of user logged in.
-    * _sysName : Loads the name of the system defined in the policy file.
+    * _sysName         : Loads the name of the system defined in the policy file.
     */
     private String _username="";
     private String _name = "";
@@ -89,7 +97,7 @@ public final class MainMenu
     /**
     * Method which handles the login, information retrieval and the menu shell of the program
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime. : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     public final void mainMenuLogic()throws Exception
     {
@@ -97,6 +105,7 @@ public final class MainMenu
         {
             //By default, check the _count value and provide the user a chance to login to the program
             while(! login() && _count <= 5 && _count > 0);
+
             /*
             * Retrieve the important information that the program requires.
             * See the method getUserDetails() for more information
@@ -104,7 +113,7 @@ public final class MainMenu
             getUserDetails();
 
             //set the system name using the PolicyEnforcement API
-            _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrivePolicyValue("sysname");
+            _sysName = new Truncheon.API.Minotaur.PolicyEnforcement().retrievePolicyValue("sysname");
             System.gc();
 
             //pass control over to the menu shell
@@ -130,7 +139,7 @@ public final class MainMenu
     * The method will help in validate the credentials and provide a frontend for the login information to MainMenu program
     *
     * @return boolean : Returns the status of the login inputs.
-    * @throws Exception : Handle general exceptions during thrown during runtime. : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final boolean login()throws Exception
     {
@@ -139,7 +148,7 @@ public final class MainMenu
         try
         {
             //Display the Program Information.
-            new Truncheon.API.BuildInfo().clearScreen();
+            new Truncheon.API.BuildInfo().versionViewer();
 
             //Display the number of login attempts remaining.
             System.out.println("Login Attempts Remaining: " + _count + "\n===========================\n");
@@ -150,9 +159,10 @@ public final class MainMenu
             //If the login status is false, pass it on to decrement the login counter.
             if(! loginStatus)
             counterLogic();
+
             //Reset the count value to 5
             else
-            _count = 5;
+            this._count = 5;
         }
         catch(Exception E)
         {
@@ -170,7 +180,7 @@ public final class MainMenu
     * A reusable method which can be used for various login challenges.
     *
     * @return boolean : Returns the LoginAPI return value for the provided username, password and the security key
-    * @throws Exception : Handle general exceptions during thrown during runtime. : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final boolean challenge()throws Exception
     {
@@ -189,7 +199,7 @@ public final class MainMenu
     *
     * Will lock the inputs if the attempts are wrong for a specified number of times.
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void counterLogic()throws Exception
     {
@@ -203,7 +213,7 @@ public final class MainMenu
             Thread.sleep(600000);
 
             //Rearm the count and provide a single attempt to the user to try again.
-            _count = 1;
+            this._count = 1;
             console.readLine("Attempt has been rearmed. Please try again.");
         }
     }
@@ -213,7 +223,7 @@ public final class MainMenu
     *
     * This is executed right after login to retrieve the details.
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void getUserDetails()throws Exception
     {
@@ -243,32 +253,41 @@ public final class MainMenu
     * @param command : The statement that needs to be executed to retrieve information from the database.
     * @param info : Specified the parameter that needs to be queried against the database such as Name, PIN, etc.
     * @return String : Returns the string containing the data fetched from the database.
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final String retrieveInfo(String command, String info)throws Exception
     {
-        //Initialize the database connection
-        String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
-        Connection conn = DriverManager.getConnection(url);
+        String temp = "";
+        try
+        {
+            //Initialize the database connection
+            String url = "jdbc:sqlite:./System/Private/Truncheon/mud.db";
+            Connection conn = DriverManager.getConnection(url);
 
-        //Execute the statement to retrieve the criteria specified by command (the SQL command) and info (the name of the column)
-        PreparedStatement pstmt = conn.prepareStatement(command);
-        pstmt.setString(1, _username);
+            //Execute the statement to retrieve the criteria specified by command (the SQL command) and info (the name of the column)
+            PreparedStatement pstmt = conn.prepareStatement(command);
+            pstmt.setString(1, _username);
 
-        //Store the result of the query in the resultset
-        ResultSet rs = pstmt.executeQuery();
+            //Store the result of the query in the resultset
+            ResultSet rs = pstmt.executeQuery();
 
-        //Store the value of the result after retrieving the value of the query
-        String temp = rs.getString(info);
+            //Store the value of the result after retrieving the value of the query
+            temp = rs.getString(info);
 
-        //close connections and cleanup memory space
-        rs.close();
-        pstmt.close();
-        conn.close();
+            //close connections and cleanup memory space
+            rs.close();
+            pstmt.close();
+            conn.close();
 
-        System.gc();
+            System.gc();
 
-        //Return the result in the string format
+            //Return the result in the string format
+        }
+        catch(Exception E)
+        {
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
+        }
         return temp;
     }
 
@@ -292,7 +311,7 @@ public final class MainMenu
     * Administrator Account:
     * Administrator@SYSTEM!> _
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void menuShell()throws Exception
     {
@@ -320,7 +339,7 @@ public final class MainMenu
     * It is now made to be compatible with the ScriptEngine implementation.
     *
     * @param input : Accept the input from the menuShell() or the ScriptEngine.
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void commandProcessor(String input)throws Exception
     {
@@ -486,7 +505,7 @@ public final class MainMenu
                 * Clears the screen and prints the basic kernel information.
                 */
                 case "clear":
-                mainMenuVerView();
+                new Truncheon.API.BuildInfo().clearScreen();
                 break;
 
                 /**
@@ -629,7 +648,7 @@ public final class MainMenu
                 {
                     case "add":
                     //add user functionality
-                    new Truncheon.API.Dragon.AddUser(_username, _name).addUserLogic();
+                    new Truncheon.API.Dragon.AddUser().addUserLogic();
                     break;
 
                     case "delete":
@@ -637,7 +656,10 @@ public final class MainMenu
                     break;
 
                     case "modify":
-                    new Truncheon.API.Dragon.ModifyAccount(_username, _name, _PIN, _admin).modifyAccountLogic();
+                    new Truncheon.API.Dragon.ModifyAccount(_username, _name).modifyAccountLogic();
+
+                    //Reinitialize the PIN value after login to store the new value from the database
+                    _PIN  = retrieveInfo("SELECT PIN FROM FCAD WHERE Username = ? ;", "PIN");
                     break;
 
                     default:
@@ -663,7 +685,6 @@ public final class MainMenu
         }
     }
 
-
     // ************************************************************************************ //
     //                                  MAINMENU LOGIC END                                  //
     // ************************************************************************************ //
@@ -676,7 +697,7 @@ public final class MainMenu
     * The logic to handle the script files.
     *
     * @param fileName : The script file name to be processed by the interpreter.
-    * @throws Exception : Handle general exceptions during thrown during runtime. : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void scriptEngine(String fileName)throws Exception
     {
@@ -689,17 +710,18 @@ public final class MainMenu
 
             System.gc();
 
+            //Check if the name of the script file is a valid string
+            if(fileName == null || fileName.equalsIgnoreCase("") || fileName.startsWith(" "))
+            {
+                System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
+                return;
+            }
+
             //Check if the script file specified exists.
             if(! new File(fileName).exists())
             {
                 //Return an error and pass the control back in case the file is not found.
                 System.out.println("[ ATTENTION ] : Script file "+fileName.replace(_username, _name)+" has not been found.\nPlease check the directory of the script file and try again.");
-                return;
-            }
-            //Check if the name of the script file is a valid string
-            if(fileName == null || fileName.equalsIgnoreCase("") || fileName.startsWith(" "))
-            {
-                System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
                 return;
             }
 
@@ -748,7 +770,7 @@ public final class MainMenu
     *
     * Separate method implemented to keep the code readable and modular.
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void lockConsole()throws Exception
     {
@@ -771,7 +793,7 @@ public final class MainMenu
     /**
     * The implementation for Pseudo functionality.
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void pseudo()throws Exception
     {
@@ -816,7 +838,7 @@ public final class MainMenu
     *
     * View the version of program with a set of extra strings
     *
-    * @throws Exception : Handle general exceptions during thrown during runtime.
+    * @throws Exception : Handle exceptions thrown during program runtime.
     */
     private final void mainMenuVerView()throws Exception
     {

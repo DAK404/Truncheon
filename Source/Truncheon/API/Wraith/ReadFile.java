@@ -1,23 +1,32 @@
 package Truncheon.API.Wraith;
 
+//Import the required Java IO classes
 import java.io.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 
+/**
+*
+*/
 public final class ReadFile
 {
     File file = null;
 
+    /**
+    *
+    * @param helpFile
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     public final void showHelp(String helpFile)throws Exception
     {
         try
         {
             if(checkFileValidity(helpFile))
             {
-                file=new File("./Information/Truncheon/"+helpFile);
+                file = new File("./Information/Truncheon/" + helpFile);
                 readFile(true);
-            }    
+            }
         }
         catch(Exception E)
         {
@@ -25,6 +34,12 @@ public final class ReadFile
         }
     }
 
+    /**
+    *
+    * @param fn
+    * @return
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private boolean checkFileValidity(String fn)throws Exception
     {
         if(fn == null || fn.equals("") || fn.startsWith(" "))
@@ -35,12 +50,18 @@ public final class ReadFile
         return true;
     }
 
+    /**
+    *
+    * @param fileName
+    * @param dir
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     public final void readUserFile(String fileName, String dir)throws Exception
     {
         try
         {
-            if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("read"))
-                return;
+            if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("read") )
+            return;
             if(checkFileValidity(fileName))
             {
                 file = new File( dir + fileName);
@@ -53,21 +74,26 @@ public final class ReadFile
         }
     }
 
+    /**
+    *
+    * @param helpMode
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
     private final void readFile(boolean helpMode) throws Exception
     {
         //A link to show the build info to the user's terminal
         new Truncheon.API.BuildInfo().versionViewer();
 
-        Console console=System.console();
+        Console console = System.console();
 
         //A condition to check if the given file is found or not. This prevents exception, which may or may not disrupt the program.
 
         //This checks if the file doesnt exist. If it doesnt exist, the error text is shown on terminal.
         if (! file.exists())
-            System.out.println("[ ERROR ] : Unable to locate file: The specified file cannot be read, found or loaded.");
+        System.out.println("[ ERROR ] : Unable to locate file: The specified file cannot be read, found or loaded.");
         //This checks if the filename points to a directory
         else if (file.isDirectory())
-            System.out.println("[ ERROR ] : Unable to read file : The specified file name is a directory.");
+        System.out.println("[ ERROR ] : Unable to read file : The specified file name is a directory.");
         //If the file exists, the file is displayed on the terminal.
         else
         {
@@ -81,7 +107,7 @@ public final class ReadFile
             {
                 //Logic to read the file line by line.
                 while ((p = ob.readLine()) != null)
-                    System.out.println(p);
+                System.out.println(p);
             }
             else
             {
@@ -93,15 +119,15 @@ public final class ReadFile
                         console.readLine("\nPress ENTER to Continue.");
                         new Truncheon.API.BuildInfo().versionViewer();
                         continue;
-                    }                    
+                    }
                     else if(p.equalsIgnoreCase("<end of help>"))
                     {
                         System.out.println("\n\nEnd of Help File.");
                         break;
                     }
                     else if(p.startsWith("#"))
-                        continue;
-                    
+                    continue;
+
                     System.out.println(p);
                 }
             }
