@@ -49,7 +49,7 @@ ECHO :::::::::::::::::::::::::::::
 ECHO.
 
 :: Accept input from user for the desired action
-ECHO Please enter your choice [ 1 - 7 ]
+ECHO Please enter your choice [ 1 - 8 ]
 choice /N /C 12345678 /M "MAKE_TOOLS ->  "
 
 :: Logic to handle the choices

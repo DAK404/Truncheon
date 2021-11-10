@@ -64,7 +64,8 @@ public class FileManager
     {
         try
         {
-            prerequisites();
+            if(! prerequisites())
+            return;
             
             new Truncheon.API.BuildInfo().versionViewer();
             System.out.println("Grinch File Manager 1.10.0");
@@ -132,25 +133,32 @@ public class FileManager
     //                                 LOGIN PROCEDURE START                                //
     // ************************************************************************************ //
 
-    private void prerequisites()throws Exception
+    private boolean prerequisites()throws Exception
     {
+        boolean isValid = false;
         try
         {
             if( !_admin  && ! (new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("filemanager")) )
-            return;
+            return isValid;
 
             if(! authenticationLogic())
             {
                 System.out.println("Authentication failed. Cannot access Grinch.");
-                return;
+                return isValid;
             }
 
+            //Set isValid to true to indicate that the user has been authenticated successfully
+            isValid = true;
+
+            //reset the directory to the User Home directory
             resetToHomeDir();
         }
         catch(Exception E)
         {
-
+            //Handle any exceptions thrown during runtime
+            new Truncheon.API.ErrorHandler().handleException(E);
         }
+        return isValid;
     }
 
 
@@ -248,7 +256,7 @@ public class FileManager
     * @return
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    private final boolean fileManagerShell(String input)throws Exception
+    public boolean fileManagerShell(String input)throws Exception
     {
         try
         {

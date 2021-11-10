@@ -30,6 +30,6 @@ CLS
 set PATH=%PATH%;.\JRE\bin
 
 :: Begin the program, and boot it to the "normal" mode
-start "Nion Shell 1.0" java ProgramLauncher Truncheon normal
+start "Nion Shell 1.0.1" java ProgramLauncher Truncheon normal
 
 :: End of File

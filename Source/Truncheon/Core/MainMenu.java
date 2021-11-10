@@ -495,7 +495,7 @@ public final class MainMenu
                 * Restarts the program, returns the exit code to the ProgramLauncher with status 1
                 */
                 case "restart":
-                System.exit(1);
+                System.exit(0xC0);
 
                 /**
                 * Clear Screen functionality.
@@ -516,6 +516,7 @@ public final class MainMenu
                 case "?":
                 case "help":
                 new Truncheon.API.Wraith.ReadFile().showHelp("HelpDocuments/MainMenu.manual");
+                mainMenuVerView();
                 break;
 
                 /**
@@ -534,13 +535,27 @@ public final class MainMenu
                 case "syshell":
                 if(! _admin)
                 {
-                    System.out.println("Cannot execute syshell command as a standard user.");
+                    System.out.println("Cannot execute SYSHELL command as a standard user.");
                     break;
                 }
-                if(System.getProperty("os.name").contains("Windows"))
-                new ProcessBuilder("cmd").inheritIO().start().waitFor();
-                else
-                new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+
+                //Catch any potential errors that may arise from trying to invoke the system shells
+                try
+                {
+                    //Condition to detect if the OS is Windows
+                    if(System.getProperty("os.name").contains("Windows"))
+                    new ProcessBuilder("cmd").inheritIO().start().waitFor();
+
+                    //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
+                    else
+                    new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+                }
+                //Catch any exceptions raised when trying to invoke the Shell
+                catch(Exception E)
+                {
+                    System.err.println("[ ERROR ] : CANNOT INVOKE SYSTEM SHELL!\nPlease contact the System Administrator for more information.");
+                    System.err.println("\nERROR DETAILS:\n\n" + E + "\n"); 
+                }
                 break;
 
                 /**
@@ -665,6 +680,7 @@ public final class MainMenu
                     default:
                     System.out.println("Invalid option");
                 }
+                mainMenuVerView();
                 break;
 
                 /**

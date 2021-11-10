@@ -153,7 +153,7 @@ public class DeleteUser
 
             //Restart the program to return to the Boot Menu
             console.readLine("User deletion complete. Press ENTER to restart program.");
-            System.exit(1);
+            System.exit(0xC0);
         }
     }
 

@@ -89,7 +89,7 @@ public final class Boot
                 * code of 101, signifiying a wrong boot mode specification
                 */
                 default:
-                System.exit(101);
+                System.exit(0x7F);
             }
 
         }
@@ -167,7 +167,7 @@ public final class Boot
 
                     //Restarts the program, sends exit code 1 to ProgramLauncher.
                     case "restart":
-                    System.exit(1);
+                    System.exit(0xC0);
 
                     //Do nothing if the input is blank
                     case "":

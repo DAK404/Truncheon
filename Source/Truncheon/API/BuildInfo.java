@@ -45,10 +45,10 @@ public final class BuildInfo
     public final String _kernel = "Synergy";
 
     /**The String Constant which holds the Build ID of the program*/
-    public final String _buildID = _version + "_19.10.2021_1934_TRNCHN";
+    public final String _buildID = _version + "_10.11.2021_0245_TRNCHN";
 
     /**The String Constant which holds the date compiled of the build*/
-    public final String _buildDate = "19-October-2021";
+    public final String _buildDate = "11-November-2021";
 
     /**The String which will store the MOTD value */
     public final static String _MOTD = motdGenerator();
@@ -184,13 +184,13 @@ public final class BuildInfo
         clearScreen();
         System.out.println("Nion: Truncheon\n_______________\n");
 
-        System.out.println("Iteration   : 8");
+        System.out.println("Iteration   : 8.1");
         System.out.println("Version     : " + _version);
         System.out.println("Kernel      : " + _kernel);
         System.out.println("Date        : " + _buildDate);
         System.out.println("Build ID    : " + _buildID);
         System.out.println("OS          : " + System.getProperty("os.name"));
-        System.out.println("\nDescription :\nTruncheon is the successor of Mosaic,\nbut now focusing on simplifying the\nprogram to give back the power to the\ndevelopers and end users.\n\n");
+        System.out.println("\nDescription :\nShell written in Java which is easy and functional to use.\n");
         System.gc();
     }
 

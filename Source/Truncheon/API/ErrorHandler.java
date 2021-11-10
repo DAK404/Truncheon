@@ -107,7 +107,7 @@ public final class ErrorHandler
             System.in.read();
 
             //Restart the program to start afresh
-            System.exit(1);
+            System.exit(0xC2);
         }
         catch(Exception Ex)
         {

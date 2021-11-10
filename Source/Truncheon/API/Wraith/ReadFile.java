@@ -116,7 +116,8 @@ public final class ReadFile
                 {
                     if(p.equalsIgnoreCase("<end of page>"))
                     {
-                        console.readLine("\nPress ENTER to Continue.");
+                        if(console.readLine("\nPress ENTER to Continue, else type EXIT to quit help viewer.\n~DOC_HLP?> ").equalsIgnoreCase("exit"))
+                        return;
                         new Truncheon.API.BuildInfo().versionViewer();
                         continue;
                     }
@@ -136,7 +137,5 @@ public final class ReadFile
             ob.close();
         }
         console.readLine("Press ENTER to continue.");
-        new Truncheon.API.BuildInfo().versionViewer();
     }
-
 }

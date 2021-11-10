@@ -79,30 +79,36 @@ class ProgramLauncher
                     System.exit(0);
 
                     case 1:
+                    System.err.println("[ ERROR ] : Cannot load program.\nPlease check the files' integrity and try again.\nPress ENTER to Continue");
+                    System.in.read();
+                    System.exit(-1);
+
+                    case 0xC0:
                     //Restart mode
-                    System.out.println("Program is restarting... Please wait.");
+                    System.out.println("[ ATTENTION ] : Program Restarting...");
                     break;
 
-                    case 2:
+                    case 0xC1:
                     //Error exit mode
-                    System.out.println("Program is exiting on an error.");
+                    System.err.println("[ WARNING ] : Program exited with an error.\nPlease check the Log Files for more information.");
                     Thread.sleep(2500);
-                    System.exit(2);
+                    System.exit(702);
 
-                    case 3:
+                    case 0xC2:
                     //Error restart mode
-                    System.out.println("Program is restarting due to an error... Please wait.");
+                    System.err.println("[ WARNING ] : Program Restarting due to an Error...");
                     Thread.sleep(2500);
                     break;
 
-                    case 4:
+                    case 0xC3:
+                    System.out.println("[ ATTENTION ] : Program now booting into safe mode...");
                     Args[1]="safemode";
                     break;
 
-                    case 101:
+                    case 0x7F:
                     //Invalid boot mode
-                    System.out.println("Invalid Boot Mode Detected! Exiting Program...");
-                    System.exit(101);
+                    System.err.println("Invalid Boot Mode Detected! Exiting Program...");
+                    System.exit(0x7F);
 
                     default:
                     //Generic error output

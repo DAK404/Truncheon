@@ -102,7 +102,7 @@ public class Setup
         new Truncheon.API.Wyvern.UpdateFrontEnd().updateLogic();
 
         //Restart the program after the setup is complete to apply changes.
-        System.exit(1);
+        System.exit(0xC0);
     }
 
     /**
@@ -183,7 +183,7 @@ public class Setup
         }
         //Exit if the user does not accept the terms of the license.
         else
-        System.exit(2);
+        System.exit(0);
 
         //Set the status of the prerequisites section as true, ie complete.
         _legal = "COMPLETE";

@@ -4,4 +4,4 @@ Binaries/*
 Tools/SQLite Driver
 Source/Truncheon/Core/DebugMainMenu.java
 Releases/*
-ReleaseCreator.java
+Source/CompileTools.cmd
