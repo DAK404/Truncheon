@@ -410,13 +410,13 @@ public class Setup
             Truncheon.API.Minotaur.PolicyEditor pInit = new Truncheon.API.Minotaur.PolicyEditor();
             pInit.resetPolicyFile();
             pInit.savePolicy("sysname", sysName);
-
             _policyInit = "COMPLETE";
         }
         catch (Exception E)
         {
-            E.printStackTrace();
+            E.printStackTrace();   
         }
+        console.readLine("Policy Configuration Complete!\nPress ENTER to Continue.");
     }
 
     /**

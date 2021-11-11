@@ -91,7 +91,6 @@ public final class Boot
                 default:
                 System.exit(0x7F);
             }
-
         }
         catch(Exception E)
         {

@@ -47,7 +47,7 @@ import java.sql.ResultSet;
 */
 public class PolicyEditor
 {
-    public String [] resetValues = { "motd", "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
+    public final String [] resetValues = { "motd", "update", "download", "script", "filemanager", "read", "write", "usermgmt"};
 
     private final String fileName = "./System/Private/Truncheon/Policy.burn";
 
@@ -220,10 +220,10 @@ public class PolicyEditor
     */
     public final void resetPolicyFile()throws Exception
     {
-        System.out.println(new File("./System/Private/Truncheon/Policy.BURN").delete());
-        Thread.sleep(3000);
-        savePolicy("sysname", "SYSTEM");
+        new File("./System/Private/Truncheon/Policy.BURN").delete();
+        props = new Properties();
         for(int i = 0; i < resetValues.length; ++i)
         savePolicy(resetValues[i], "on");
+        savePolicy("sysname", "SYSTEM");
     }
 }
