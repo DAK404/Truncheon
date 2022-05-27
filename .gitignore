@@ -1,8 +1,10 @@
 Source/*.bat
+Source/*.cmd
 Source/*.log
-Binaries/*
-Tools/SQLite Driver
 Source/Truncheon/Core/DebugMainMenu.java
-Releases/*
-Source/CompileTools.cmd
+
+Binaries/*
+
+Tools/SQLite Driver
+
 .vscode/*

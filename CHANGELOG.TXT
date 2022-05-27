@@ -8,23 +8,27 @@ given time frame.
 
 To check ALL changes, please check the GitHub commits.
 
+This is the first update to Truncheon, providing many changes,
+improvements in the aspects of security, performance and program
+flexibility. Please check this file if you want to keep a track
+of the changes made to the code over time.
+
 -----------------------------------------------------------------
 CHANGES MADE TO v1.1.0 CODENAMED "KATANA" (14-FEB-2022)
 -----------------------------------------------------------------
 
 ADDITIONS:
 
-* File integrity checking during boot
+* Abraxis File integrity checking during boot
 * Repair mode to recover from faulty programs
-* New tools which can work with IDEs/Editors
-* Tulzcha tools to sign the compiled
+* Tulzcha tools to sign the compiled build
 * Print streams to customize the output messages with colors
 * Refactored, Unified and modularized scripting system
 * Kernel Prober 1.0 to check for bootable kernels by loaders
 
 IMPROVEMENTS:
 
-* Upgraded Java version and JRE to 17.0.0
+* Upgraded Java version and JRE to 18.0.1.1
 * Upgraded File structures to Nion program standards
 * Improved database handling logic and login authentication
 * Improved existing interactive tools
