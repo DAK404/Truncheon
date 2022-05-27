@@ -1,0 +1,41 @@
+=================================================================
+                   NION: TRUNCHEON - CHANGELOG
+=================================================================
+
+This file shall track the changes made to the code and project.
+Dates shall be subsequently added to reflect changes made at
+given time frame.
+
+To check ALL changes, please check the GitHub commits.
+
+-----------------------------------------------------------------
+CHANGES MADE TO v1.1.0 CODENAMED "KATANA" (14-FEB-2022)
+-----------------------------------------------------------------
+
+ADDITIONS:
+
+* File integrity checking during boot
+* Repair mode to recover from faulty programs
+* New tools which can work with IDEs/Editors
+* Tulzcha tools to sign the compiled
+* Print streams to customize the output messages with colors
+* Refactored, Unified and modularized scripting system
+* Kernel Prober 1.0 to check for bootable kernels by loaders
+
+IMPROVEMENTS:
+
+* Upgraded Java version and JRE to 17.0.0
+* Upgraded File structures to Nion program standards
+* Improved database handling logic and login authentication
+* Improved existing interactive tools
+* Improved API flexibility
+* Optimized resource usage and overall performance
+
+DELETIONS AND DEPRECATIONS:
+
+* Older database system handing programs
+* older file management and main menu scripting logic
+* redundant tools
+* debug/unused code
+
+-----------------------------------------------------------------

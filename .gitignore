@@ -5,3 +5,4 @@ Tools/SQLite Driver
 Source/Truncheon/Core/DebugMainMenu.java
 Releases/*
 Source/CompileTools.cmd
+.vscode/*
