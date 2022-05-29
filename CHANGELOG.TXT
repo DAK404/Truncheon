@@ -33,10 +33,13 @@ IMPROVEMENTS:
 * Improved database handling logic and login authentication
 * Improved existing interactive tools
 * Improved API flexibility
+* Improved Code readability
+* Fixed certain code issues
 * Optimized resource usage and overall performance
 
 DELETIONS AND DEPRECATIONS:
 
+* Removed redundant code
 * Older database system handing programs
 * older file management and main menu scripting logic
 * redundant tools
