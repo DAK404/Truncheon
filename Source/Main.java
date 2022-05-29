@@ -115,7 +115,7 @@ public class Main
     
     public static void main(String[] args)throws Exception
     {
-        if(args.length < 2)
+        if(args.length == 0)
         {
             System.err.println(errorHeader + INVALID_SYNTAX + errorFooter);
             System.in.read();
@@ -168,6 +168,19 @@ public class Main
                 System.err.println(errorHeader + KERNEL_NOT_FOUND + errorFooter);
                 System.exit(0);
 
+                //force reboot to normal mode;
+                case 211:
+                args[1] = "normal";
+                break;
+
+                case 212:
+                args[1] = "repair";
+                break;
+
+                case 213: 
+                args[1] = "debug";
+                break;
+
                 case 3:
                 System.err.println(errorHeader + UNDEFINED_BOOTMODE + errorFooter);
                 System.exit(0);
@@ -190,6 +203,10 @@ public class Main
 
                 case 8:
                 System.err.println(errorHeader + AUTOMATIC_REPAIR_MODE + errorFooter);
+                System.exit(0);
+
+                default:
+                System.err.println("Undefined Exit Code. EXITING...");
                 System.exit(0);
                 /*
 

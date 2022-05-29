@@ -29,7 +29,7 @@ public class BuildSigner
     {
         try
         {
-            new File("./.Manifest/Conch").mkdirs();
+            new File("./.Manifest/Truncheon").mkdirs();
             new BuildSigner().enumerateFiles(new File("./"));
             new BuildSigner().hashFiles();
         }
@@ -109,7 +109,7 @@ public class BuildSigner
         try
         {
             Properties props = new Properties();
-            FileOutputStream output = new FileOutputStream("./.Manifest/Conch/Manifest.m1");
+            FileOutputStream output = new FileOutputStream("./.Manifest/Truncheon/Manifest.m1");
             System.out.println(filePaths);
 
             for(String fileName: filePaths)

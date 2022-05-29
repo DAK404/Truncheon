@@ -27,6 +27,9 @@ public class Loader
 {
     Console console = System.console();
 
+
+    private static List<String> filePath = new  ArrayList<String>();
+
     public Loader()
     {
         try
@@ -44,32 +47,25 @@ public class Loader
         switch(args[0].toLowerCase())
         {
             case "normal":
-            new Loader().PLACEHOLDER_ENTRY_POINT();
             break;
-            
-            case "debug":
-                Console console = System.console();
-                String debugParam = console.readLine(">");
-                switch(debugParam.toLowerCase())
-                {
-                    case "io":
-                        new Loader()._debugPrintStreams();
-                        break;
 
-                    case "buildinfo":
-                        System.out.println("Testing Build Info...");
-                        BuildInfo.viewBuildInfo();
-                        System.out.println("Press RETURN to clear screen...");
-                        System.in.read();
-                        BuildInfo.clearScreen();
-                        break;
-                    
-                    default:
-                        System.out.println("INVALID DEBUG ARGUMENT. QUITTING...");
-                        break;
-                }
-            break;
-        }        
+            case "repair":
+            new Loader().repairMode();
+            System.exit(211);
+            
+            default:
+            System.exit(3);
+        }
+        
+        new Loader().loaderLogic();
+    }
+
+    private void loaderLogic()throws Exception
+    {
+        BuildInfo.viewBuildInfo();
+
+        //Invoke Abraxis logic to verify the kernel integrity
+        abraxisLogic();
     }
 
     /*
@@ -85,7 +81,8 @@ public class Loader
     
     private void repairMode()
     {
-
+        System.out.println("REPAIR MODE: WORK IN PROGRESS");
+        console.readLine();
     }
 
     private void repairCmdProcessor()
@@ -129,29 +126,163 @@ public class Loader
     ----------------------------------------------------------------------------------
     */
 
-    private void abraxisLogic()
+    private byte abraxisLogic()throws Exception
     {
+        byte abraxisResult = 55;
+        /*
+        Return value table:
 
+        RETURN VALUE	MEANING
+            0           File integrity OK
+            1           File integrity FAILED
+            2           Manifest File Missing
+            3           Kernel File Population Failed  
+            4           Program Setup Required
+
+        */
+
+        if(manifestFileExists())
+        {
+            IOStreams.printInfo("Manifest file found.");
+            if(populateFiles(new File("./")))
+            {
+                IOStreams.printInfo("Kernel Files Population Complete.");
+                if(checkFileHash())
+                {
+                    IOStreams.printInfo("File Hash Check Complete.");
+
+                    abraxisResult = 0;
+
+                    if(checkDirectoryStructure())
+                        IOStreams.printInfo("Setup Not Required. Booting Program...");
+                    else
+                    {
+                        IOStreams.printAttention("Setup Incomplete.");
+                        abraxisResult = 4;
+                    }
+                }
+                else
+                {
+                    IOStreams.printError("File Integrity Checks failed!");
+                    abraxisResult = 1;
+                }
+            }
+            else
+            {
+                IOStreams.printError("Kernel Files Population failed!");
+                abraxisResult = 3;
+            }
+        }
+        else
+        {
+            IOStreams.printError("Manifest file not found! Aborting...");
+            abraxisResult = 2;
+        }
+
+        return abraxisResult;
     }
 
-    private void populateFiles()
+    private boolean manifestFileExists()
     {
-
+        return new File("./.Manifest/Truncheon/Manifest.m1").exists();
     }
 
-    private void checkDirectoryStructure()
+    private boolean populateFiles(File checkDir)
     {
+        boolean filePopulationStatus = false;
+        try 
+        {
+            File[] fileList = checkDir.listFiles();
 
+            for (File f: fileList)
+            {
+                //Dont bother checking directories that can change over time
+                //The System, Users, .Manifest, SQLite Driver, JRE and the program runner are excluded
+                if(fileIgnoreList(f.getName()))
+                    continue;
+                
+                if (f.isDirectory())
+                    populateFiles(f);
+
+                if (f.isFile())
+                {
+                    String a = f.getPath();
+                    filePath.add(a);
+                }
+            }
+            filePopulationStatus = true;
+        } 
+        catch(Exception e)
+        {
+            //Write the exception to File
+        }
+        return filePopulationStatus;
     }
 
-    private void checkFileHash()
+    private boolean checkFileHash()throws Exception
     {
+        boolean kernelIntegrity = true;
 
+        Properties props = new Properties();
+        FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Manifest.m1");
+        props.loadFromXML(manifestEntries);
+        manifestEntries.close();
+
+        // DEBUG CODE //
+        //props.list(System.out);
+        // DEBUG CODE //
+
+        for(String fileName: filePath)
+        {
+            // if(fileIgnoreList(fileName))
+            //     continue;
+
+            
+            String fileHash = new Truncheon.API.Minotaur.Cryptography().fileToMD5(fileName);
+
+            try
+            {
+                String manifestHash = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(fileName.replaceAll(File.separator, "\\\\"))).toString();
+
+                if(!manifestHash.equals(fileHash))
+                {
+                    kernelIntegrity = false;
+                    IOStreams.printError("Integrity Failure: " + fileName);
+                    IOStreams.printError("File Hash        : " + fileHash);
+                    IOStreams.printError("Expected Hash    : " + manifestHash);
+                    System.out.println();
+                }
+            }
+            catch(NullPointerException unknownFileFound)
+            {
+                IOStreams.printAttention("Unrecognized File Found : " + fileName);
+                IOStreams.printAttention("Unrecognized File Hash  : " + fileHash);
+            }
+        }
+
+        return kernelIntegrity;
     }
 
-    private void fileIgnoreList()
+    
+    private boolean checkDirectoryStructure()
     {
+        //logic to check if the program has been setup or it needs to be setup
+        return new File("./System/Truncheon").exists() && new File("./Users/Truncheon").exists();
+    }
 
+    private boolean fileIgnoreList(String fileName)
+    {
+        boolean status = false;
+        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd"};
+        for(String files : ignoreList)
+        {
+            if(fileName.equalsIgnoreCase(files))
+            {
+                status = true;
+                break;
+            }
+        }
+        return status;
     }
 
     /*

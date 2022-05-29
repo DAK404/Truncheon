@@ -3,8 +3,8 @@ package Truncheon.API;
 public class BuildInfo
 {
     public static String _Branding = """
-  _____ ____  _   _ _   _  ____ _   _ _____ ___  _   _ 
- |_   _|  _ \\| | | | \\ | |/ ___| | | | ____/ _ \\| \\ | |
+  _____ ____  _   _ _   _  ____ _   _ _________  _   _ 
+ |_   _|  _ \\| | | | \\ | |/ ___| | | | ________\\| \\ | |
    | | | |_) | | | |  \\| | |   | |_| |  _|| | | |  \\| |
    | | |  _ <| |_| | |\\  | |___|  _  | |__| |_| | |\\  |
    |_| |_| \\_\\\\___/|_| \\_|\\____|_| |_|_____\\___/|_| \\_|
@@ -12,16 +12,14 @@ public class BuildInfo
     """;
 
     public static String _Version = "1.1.0 \"KATANA\"";
-    public static String _BuildDate = "14-May-2022";
-    public static String _BuildID = "NION_14_MAY_22_1312";
+    public static String _BuildDate = "29-May-2022";
+    public static String _BuildID = "NION_28_MAY_22_1721";
     public static String _BuildType = "Development";
 
     public static void viewBuildInfo()
     {
         try
         {
-            System.setProperty("file.encoding", "IBM437");
-
             clearScreen();
             System.out.println(_Branding);
             System.out.println(" Build Version : " + _Version);
