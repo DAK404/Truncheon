@@ -21,10 +21,11 @@ ADDITIONS:
 
 * Abraxis File integrity checking during boot
 * Repair mode to recover from faulty programs
-* Tulzcha tools to sign the compiled build
-* Print streams to customize the output messages with colors
+* Tulzscha tools to sign the compiled build
+* Print streams to customize the output messages with
+color coding support
 * Refactored, Unified and modularized scripting system
-* Kernel Prober 1.0 to check for bootable kernels by loaders
+* Kernel Prober 1.0 to check for bootable kernels by the loader
 
 IMPROVEMENTS:
 
@@ -35,6 +36,7 @@ IMPROVEMENTS:
 * Improved API flexibility
 * Improved Code readability
 * Fixed certain code issues
+* Removed unsafe code structures
 * Optimized resource usage and overall performance
 
 DELETIONS AND DEPRECATIONS:
@@ -43,6 +45,6 @@ DELETIONS AND DEPRECATIONS:
 * Older database system handing programs
 * older file management and main menu scripting logic
 * redundant tools
-* debug/unused code
+* debug/unused/redundant code
 
 -----------------------------------------------------------------

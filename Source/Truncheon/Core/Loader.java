@@ -28,7 +28,7 @@ import Truncheon.API.BuildInfo;
  * Conforms to the Nion Program Structure
  * 
  * @author: @DAK404
- * @version:  
+ * @version: 
  * @since: 
  */
 public class Loader
@@ -61,10 +61,6 @@ public class Loader
             new Loader().repairMode();
             System.exit(211);
 
-            case "debug_io":
-            new Loader()._debugPrintStreams();
-            System.exit(0);
-
             default:
             System.exit(3);
         }
@@ -77,7 +73,7 @@ public class Loader
     {
         try
         {
-
+            System.out.println(abraxisLogic());
         }
         catch(Exception e)
         {
@@ -158,41 +154,60 @@ public class Loader
 
         */
 
+        //Check if the manifest File is found
         if(manifestFileExists())
         {
             IOStreams.printInfo("Manifest file found.");
+
+            //Begin the population of the files in the installed directory of Truncheon
             if(populateFiles(new File("./")))
             {
                 IOStreams.printInfo("Kernel Files Population Complete.");
+
+                //Begin checking the file hashes to enforce integrity
                 if(checkFileHash())
                 {
                     IOStreams.printInfo("File Hash Check Complete.");
 
+                    //Set the return value result to 0, denoting that the File Integrity is okay
                     abraxisResult = 0;
 
+                    //Check if the program requires the first time setup
                     if(checkDirectoryStructure())
                         IOStreams.printInfo("Setup Not Required. Booting Program...");
+
                     else
                     {
                         IOStreams.printAttention("Setup Incomplete.");
+
+                        //Set the return value to be 4, denoting that the program requires setup
                         abraxisResult = 4;
                     }
                 }
+
                 else
                 {
                     IOStreams.printError("File Integrity Checks failed!");
+
+                    //Set the return value to be 1, denoting that the File Integrity has failed
                     abraxisResult = 1;
                 }
             }
+
             else
             {
                 IOStreams.printError("Kernel Files Population failed!");
+
+                //Set the return value to be 3, denoting that the Kernel File Population has failed
                 abraxisResult = 3;
             }
         }
+
         else
         {
             IOStreams.printError("Manifest file not found! Aborting...");
+
+            //Set the return value to be 2, denoting that the Manifest File is missing
             abraxisResult = 2;
         }
 
@@ -201,6 +216,7 @@ public class Loader
 
     private boolean manifestFileExists()
     {
+        //Check if the manifest file exists
         return new File("./.Manifest/Truncheon/Manifest.m1").exists();
     }
 
@@ -322,28 +338,6 @@ public class Loader
     AUTHOR       : Deepak Anil Kumar (@DAK404)
     ----------------------------------------------------------------------------------
     */
-
-    private void _debugPrintStreams()
-    {
-        IOStreams.println("Hello World!");
-        IOStreams.printInfo("THIS IS AN INFORMATION STRING");
-        IOStreams.printWarning("THIS IS A WARNING STRING");
-        IOStreams.printAttention("THIS IS AN ATTENTION STRING");
-        IOStreams.printError("THIS IS AN ERROR STRING");
-    }
-
-    private void PLACEHOLDER_ENTRY_POINT()
-    {
-        BuildInfo.viewBuildInfo();
-
-        IOStreams.println("DEFAULT OUTPUT");
-        IOStreams.printInfo("DEFAULT INFO");
-        IOStreams.printWarning("DEFAULT WARNING");
-        IOStreams.printAttention("DEFAULT ATTENTION");
-        IOStreams.printError("DEFAULT ERROR");
-
-        System.out.println("End Of Demo.");
-    }
 
     /*
     ----------------------------------------------------------------------------------
