@@ -90,7 +90,7 @@ public class BuildSigner
         boolean status = false;
 
         //Initialize the list of the directories/files to be ignored
-        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd"};
+        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd", "BuildSigner.java"};
 
         //Check the fileName against the ignore list
         for(String files : ignoreList)

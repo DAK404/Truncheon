@@ -6,17 +6,18 @@ relative_links:
   enabled: true
   collections: true
 include:
-  - Readme.md
-  - License.md
-  - Index.md
+  - ./Documentation/Readme.md
+  - ./Documentation/License.md
+  - ./Documentation/DocumentationIndex.md
+  - ./Documentation/Changelog.md
 
 theme: jekyll-theme-minimal
 logo: ./assets/Images/Logo.png
-title: Truncheon | DAK
+title: Nion Truncheon | DAK
 description: Official website for Truncheon!
 show_downloads: true
 
 github:
-  release_url: https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip
+  release_url: https://github.com/DAK404/Truncheon/releases/latest/download/Truncheon.zip
   jre_url: https://github.com/DAK404/Truncheon/releases/tag/JRE
   doc_url: https://dak404.github.io/Truncheon/Documentation/index.html

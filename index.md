@@ -1,2 +1,3 @@
-Truncheon Katana
-Coming Soon.
+# Nion: Truncheon
+
+Katana Update. Coming Soon.
