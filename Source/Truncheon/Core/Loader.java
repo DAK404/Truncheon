@@ -23,7 +23,15 @@ import java.net.URL;
 import Truncheon.API.IOStreams;
 import Truncheon.API.BuildInfo;
 
-public class Loader 
+/**
+ * Loader class to load the Kernel up
+ * Conforms to the Nion Program Structure
+ * 
+ * @author: @DAK404
+ * @version:  
+ * @since: 
+ */
+public class Loader
 {
     Console console = System.console();
 
@@ -52,20 +60,29 @@ public class Loader
             case "repair":
             new Loader().repairMode();
             System.exit(211);
-            
+
+            case "debug_io":
+            new Loader()._debugPrintStreams();
+            System.exit(0);
+
             default:
             System.exit(3);
         }
-        
+
+        System.gc();
         new Loader().loaderLogic();
     }
 
     private void loaderLogic()throws Exception
     {
-        BuildInfo.viewBuildInfo();
+        try
+        {
 
-        //Invoke Abraxis logic to verify the kernel integrity
-        abraxisLogic();
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 
     /*
@@ -78,7 +95,7 @@ public class Loader
     AUTHOR       : Deepak Anil Kumar (@DAK404)
     ----------------------------------------------------------------------------------
     */
-    
+
     private void repairMode()
     {
         System.out.println("REPAIR MODE: WORK IN PROGRESS");
@@ -136,7 +153,7 @@ public class Loader
             0           File integrity OK
             1           File integrity FAILED
             2           Manifest File Missing
-            3           Kernel File Population Failed  
+            3           Kernel File Population Failed
             4           Program Setup Required
 
         */
@@ -190,7 +207,7 @@ public class Loader
     private boolean populateFiles(File checkDir)
     {
         boolean filePopulationStatus = false;
-        try 
+        try
         {
             File[] fileList = checkDir.listFiles();
 
@@ -200,7 +217,7 @@ public class Loader
                 //The System, Users, .Manifest, SQLite Driver, JRE and the program runner are excluded
                 if(fileIgnoreList(f.getName()))
                     continue;
-                
+
                 if (f.isDirectory())
                     populateFiles(f);
 
@@ -211,7 +228,7 @@ public class Loader
                 }
             }
             filePopulationStatus = true;
-        } 
+        }
         catch(Exception e)
         {
             //Write the exception to File
@@ -237,7 +254,7 @@ public class Loader
             // if(fileIgnoreList(fileName))
             //     continue;
 
-            
+
             String fileHash = new Truncheon.API.Minotaur.Cryptography().fileToMD5(fileName);
 
             try
@@ -257,13 +274,14 @@ public class Loader
             {
                 IOStreams.printAttention("Unrecognized File Found : " + fileName);
                 IOStreams.printAttention("Unrecognized File Hash  : " + fileHash);
+                System.out.println();
             }
         }
 
         return kernelIntegrity;
     }
 
-    
+
     private boolean checkDirectoryStructure()
     {
         //logic to check if the program has been setup or it needs to be setup
