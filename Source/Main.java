@@ -6,7 +6,7 @@ public class Main
     *********************************************************
                         NION PROGRAM LOADER
     *********************************************************
-    
+
     #######################
      Build Details -
      Version : 7.241
@@ -16,10 +16,10 @@ public class Main
     """;
 
     private static final String errorFooter = """
-    
+
     *********************************************************
     """;
-    
+
     private static final String INVALID_SYNTAX = """
     [ ERROR ] : INCORRECT LAUNCHER SYNTAX
 
@@ -39,7 +39,7 @@ public class Main
 
     Press RETURN to exit.
     """;
-    
+
     private static final String KERNEL_NOT_FOUND = """
     [ ERROR ] : KERNEL NOT FOUND
 
@@ -53,15 +53,15 @@ public class Main
     kernels for you using the probe command. Following
     syntax is used to probe whether the kernel is
     bootable or not:
-    
+
     java <arguments> Main probe <kernel_name>
-    
+
     Press RETURN to exit.
     """;
-    
+
     private static final String UNDEFINED_BOOTMODE = """
     [ ATTENTION ] : UNDEFINED BOOT MODE
-    
+
     Description: The specified boot parameter is not
     recognized by the kernel. Every kernel has its own
     set of boot modes. For more information, please
@@ -70,7 +70,7 @@ public class Main
 
     Press RETURN to exit.
     """;
-    
+
     private static final String FATAL_ERROR_EXIT = """
     [ ERROR ] : UNHANDLED EXIT
 
@@ -82,10 +82,10 @@ public class Main
 
     Press RETURN to exit.
     """;
-    
+
     private static final String FATAL_ERROR_RESTART = """
     [ ERROR ] : UNHANDLED RESTART
-    
+
     Description: The program has encountered an
     exception. The program shall restart to recover the
     session.
@@ -94,14 +94,14 @@ public class Main
 
     Press RETURN to restart.
     """;
-    
+
     private static final String RESTART_UPDATE = """
     [ ATTENTION ] : RESTART UPDATE
-    
+
     Description: The program is restarting to update the
     files. Please Wait...
     """;
-    
+
     private static final String AUTOMATIC_REPAIR_MODE = """
     [ ERROR ] : AUTOMATIC REPAIR MODE
 
@@ -112,7 +112,7 @@ public class Main
 
     Press RETURN to restart.
     """;
-    
+
     public static void main(String[] args)throws Exception
     {
         if(args.length == 0)
@@ -128,7 +128,7 @@ public class Main
         if(args[0].equalsIgnoreCase("debug"))
         {
             System.out.println("PRINTING ALL STRINGS AVAILABLE");
-            
+
             System.out.println(INVALID_SYNTAX + "\n");
             System.out.println(KERNEL_NOT_FOUND + "\n");
             System.out.println(UNDEFINED_BOOTMODE + "\n");
@@ -145,21 +145,21 @@ public class Main
             System.out.println("Result: Kernel Loader " + (new File("./"+args[1]+"/Core/Loader.class").exists()?"Exists":"Not Found, Not Bootable"));
             System.exit(0);
         }
-        
+
         ///////////////////////////////////////////////////////////////
         // DEBUG CODE! REMOVE BEFORE RELEASE!
         ///////////////////////////////////////////////////////////////
-        
+
         while(true)
         {
             System.gc();
             ProcessBuilder sessionMonitor=new ProcessBuilder("java", args[0]+".Core.Loader", args[1]);
             Process processMonitor = sessionMonitor.inheritIO().start();
-            
+
             processMonitor.waitFor();
-            
+
             switch(processMonitor.exitValue())
-            {            
+            {
 
                 case 0:
                 System.exit(0);
@@ -177,7 +177,7 @@ public class Main
                 args[1] = "repair";
                 break;
 
-                case 213: 
+                case 213:
                 args[1] = "debug";
                 break;
 
@@ -213,53 +213,53 @@ public class Main
                 -- TODO --
 
                 REDO THE ENTIRE EXIT CODE HANDLING SYSTEM
-                
+
                 case 0:
                 System.exit(0);
-                
+
                 case 1:
                 System.err.println(errorHeader + KERNEL_NOT_FOUND + errorFooter);
                 System.in.read();
                 System.exit(1);
-                
+
                 // KERNEL RELATED EXIT CASES //
                 case 2:
                 System.err.println(errorHeader + UNDEFINED_BOOTMODE + errorFooter);
                 System.in.read();
                 System.exit(2);
-                
+
                 case 3:
                 System.out.println("Restarting...");
                 break;
-                
+
                 case 4:
                 System.err.println(errorHeader + RESTART_UPDATE + errorFooter);
                 break;
 
                 */
-                
+
                 /* Reserved for future implementations
                 case 0x1A0004:
                 break;
                 */
-                
+
                 /*
                 // KERNEL RELATED ERROR EXIT CASES //
                 case 5:
                 System.err.println(errorHeader + FATAL_ERROR_EXIT + errorFooter);
                 System.in.read();
                 System.exit(3);
-                
+
                 case 6:
                 System.err.println(errorHeader + FATAL_ERROR_RESTART + errorFooter);
                 System.in.read();
                 break;
-                
+
                 case 7:
                 System.err.println(errorHeader + AUTOMATIC_REPAIR_MODE + errorFooter);
                 args[1] = "repair";
                 break;
-                
+
                 default:
                 System.out.println("Default Unknown Exit");
                 System.exit(100001);
