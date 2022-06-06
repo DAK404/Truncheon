@@ -22,6 +22,7 @@ import java.net.URL;
 
 import Truncheon.API.IOStreams;
 import Truncheon.API.BuildInfo;
+import Truncheon.API.ExceptionHandler;
 
 /**
  * Loader class to load the Kernel up
@@ -60,6 +61,9 @@ public class Loader
             case "repair":
             new Loader().repairMode();
             System.exit(211);
+
+            case "debug_ex_ha":
+            new Loader().debugExceptionHandler();
 
             default:
             System.exit(3);
@@ -338,7 +342,18 @@ public class Loader
     AUTHOR       : Deepak Anil Kumar (@DAK404)
     ----------------------------------------------------------------------------------
     */
+    private void debugExceptionHandler()
+    {
+        try
+        {
+            throw new Exception();
+        }
+        catch(Exception e)
+        {
+            new ExceptionHandler().handleException(e);
+        }
 
+    }
     /*
     ----------------------------------------------------------------------------------
     END OF DEBUG LOGIC

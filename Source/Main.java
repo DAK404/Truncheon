@@ -191,7 +191,8 @@ public class Main
 
                 case 5:
                 System.err.println(errorHeader + FATAL_ERROR_RESTART + errorFooter);
-                System.exit(0);
+                System.in.read();
+                break;
 
                 case 6:
                 System.err.println(errorHeader + RESTART_UPDATE + errorFooter);

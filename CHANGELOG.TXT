@@ -35,6 +35,7 @@ IMPROVEMENTS:
 * Improved existing interactive tools
 * Improved API flexibility
 * Improved Code readability
+* Improved the user friendliness of the program
 * Fixed certain code issues
 * Removed unsafe code structures
 * Optimized resource usage and overall performance
