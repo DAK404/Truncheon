@@ -1,7 +1,6 @@
 package Truncheon.API.Minotaur;
 
 //Import the required Java IO classes
-import java.io.Console;
 import java.io.FileInputStream;
 
 //Import the required Java Util classes
@@ -30,7 +29,6 @@ public class PolicyEnforce
         //Initialize the policy value as false by default
         boolean policyValue = false;
 
-        Console console = System.console();
         try
         {
             //Feeds the retrievePolicyValue() with the policy to be checked

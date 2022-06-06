@@ -88,7 +88,7 @@ public class PolicyEdit
             resetPolicyFile();
             displaySettings();
 
-            //Accept a String and convert to a String Array and then parse the arguments for every option
+            // TODO: Accept a String and convert to a String Array and then parse the arguments for every option
 
 
             switch(console.readLine("[ MODIFY | RESET | HELP | EXIT ]\n\nPolicyEditor)> ").toLowerCase())
