@@ -51,13 +51,40 @@ java [java_arguments] Main [kernel_name] [boot_mode]
 [*] The [boot_mode] defines the mode that the kernel should use. Generally, the kernel boot modes are "normal", "debug" and "repair". Do note that the Loader program can accommodate more boot modes.
 ```
 
+### Nion Standard Exit Codes
+---
+
+THe Program Launcher has a few pre-defined exit codes which is used to denote a certain outcome of the spawned process. The exit codes need to be defined in the Main.java class, and to add a custom exit code, one must edit the source code and recompile the launcher and reflect the changes.
+
+The standard exit codes shall be updated here once the development of the kernel is complete.
+
 ## Structures
 ---
 
-Nion compatible programs must follow the basic directory, documentation and program structures.
+Every kernel that must be compatible or be similar to Truncheon must follow the directory structure as defined. This makes sure that the program is easy to implement features, debug, modify and manage the code and binaries.
 
-These help in creating kernels which can be used alongside Truncheon and can be launched via the Program Launcher.
+The directory structure of the program must be as follows:
 
-This program conforms to various standards, which is to be followed if it needs to work with Truncheon onwards.
+```
+INSTALLATION_DIRECTORY_ROOT
+|
+|--> /.Manifest
+|--> /Truncheon
+|--> /Information
+|       |--> /Truncheon
+|--> /org
+|--> /System
+|       |--> /Truncheon
+|              |--> /Public
+|              |--> /Private
+|--> /Users
+        |--> /Truncheon
+```
 
-This is a reference on how to write programs and build applications on top of Truncheon and kernels which follows the Nion Standards
+The following shall detail upon the entries in the directory
+
+* .Manifest: This is a directory that shall store the kernel metadata and manifest files. These files are used for providing contexts to the program, such as file hashes for integrity verification.
+* Truncheon: This is the kernel directory, where all the programs related to the kernel is stored. You may substitute the name Truncheon with the name of the desired kernel to be used.
+* Information: This directory shall contain the help files and any manuals and documentations of any sort which can be there for the user's reference while using the program. Every Kernel has its own Information Workspace, which means that there needs to be a directory under Information corresponding to the Kernel used, to display the documentation.
+* org: This is the Java JDBC SQLite Driver used.
+* System: This contains the system configuration files, policy files, user database files and any kernel related files which are required for the normal functioning of the kernel. Every kernel needs to have its own System Workspace, which means that there needs to be a directory under System corresponding to the Kernel, to have its set of critical files required by it. Every System Workspace has a set of Public and Private directories, which can accommodate the files under Public and the Private Directories.   
