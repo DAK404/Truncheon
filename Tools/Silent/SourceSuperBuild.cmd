@@ -32,6 +32,12 @@
 ::
 :: =============================
 
+:: Set the terminal echo mode to off
+@ECHO OFF
+
+:: Clear the screen
+CLS
+
 :: Display the build information
 ECHO ========================
 ECHO     Nion Tools Suite   
@@ -53,7 +59,8 @@ dir /s /B *.java > sources.txt
 
 :: Run the javadoc command to compile the documentation by parsing every file found in sources.txt
 :: additionally, write the statuses to the compile log
-javadoc -d ../Documentation/JavaDoc -author -version @sources.txt > CompileDoc.log
+javadoc -d ../../TruncheonDocumentation/InternalDocs -author -version --show-members private @sources.txt > "CompileDoc.log" 2>&1
+javadoc -d ../../TruncheonDocumentation/DeveloperDocs -author -version @sources.txt >> "CompileDoc.log" 2>&1
 
 :: Delete the sources.txt file after use
 DEL /s /q sources.txt
