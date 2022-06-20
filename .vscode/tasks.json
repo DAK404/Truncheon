@@ -1,0 +1,44 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "BuildProgram",
+            "type": "shell",
+            "windows": {
+                "command": ".\\SourceCompileProgram.cmd"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Source"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "windows": {
+                "command": "java",
+                "args": ["Main", "Truncheon", "normal"]
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Binaries"
+            }
+        },
+        {
+            "label": "RunDebug",
+            "type": "shell",
+            "windows": {
+                "command": "java",
+                "args": ["Main", "Truncheon", "debug"]
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Binaries"
+            }
+        }
+    ]
+}
