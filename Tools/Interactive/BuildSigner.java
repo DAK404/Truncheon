@@ -12,17 +12,17 @@ import java.util.Properties;
 
 /**
  * An Application to sign the build files, to ensure the program integrity
- * 
+ *
  * @author: DAK
  * @version: 1.0
  */
-public class BuildSigner 
+public class BuildSigner
 {
     private static List<String> filePaths = new  ArrayList<String>();
 
     /**
      * Logic to sign the build
-     * 
+     *
      * @param Args
      */
     public static void main(String[] Args)
@@ -42,7 +42,7 @@ public class BuildSigner
 
     /**
      * Enumerate all the files and subdirectory in the specified directory.
-     * 
+     *
      * @param directory: The directory to be traversed through to enumerate contents
      */
     private void enumerateFiles(File directory)
@@ -59,7 +59,7 @@ public class BuildSigner
                 if(ignoreFiles(f.getName()))
                     //If true, begin traversing the next entry
                     continue;
-                
+
                 //Check if the entry is a directory
                 if (f.isDirectory())
                     //If true, recurse the method to traverse through the subdirectory
@@ -80,7 +80,7 @@ public class BuildSigner
 
     /**
      * Logic to ignore a few files/directories
-     * 
+     *
      * @param fileName: The file name to be checked
      * @return status: True if the file/directory is to be ignored, false otherwise
      */
@@ -121,7 +121,7 @@ public class BuildSigner
 
             props.storeToXML(output, "FileManifest");
             output.close();
-            System.gc();            
+            System.gc();
         }
         catch(Exception e)
         {

@@ -9,12 +9,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import javax.print.attribute.standard.MediaSize.ISO;
-
+import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
 public class Setup
 {
+    Console console = System.console();
+    
     private String [][] displayProgressStrings = {
         {
             "Accept License and Display Readme: ", "PENDING"
@@ -88,7 +89,7 @@ public class Setup
         {
             e.printStackTrace();
         }
-        IOStreams.printAttention("Master User Database Initialization: " + (initializeDatabaseStatus?"Complete":"Failed") + "!");
+        displayProgressStrings[2][2] = (initializeDatabaseStatus?"Complete":"Failed");
     }
     
     private void initializeAdministratorAccount()
@@ -103,6 +104,7 @@ public class Setup
     
     private void displaySetupProgress()
     {
+        BuildInfo.viewBuildInfo();
         IOStreams.printInfo("[ -- Program Setup Checklist -- ]");
         for(int i = 0; i < displayProgressStrings.length; i++)
         for(int j = 1; j < 2; j += 2)
