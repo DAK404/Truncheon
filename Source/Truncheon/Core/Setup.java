@@ -15,45 +15,50 @@ import Truncheon.API.IOStreams;
 public class Setup
 {
     Console console = System.console();
-    
-    private String [][] displayProgressStrings = {
-        {
-            "Accept License and Display Readme: ", "PENDING"
-        },
-        {
-            "Initialize Libraries: ", "PENDING"
-        },
-        {
-            "Initialize Database System: ", "PENDING"
-        },
-        {
-            "Initialize Default Policies: ", "PENDING"
-        },
-        {
-            "Create Administrator account: ", "PENDING"
-        },
-        {
-            "Check for System Updates: ", "PENDING"
-        },
-    };
+
+    private String prereqInfoStatus, initDB, initDirs, initPolicies = "PENDING";
     
     public void setupLogic()throws Exception
     {
-        displaySetupProgress();
+        displayPrerequisiteInformation();
+        initializeDirectories();
+        initializeDatabase();
+        initializeDefaultPolicies();
     }
     
     private void displayPrerequisiteInformation()
     {
+        displaySetupProgress();
+        String displaySetupMessage = """
+        Welcome to Truncheon!
         
+        This program needs to be setup before it can be used normally.
+        If you are a System Administrator, please continue the setup. If not, please contact the System Administrator for more information.
+
+        The setup cannot be interrupted, and if done so, the program will need to be reset and setup to make the shell usable by the end user.
+        The setup is a one time process and will need to be done only once.
+
+        Press ENTER to continue, or press the CTRL + C keys to exit.
+        """;
+
+        IOStreams.println(displaySetupMessage);
+        console.readLine("Setup> ");
+
+        prereqInfoStatus = "COMPLETE";
     }
     
     private void initializeDirectories()
     {
-        
+        displaySetupProgress();
+        String [] directoryNames = {"./System/Truncheon/Public/Logs", "./System/Truncheon/Private/Backups", "./Users/Truncheon"};
+        for (String dirs: directoryNames)
+            new File(dirs).mkdirs();
+        initDirs = "COMPLETE";
     }
     
     private void initializeDatabase()
     {
+        displaySetupProgress();
         boolean initializeDatabaseStatus = false;
         try
         {
@@ -83,13 +88,15 @@ public class Setup
                 dbConnection.close();
                 
                 System.gc();
+
+                initializeDatabaseStatus = true;
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        displayProgressStrings[2][2] = (initializeDatabaseStatus?"Complete":"Failed");
+        initDB = (initializeDatabaseStatus?"COMPLETE":"FAILED");
     }
     
     private void initializeAdministratorAccount()
@@ -99,16 +106,19 @@ public class Setup
     
     private void initializeDefaultPolicies()
     {
-        
+        displaySetupProgress();
+        new Truncheon.API.Minotaur.PolicyEdit();
+        initPolicies = "Complete";
     }
     
     private void displaySetupProgress()
     {
         BuildInfo.viewBuildInfo();
         IOStreams.printInfo("[ -- Program Setup Checklist -- ]");
-        for(int i = 0; i < displayProgressStrings.length; i++)
-        for(int j = 1; j < 2; j += 2)
-        IOStreams.println(" * " + displayProgressStrings[i][j-1] + displayProgressStrings[i][j]);
+        IOStreams.println("[*] Show Program Prerequisites  : " + prereqInfoStatus);
+        IOStreams.println("[*] Initialize Directories      : " + initDirs);
+        IOStreams.println("[*] Initialize Database System  : " + initDB);
+        IOStreams.println("[*] Initialize Program Policies : " + initPolicies);
         IOStreams.printInfo("[ ----------------------------- ]");
     }
 }

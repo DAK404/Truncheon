@@ -2,7 +2,7 @@ package Truncheon.API;
 
 public class BuildInfo
 {
-    public static String _Branding = """
+    public final static String _Branding = """
   _____ ____  _   _ _   _  ____ _   _ _________  _   _ 
  |_   _|  _ \\| | | | \\ | |/ ___| | | | ________\\| \\ | |
    | | | |_) | | | |  \\| | |   | |_| |  _|| | | |  \\| |
@@ -11,10 +11,12 @@ public class BuildInfo
                                                                                                                              
     """;
 
-    public static String _Version = "1.1.0 \"KATANA\"";
-    public static String _BuildDate = "29-May-2022";
-    public static String _BuildID = "NION_28_MAY_22_1721";
-    public static String _BuildType = "Development";
+    public final static String _KernelName = "Truncheon";
+    public final static String _Version = "1.1.0";
+    public final static String _VersionCodeName = "Katana";
+    public final static String _BuildDate = "27-JUNE-2022";
+    public final static String _BuildID = "NION_27_JUN_22_2001";
+    public final static String _BuildType = "Development";
 
     public static void viewBuildInfo()
     {
