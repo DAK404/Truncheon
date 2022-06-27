@@ -39,15 +39,19 @@ public class ExceptionHandler
             System.err.println("[ END OF TECHNICAL DETAILS ]\n");
 
             System.err.println("This information will be written into a log file which can be used to debug the cause of the failure.\nAny additional information can be useful to find the root cause of the issue efficiently.");
-            String userComments = console.readLine("DESCRIPTION (OPTIONAL)> ");
 
             //write the user comments into the log file.
-
-            //Once done, ask if the user wants to restart or quit the program
+            new Truncheon.API.Wraith.WraithEdit().logger("[--- TECHNICAL DETAILS ---]", "Error");
+            new Truncheon.API.Wraith.WraithEdit().logger(e.getClass().getName(), "Error");
+            new Truncheon.API.Wraith.WraithEdit().logger(e.getStackTrace().toString(), "Error");
+            new Truncheon.API.Wraith.WraithEdit().logger(exceptionStackTrace, "Error");
+            new Truncheon.API.Wraith.WraithEdit().logger("User Comment> " + console.readLine("User Comment> ") + "\n\n", "Error");
+            
+            
         }
         catch(Exception ex)
         {
-
+            e.printStackTrace();
         }
         System.exit((console.readLine("Do you want to restart the program? [ Y | N ]> ").equalsIgnoreCase("y")?5:4));
     } 

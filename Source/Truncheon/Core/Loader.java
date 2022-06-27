@@ -28,7 +28,7 @@ import Truncheon.API.ExceptionHandler;
  * Loader class to load the Kernel up
  * Conforms to the Nion Program Structure
  * 
- * @author: @DAK404
+ * @author: DAK404 (https://github.com/DAK404)
  * @version: 
  * @since: 
  */
@@ -43,7 +43,8 @@ public class Loader
     {
         try
         {
-
+            System.out.println("Nion: Truncheon");
+            System.out.println("Booting Program. Please wait...");
         }
         catch(Exception e)
         {
@@ -77,7 +78,12 @@ public class Loader
     {
         try
         {
-            System.out.println(abraxisLogic());
+            switch(abraxisLogic())
+            {
+                case 4:
+                    new Setup().setupLogic();
+                    break;
+            }
         }
         catch(Exception e)
         {
@@ -233,8 +239,8 @@ public class Loader
 
             for (File f: fileList)
             {
-                //Dont bother checking directories that can change over time
-                //The System, Users, .Manifest, SQLite Driver, JRE and the program runner are excluded
+                //Don't bother checking directories that can change over time
+                //The System, Users, .Manifest, SQLite Driver, JRE, Logs and the program runner are excluded
                 if(fileIgnoreList(f.getName()))
                     continue;
 
@@ -286,7 +292,6 @@ public class Loader
                     kernelIntegrity = false;
                     IOStreams.printError("Integrity Failure: " + fileName);
                     IOStreams.printError("File Hash        : " + fileHash);
-                    IOStreams.printError("Expected Hash    : " + manifestHash);
                     System.out.println();
                 }
             }
@@ -311,7 +316,7 @@ public class Loader
     private boolean fileIgnoreList(String fileName)
     {
         boolean status = false;
-        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd"};
+        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd", "Logs"};
         for(String files : ignoreList)
         {
             if(fileName.equalsIgnoreCase(files))
