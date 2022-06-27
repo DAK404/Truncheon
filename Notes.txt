@@ -1,3 +1,5 @@
 Download link of the latest release asset: https://github.com/DAK404/Truncheon/releases/latest/download/Truncheon.zip
 
 Remove all return statements for void methods and remove all the return statements that occurs before the end of the method.
+
+In file management "Tree" command, make sure that the file type is checked, if it is a folder, state the file size as "DIRECTORY"
