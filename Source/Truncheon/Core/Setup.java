@@ -16,7 +16,7 @@ public class Setup
 {
     Console console = System.console();
 
-    private String prereqInfoStatus, initDB, initDirs, initPolicies = "PENDING";
+    private String prereqInfoStatus = "PENDING", initDB = "PENDING", initDirs = "PENDING", initPolicies = "PENDING", initAdminAccount = "PENDING";
     
     public void setupLogic()throws Exception
     {
@@ -24,6 +24,9 @@ public class Setup
         initializeDirectories();
         initializeDatabase();
         initializeDefaultPolicies();
+
+        displaySetupProgress();
+        IOStreams.printAttention("Setup Complete!\n You may now use Truncheon Shell!\nThe program needs to reboot to apply the changes.\n\nDo you want to check for new updates? [ Y | N ]");
     }
     
     private void displayPrerequisiteInformation()
@@ -44,6 +47,20 @@ public class Setup
         IOStreams.println(displaySetupMessage);
         console.readLine("Setup> ");
 
+        displaySetupProgress();
+        IOStreams.printAttention("THE PROGRAM LICENSE SHALL BE DISPLAYED TO YOU. IF YOU ACCEPT IT, PRESS Y. ELSE, PRESS N.\nBY PROCEEDING TO SETTING UP AND USE THE PROGRAM, YOU HEREBY AGREE THAT YOU ACCEPT THE PROGRAM LICENSE CLAUSES.\nIF YOU DO NOT WANT TO AGREE TO THE LICENSE CLAUSES IN THE FUTURE, PLEASE UNINSTALL THE PROGRAM IMMEDIATELY.");
+        console.readLine("Press ENTER to continue, or press CTRL + C to quit.");
+
+        //Read the EULA file
+        IOStreams.printAttention("Do you agree to the clauses specified in the license?");
+        if(console.readLine("Accept EULA?> ").equalsIgnoreCase("N"))
+        {
+            System.exit(0);
+        }
+        else
+        {
+            //display the readme, changelog and the other files
+        }
         prereqInfoStatus = "COMPLETE";
     }
     
@@ -108,17 +125,18 @@ public class Setup
     {
         displaySetupProgress();
         new Truncheon.API.Minotaur.PolicyEdit();
-        initPolicies = "Complete";
+        initPolicies = "COMPLETE";
     }
     
     private void displaySetupProgress()
     {
         BuildInfo.viewBuildInfo();
         IOStreams.printInfo("[ -- Program Setup Checklist -- ]");
-        IOStreams.println("[*] Show Program Prerequisites  : " + prereqInfoStatus);
-        IOStreams.println("[*] Initialize Directories      : " + initDirs);
-        IOStreams.println("[*] Initialize Database System  : " + initDB);
-        IOStreams.println("[*] Initialize Program Policies : " + initPolicies);
+        IOStreams.println("[*] Show Program Prerequisites   : " + prereqInfoStatus);
+        IOStreams.println("[*] Initialize Directories       : " + initDirs);
+        IOStreams.println("[*] Initialize Database System   : " + initDB);
+        IOStreams.println("[*] Initialize Program Policies  : " + initPolicies);
+        IOStreams.println("[*] Create Administrator Account : " + initAdminAccount);
         IOStreams.printInfo("[ ----------------------------- ]");
     }
 }
