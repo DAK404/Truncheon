@@ -22,15 +22,19 @@ public class WraithEdit
     {
         try
         {
+            String logfilePath = "./System/Truncheon/Public/Logs/";
             if(checkFileValidity(fileName))
             {
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Date date = new Date();
-                File logFile = new File("./Logs");
+
+                logfilePath = (new File(logfilePath).exists()?logfilePath:"./Logs/Truncheon/");
+
+                File logFile = new File(logfilePath);
                 if(! logFile.exists())
                     logFile.mkdir();
 
-                BufferedWriter obj = new BufferedWriter(new FileWriter("./Logs/" + fileName + ".log", true));
+                BufferedWriter obj = new BufferedWriter(new FileWriter(logfilePath + fileName + ".log", true));
                 PrintWriter pr = new PrintWriter(obj);
                 pr.println(dateFormat.format(date) + ": " + printToFile);
                 pr.close();

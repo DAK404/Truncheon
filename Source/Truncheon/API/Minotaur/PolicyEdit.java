@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 //Import the required Java Util classes
 import java.util.Properties;
 
+import java.lang.Math;
+
 //Import the Truncheon classes
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
@@ -184,6 +186,6 @@ public class PolicyEdit
         for(int i = 0; i < resetValues.length; ++i)
             savePolicy(resetValues[i], "on");
 
-        savePolicy("sysname", "SYSTEM");
+        savePolicy("sysname", "SYSTEM" + ((int)(Math.random() * (999999 - 100000 + 1)) + 100000));
     }
 }
