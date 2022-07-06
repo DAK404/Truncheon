@@ -9,50 +9,73 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import javax.print.attribute.standard.MediaSize.ISO;
-
+import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
 public class Setup
 {
-    private String [][] displayProgressStrings = {
-        {
-            "Accept License and Display Readme: ", "PENDING"
-        },
-        {
-            "Initialize Libraries: ", "PENDING"
-        },
-        {
-            "Initialize Database System: ", "PENDING"
-        },
-        {
-            "Initialize Default Policies: ", "PENDING"
-        },
-        {
-            "Create Administrator account: ", "PENDING"
-        },
-        {
-            "Check for System Updates: ", "PENDING"
-        },
-    };
+    Console console = System.console();
+
+    private String prereqInfoStatus = "PENDING", initDB = "PENDING", initDirs = "PENDING", initPolicies = "PENDING", initAdminAccount = "PENDING";
     
     public void setupLogic()throws Exception
     {
+        displayPrerequisiteInformation();
+        initializeDirectories();
+        initializeDatabase();
+        initializeDefaultPolicies();
+
         displaySetupProgress();
+        IOStreams.printAttention("Setup Complete!\n You may now use Truncheon Shell!\nThe program needs to reboot to apply the changes.\n\nDo you want to check for new updates? [ Y | N ]");
     }
     
     private void displayPrerequisiteInformation()
     {
+        displaySetupProgress();
+        String displaySetupMessage = """
+        Welcome to Truncheon!
         
+        This program needs to be setup before it can be used normally.
+        If you are a System Administrator, please continue the setup. If not, please contact the System Administrator for more information.
+
+        The setup cannot be interrupted, and if done so, the program will need to be reset and setup to make the shell usable by the end user.
+        The setup is a one time process and will need to be done only once.
+
+        Press ENTER to continue, or press the CTRL + C keys to exit.
+        """;
+
+        IOStreams.println(displaySetupMessage);
+        console.readLine("Setup> ");
+
+        displaySetupProgress();
+        IOStreams.printAttention("THE PROGRAM LICENSE SHALL BE DISPLAYED TO YOU. IF YOU ACCEPT IT, PRESS Y. ELSE, PRESS N.\nBY PROCEEDING TO SETTING UP AND USE THE PROGRAM, YOU HEREBY AGREE THAT YOU ACCEPT THE PROGRAM LICENSE CLAUSES.\nIF YOU DO NOT WANT TO AGREE TO THE LICENSE CLAUSES IN THE FUTURE, PLEASE UNINSTALL THE PROGRAM IMMEDIATELY.");
+        console.readLine("Press ENTER to continue, or press CTRL + C to quit.");
+
+        //Read the EULA file
+        IOStreams.printAttention("Do you agree to the clauses specified in the license?");
+        if(console.readLine("Accept EULA?> ").equalsIgnoreCase("N"))
+        {
+            System.exit(0);
+        }
+        else
+        {
+            //display the readme, changelog and the other files
+        }
+        prereqInfoStatus = "COMPLETE";
     }
     
     private void initializeDirectories()
     {
-        
+        displaySetupProgress();
+        String [] directoryNames = {"./System/Truncheon/Public/Logs", "./System/Truncheon/Private/Backups", "./Users/Truncheon"};
+        for (String dirs: directoryNames)
+            new File(dirs).mkdirs();
+        initDirs = "COMPLETE";
     }
     
     private void initializeDatabase()
     {
+        displaySetupProgress();
         boolean initializeDatabaseStatus = false;
         try
         {
@@ -82,13 +105,15 @@ public class Setup
                 dbConnection.close();
                 
                 System.gc();
+
+                initializeDatabaseStatus = true;
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        IOStreams.printAttention("Master User Database Initialization: " + (initializeDatabaseStatus?"Complete":"Failed") + "!");
+        initDB = (initializeDatabaseStatus?"COMPLETE":"FAILED");
     }
     
     private void initializeAdministratorAccount()
@@ -98,15 +123,20 @@ public class Setup
     
     private void initializeDefaultPolicies()
     {
-        
+        displaySetupProgress();
+        new Truncheon.API.Minotaur.PolicyEdit();
+        initPolicies = "COMPLETE";
     }
     
     private void displaySetupProgress()
     {
+        BuildInfo.viewBuildInfo();
         IOStreams.printInfo("[ -- Program Setup Checklist -- ]");
-        for(int i = 0; i < displayProgressStrings.length; i++)
-        for(int j = 1; j < 2; j += 2)
-        IOStreams.println(" * " + displayProgressStrings[i][j-1] + displayProgressStrings[i][j]);
+        IOStreams.println("[*] Show Program Prerequisites   : " + prereqInfoStatus);
+        IOStreams.println("[*] Initialize Directories       : " + initDirs);
+        IOStreams.println("[*] Initialize Database System   : " + initDB);
+        IOStreams.println("[*] Initialize Program Policies  : " + initPolicies);
+        IOStreams.println("[*] Create Administrator Account : " + initAdminAccount);
         IOStreams.printInfo("[ ----------------------------- ]");
     }
 }
