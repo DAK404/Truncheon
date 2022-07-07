@@ -12,12 +12,30 @@ import java.sql.Statement;
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
+/**
+ * Program to make Truncheon ready for normal use
+ * 
+ * @author: DAK404 (https://github.com/DAK404)
+ * @version: 7.3.6
+ * @since: 2018
+ */
 public class Setup
 {
+    /**
+     * Instantiate the Console class to accept input operations through the console
+     */
     Console console = System.console();
 
+    /**
+     * Initialize a set of strings to show various statuses of the setup stages
+     */
     private String prereqInfoStatus = "PENDING", initDB = "PENDING", initDirs = "PENDING", initPolicies = "PENDING", initAdminAccount = "PENDING";
     
+    /**
+     * The main logic of the setup program
+     * 
+     * @throws Exception
+     */
     public void setupLogic()throws Exception
     {
         displayPrerequisiteInformation();
@@ -29,6 +47,9 @@ public class Setup
         IOStreams.printAttention("Setup Complete!\n You may now use Truncheon Shell!\nThe program needs to reboot to apply the changes.\n\nDo you want to check for new updates? [ Y | N ]");
     }
     
+    /**
+     * Shows a set of prerequisite information to the user before the setup starts.
+     */
     private void displayPrerequisiteInformation()
     {
         displaySetupProgress();
@@ -64,6 +85,9 @@ public class Setup
         prereqInfoStatus = "COMPLETE";
     }
     
+    /**
+     * Initialize a set of directories required by Truncheon
+     */
     private void initializeDirectories()
     {
         displaySetupProgress();
@@ -73,6 +97,9 @@ public class Setup
         initDirs = "COMPLETE";
     }
     
+    /**
+     * Initialize the database file and its table for user credential operations
+     */
     private void initializeDatabase()
     {
         displaySetupProgress();
@@ -116,11 +143,17 @@ public class Setup
         initDB = (initializeDatabaseStatus?"COMPLETE":"FAILED");
     }
     
+    /**
+     * Initialize the first administrator account
+     */
     private void initializeAdministratorAccount()
     {
         
     }
     
+    /**
+     * Initialize all the default policies along with a system name appended by a set of random numbers
+     */
     private void initializeDefaultPolicies()
     {
         displaySetupProgress();
@@ -128,6 +161,9 @@ public class Setup
         initPolicies = "COMPLETE";
     }
     
+    /**
+     * Display the progress of the setup program to the user
+     */
     private void displaySetupProgress()
     {
         BuildInfo.viewBuildInfo();
