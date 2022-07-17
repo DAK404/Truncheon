@@ -18,6 +18,8 @@ import java.text.DateFormat;
 
 public class WraithEdit
 {
+    private Console console = System.console();
+
     public final void logger(String printToFile, String fileName)
     {
         try

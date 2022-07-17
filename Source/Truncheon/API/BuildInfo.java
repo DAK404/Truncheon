@@ -3,12 +3,12 @@ package Truncheon.API;
 public class BuildInfo
 {
     public final static String _Branding = """
-  _____ ____  _   _ _   _  ____ _   _ _________  _   _ 
+  _____ ____  _   _ _   _  ____ _   _ _________  _   _
  |_   _|  _ \\| | | | \\ | |/ ___| | | | ________\\| \\ | |
    | | | |_) | | | |  \\| | |   | |_| |  _|| | | |  \\| |
    | | |  _ <| |_| | |\\  | |___|  _  | |__| |_| | |\\  |
    |_| |_| \\_\\\\___/|_| \\_|\\____|_| |_|_____\\___/|_| \\_|
-                                                                                                                             
+
     """;
 
     public final static String _KernelName = "Truncheon";
@@ -28,7 +28,7 @@ public class BuildInfo
             System.out.println(" Build Date    : " + _BuildDate);
             System.out.println(" Build ID      : " + _BuildID);
             System.out.println(" Build Type    : " + _BuildType);
-            System.out.println("--------------------------------------------\n");
+            System.out.println("---------------------------------------------\n");
         }
         catch(Exception e)
         {
@@ -65,5 +65,5 @@ public class BuildInfo
             System.err.println("\n\nERROR WHILE CLEARING SCREEN");
             System.err.println("ERROR: " + e + "\n\n");
         }
-    }    
+    }
 }
