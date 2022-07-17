@@ -42,9 +42,12 @@ public class Setup
         initializeDirectories();
         initializeDatabase();
         initializeDefaultPolicies();
+        initializeAdministratorAccount();
 
         displaySetupProgress();
-        IOStreams.printAttention("Setup Complete!\n You may now use Truncheon Shell!\nThe program needs to reboot to apply the changes.\n\nDo you want to check for new updates? [ Y | N ]");
+        IOStreams.printAttention("Setup Complete!\nYou may now use Truncheon Shell!\nThe program needs to reboot to apply the changes.\n\nDo you want to check for new updates? [ Y | N ]");
+        console.readLine();
+        System.exit(101);
     }
     
     /**
@@ -138,7 +141,7 @@ public class Setup
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            new Truncheon.API.ExceptionHandler().handleException(e);
         }
         initDB = (initializeDatabaseStatus?"COMPLETE":"FAILED");
     }
@@ -146,9 +149,9 @@ public class Setup
     /**
      * Initialize the first administrator account
      */
-    private void initializeAdministratorAccount()
+    private void initializeAdministratorAccount()throws Exception
     {
-        
+        new Truncheon.API.Dragon.AccountCreate().createDefaultAdministratorAccount();
     }
     
     /**

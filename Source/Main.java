@@ -168,6 +168,9 @@ public class Main
                 System.err.println(errorHeader + KERNEL_NOT_FOUND + errorFooter);
                 System.exit(0);
 
+                case 101:
+                break;
+
                 //force reboot to normal mode;
                 case 211:
                 args[1] = "normal";

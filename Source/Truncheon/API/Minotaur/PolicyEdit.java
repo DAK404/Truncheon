@@ -20,7 +20,7 @@ import Truncheon.API.IOStreams;
 */
 public class PolicyEdit
 {
-    public final String [] resetValues = {"update", "download", "script", "filemgmt", "read", "edit", "usermgmt"};
+    public final String [] resetValues = {"auth", "update", "download", "script", "filemgmt", "read", "edit", "usermgmt"};
 
     private final String policyFileName = "./System/Truncheon/Private/Policy.burn";
 

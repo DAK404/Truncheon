@@ -34,8 +34,8 @@ import Truncheon.API.ExceptionHandler;
  */
 public class Loader
 {
-    Console console = System.console();
 
+    private Console console = System.console();
 
     private static List<String> filePath = new  ArrayList<String>();
 
@@ -63,6 +63,10 @@ public class Loader
             new Loader().repairMode();
             System.exit(211);
 
+            // case "safemode":
+
+            // break;
+
             case "debug_ex_ha":
             new Loader().debugExceptionHandler();
 
@@ -83,6 +87,13 @@ public class Loader
                 case 4:
                     new Setup().setupLogic();
                     break;
+            }
+
+            System.out.println("DEFAULT");
+            while(! console.readLine("X> ").equalsIgnoreCase("exit"))
+            {
+                BuildInfo.viewBuildInfo();
+                debug();
             }
         }
         catch(Exception e)
@@ -358,6 +369,27 @@ public class Loader
             new ExceptionHandler().handleException(e);
         }
 
+    }
+
+    private void debug()
+    {
+        int mb = 1024 * 1024;
+        // get Runtime instance
+        Runtime instance = Runtime.getRuntime();
+        System.out.println("\n*********************************************");
+        System.out.println("        ---   DEBUG INFORMATION   ---        ");
+        System.out.println("*********************************************");
+        System.out.println("\n   - Heap utilization statistics [MB] -  \n");
+        System.out.println("      [*]  Process ID   : "+ProcessHandle.current().pid());
+         // available memory
+        System.out.println("      [*]  Total Memory : " + instance.totalMemory() + " Bytes");
+        // free memory
+        System.out.println("      [*]  Free Memory  : " + instance.freeMemory() + " Bytes");
+        // used memory
+        System.out.println("      [*]  Used Memory  : " + (instance.totalMemory() - instance.freeMemory()) + " Bytes");
+        // Maximum available memory
+        System.out.println("      [*]  Max Memory   : " + instance.maxMemory() + " Bytes");
+        System.out.println("\n*********************************************\n\n");
     }
     /*
     ----------------------------------------------------------------------------------
