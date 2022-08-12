@@ -110,13 +110,13 @@ public class BuildSigner
         {
             Properties props = new Properties();
             FileOutputStream output = new FileOutputStream("./.Manifest/Truncheon/Manifest.m1");
-            System.out.println(filePaths);
+            //System.out.println(filePaths);
 
             for(String fileName: filePaths)
             {
                 String temp = System.getProperty("os.name").contains("Linux")?fileName.replaceAll(File.separator, "\\\\"):fileName;
-                System.out.println(temp);
                 props.setProperty(temp, fileToMD5(fileName));
+                System.out.println("Signing File: " + temp);
             }
 
             props.storeToXML(output, "FileManifest");
@@ -125,7 +125,8 @@ public class BuildSigner
         }
         catch(Exception e)
         {
-
+            System.out.println("Error: " + e);
+            e.printStackTrace();
         }
     }
 

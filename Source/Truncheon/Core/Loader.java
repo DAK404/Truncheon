@@ -75,6 +75,7 @@ public class Loader
         }
 
         System.gc();
+        BuildInfo.viewBuildInfo();
         new Loader().loaderLogic();
     }
 
