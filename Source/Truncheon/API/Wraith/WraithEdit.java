@@ -52,19 +52,11 @@ public class WraithEdit
         {
             e.printStackTrace();
         }
+        System.gc();
     }
 
     private boolean checkFileValidity(String fileName)throws Exception
     {
-        boolean validity = true;
-        if(fileName == null || fileName.equals("") || fileName.startsWith(" "))
-        {
-            System.out.println(fileName == null);
-            System.out.println(fileName.equals(""));
-            System.out.println(fileName.startsWith(" "));
-            System.out.println("Please enter a valid file name to open.");
-            validity = false;
-        }
-        return validity;
+        return !(fileName == null || fileName.equals("") || fileName.startsWith(" "));
     }
 }
