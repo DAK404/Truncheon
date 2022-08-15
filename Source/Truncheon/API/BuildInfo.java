@@ -14,8 +14,8 @@ public class BuildInfo
     public final static String _KernelName = "Truncheon";
     public final static String _Version = "1.1.0";
     public final static String _VersionCodeName = "Katana";
-    public final static String _BuildDate = "27-JUNE-2022";
-    public final static String _BuildID = "NION_27_JUN_22_2001";
+    public final static String _BuildDate = "12-AUGUST-2022";
+    public final static String _BuildID = "NION_12_AUG_22_1929";
     public final static String _BuildType = "Development";
 
     public static void viewBuildInfo()
