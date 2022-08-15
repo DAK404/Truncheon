@@ -85,9 +85,27 @@ public class Loader
         {
             switch(abraxisLogic())
             {
+                case 0:
+                break;
+
+                case 1:
+                    IOStreams.printError("File Integrity Check Failure. Cannot Boot Program.");
+                    System.exit(4);
+                break;
+
+                case 2:
+                    IOStreams.printError("Manifest File Missing! Aborting startup...");
+                    System.exit(4);
+                break;
+
+                case 3:
+                    IOStreams.printError("Failed to populate the files. Cannot Boot Program.");
+                    System.exit(4);
+                break;
+
                 case 4:
                     new Setup().setupLogic();
-                    break;
+                break;
             }
 
             System.out.println("DEFAULT");
@@ -170,7 +188,7 @@ public class Loader
         RETURN VALUE	MEANING
             0           File integrity OK
             1           File integrity FAILED
-            2           Manifest File Missing
+            2           Manifest File Corrupt or Missing 
             3           Kernel File Population Failed
             4           Program Setup Required
 
@@ -277,42 +295,50 @@ public class Loader
     private boolean checkFileHash()throws Exception
     {
         boolean kernelIntegrity = true;
-
-        Properties props = new Properties();
-        FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Manifest.m1");
-        props.loadFromXML(manifestEntries);
-        manifestEntries.close();
-
-        // DEBUG CODE //
-        //props.list(System.out);
-        // DEBUG CODE //
-
-        for(String fileName: filePath)
+        
+        try
         {
-            // if(fileIgnoreList(fileName))
-            //     continue;
+            Properties props = new Properties();
+            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Manifest.m1");
+            props.loadFromXML(manifestEntries);
+            manifestEntries.close();
 
+            // DEBUG CODE //
+            //props.list(System.out);
+            // DEBUG CODE //
 
-            String fileHash = new Truncheon.API.Minotaur.Cryptography().fileToMD5(fileName);
-
-            try
+            for(String fileName: filePath)
             {
-                String manifestHash = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(fileName.replaceAll(File.separator, "\\\\"))).toString();
+                // if(fileIgnoreList(fileName))
+                //     continue;
 
-                if(!manifestHash.equals(fileHash))
+
+                String fileHash = new Truncheon.API.Minotaur.Cryptography().fileToMD5(fileName);
+
+                try
                 {
-                    kernelIntegrity = false;
-                    IOStreams.printError("Integrity Failure: " + fileName);
-                    IOStreams.printError("File Hash        : " + fileHash);
+                    String manifestHash = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(fileName.replaceAll(File.separator, "\\\\"))).toString();
+
+                    if(!manifestHash.equals(fileHash))
+                    {
+                        kernelIntegrity = false;
+                        IOStreams.printError("Integrity Failure: " + fileName);
+                        IOStreams.printError("File Hash        : " + fileHash);
+                        System.out.println();
+                    }
+                }
+                catch(NullPointerException unknownFileFound)
+                {
+                    IOStreams.printAttention("Unrecognized File Found : " + fileName);
+                    IOStreams.printAttention("Unrecognized File Hash  : " + fileHash);
                     System.out.println();
                 }
             }
-            catch(NullPointerException unknownFileFound)
-            {
-                IOStreams.printAttention("Unrecognized File Found : " + fileName);
-                IOStreams.printAttention("Unrecognized File Hash  : " + fileHash);
-                System.out.println();
-            }
+        }
+        catch(Exception e)
+        {
+            IOStreams.printError("Manifest File Population Failure.");
+            kernelIntegrity = false;
         }
 
         return kernelIntegrity;

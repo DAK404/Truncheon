@@ -152,6 +152,7 @@ public class Setup
     private void initializeAdministratorAccount()throws Exception
     {
         new Truncheon.API.Dragon.AccountCreate().createDefaultAdministratorAccount();
+        initAdminAccount = "COMPLETE";
     }
     
     /**

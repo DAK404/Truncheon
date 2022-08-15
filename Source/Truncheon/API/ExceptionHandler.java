@@ -32,7 +32,7 @@ public class ExceptionHandler
             """;
 
             System.err.println("\n[ FATAL ERROR ] AN EXCEPTION OCCURRED DURING THE EXECUTION OF THE PROGRAM.");
-            System.err.println("\n[ --- TECHNICAL DETAILS ---]\n");
+            System.err.println("\n[ --- TECHNICAL DETAILS --- ]\n");
             System.err.println("Class: " + e.getClass().getName());
             System.err.println("Trace Details: " + e.getStackTrace());
             System.err.println(exceptionStackTrace);
