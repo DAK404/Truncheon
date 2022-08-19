@@ -49,6 +49,7 @@ public class Loader
         catch(Exception e)
         {
             System.err.println("FATAL ERROR: " + e);
+            System.exit(4);
         }
     }
 
@@ -58,10 +59,6 @@ public class Loader
         {
             case "normal":
             break;
-
-            case "repair":
-            new Loader().repairMode();
-            System.exit(211);
 
             // case "safemode":
 
@@ -120,54 +117,6 @@ public class Loader
 
         }
     }
-
-    /*
-    ----------------------------------------------------------------------------------
-    SECTION NAME : REPAIR MODE LOGIC
-    OBJECTIVE    : Provide a shell access to repair the system to a working state.
-    This mode is restricted to a small set of commands which can be used to find
-    the root cause of the kernel integrity failures which prevent booting system
-    to the normal mode.
-    AUTHOR       : Deepak Anil Kumar (@DAK404)
-    ----------------------------------------------------------------------------------
-    */
-
-    private void repairMode()
-    {
-        System.out.println("REPAIR MODE: WORK IN PROGRESS");
-        console.readLine();
-    }
-
-    private void repairCmdProcessor()
-    {
-
-    }
-
-    private void repairOnlineMode()
-    {
-
-    }
-
-    private void downloadBuildFromCloud()
-    {
-
-    }
-
-    private void restoreFromBackup()
-    {
-
-    }
-
-    private void removeExistingBinaries()
-    {
-
-    }
-
-    /*
-    ----------------------------------------------------------------------------------
-    END OF REPAIR MODE LOGIC
-    ----------------------------------------------------------------------------------
-    */
 
     /*
     ----------------------------------------------------------------------------------
