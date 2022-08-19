@@ -3,3 +3,10 @@ Download link of the latest release asset: https://github.com/DAK404/Truncheon/r
 Remove all return statements for void methods and remove all the return statements that occurs before the end of the method.
 
 In file management "Tree" command, make sure that the file type is checked, if it is a folder, state the file size as "DIRECTORY"
+If a file is found, it is named as a file. If the file is a Truncheon Script file, the type describes it as a Nion Script File.
+
+--- IMPORTANT ---
+
+make sure that the repair mode in the program to be automatic, without providing a shell to the user to interact with the system.
+by implementing a repair mode shell, it is increasing the attack surface of the system and bloating the system up
+
