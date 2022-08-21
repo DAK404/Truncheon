@@ -3,19 +3,21 @@ package Truncheon.API;
 public class BuildInfo
 {
     public final static String _Branding = """
-  _____ ____  _   _ _   _  ____ _   _ _________  _   _
- |_   _|  _ \\| | | | \\ | |/ ___| | | | ________\\| \\ | |
-   | | | |_) | | | |  \\| | |   | |_| |  _|| | | |  \\| |
-   | | |  _ <| |_| | |\\  | |___|  _  | |__| |_| | |\\  |
-   |_| |_| \\_\\\\___/|_| \\_|\\____|_| |_|_____\\___/|_| \\_|
-
-    """;
+                          |                                          |      
+                          ||                                         ||     
+|||||||| |||||||  |||  || |||  |||  |||||| |||  || |||||||| |||||||  |||  |||
+   |||         || |||  || |||| ||| |||     |||  ||                || |||| |||
+   |||    ||||||  |||  || |||||||| |||     |||||||  |||||||  ||   || ||||||||
+   |||    ||  ||  |||  || ||| |||| |||     |||  ||  |||      ||   || ||| ||||
+   |||    ||   ||  |||||  |||  |||  |||||| |||  ||  |||||||   |||||  |||  |||
+                                ||         |||                             ||
+                                 |                                          |""";
 
     public final static String _KernelName = "Truncheon";
     public final static String _Version = "1.1.0";
     public final static String _VersionCodeName = "Katana";
-    public final static String _BuildDate = "12-AUGUST-2022";
-    public final static String _BuildID = "NION_12_AUG_22_1929";
+    public final static String _BuildDate = "21-AUGUST-2022";
+    public final static String _BuildID = "NION_21_AUG_22_2219";
     public final static String _BuildType = "Development";
 
     public static void viewBuildInfo()
@@ -24,10 +26,10 @@ public class BuildInfo
         {
             clearScreen();
             System.out.println(_Branding);
-            System.out.println(" Build Version : " + _Version);
-            System.out.println(" Build Date    : " + _BuildDate);
-            System.out.println(" Build ID      : " + _BuildID);
-            System.out.println(" Build Type    : " + _BuildType);
+            System.out.println(" Version    : " + _Version);
+            System.out.println(" Build Date : " + _BuildDate);
+            System.out.println(" Build ID   : " + _BuildID);
+            System.out.println(" CAUTION! " + _BuildType + " build!\n Expect changes and crashes.");
             System.out.println("---------------------------------------------\n");
         }
         catch(Exception e)
