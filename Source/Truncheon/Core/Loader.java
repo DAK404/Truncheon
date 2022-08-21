@@ -106,11 +106,12 @@ public class Loader
             }
 
             System.out.println("DEFAULT");
-            while(! console.readLine("X> ").equalsIgnoreCase("exit"))
+            do
             {
                 BuildInfo.viewBuildInfo();
                 debug();
             }
+            while(! console.readLine("X> ").equalsIgnoreCase("exit"));
         }
         catch(Exception e)
         {
@@ -367,6 +368,17 @@ public class Loader
         System.out.println("      [*]  Max Memory   : " + instance.maxMemory() + " Bytes");
         System.out.println("\n*********************************************\n\n");
     }
+
+    //logic to handle the compilation of non-linked/under development modules
+
+    private void compileDeez()throws Exception
+    {
+        new Truncheon.API.Dragon.AccountDelete("test");
+        new Truncheon.API.Dragon.AccountModify();
+        new Truncheon.API.Wraith.WraithRead();
+        new Truncheon.API.Wraith.WraithEdit();
+    }
+
     /*
     ----------------------------------------------------------------------------------
     END OF DEBUG LOGIC
