@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+//Import the required Truncheon classes
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
