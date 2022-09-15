@@ -78,7 +78,7 @@ public class LoginAuth
         try
         {
             Class.forName("org.sqlite.JDBC");
-            String databasePath = "jdbc:sqlite:./System/Conch/Private/mud.dbx";
+            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
 
             Connection dbConnection = DriverManager.getConnection(databasePath);
             PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
@@ -93,6 +93,7 @@ public class LoginAuth
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             result = "ERROR";
         }
         System.gc();

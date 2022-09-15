@@ -1,15 +1,29 @@
-The first Truncheon Update, containing various fixes, optimizations and improvements.
+                          |                                          |      
+                          ||                                         ||     
+|||||||| |||||||  |||  || |||  |||  |||||| |||  || |||||||| |||||||  |||  |||
+   |||         || |||  || |||| ||| |||     |||  ||                || |||| |||
+   |||    ||||||  |||  || |||||||| |||     |||||||  |||||||  ||   || ||||||||
+   |||    ||  ||  |||  || ||| |||| |||     |||  ||  |||      ||   || ||| ||||
+   |||    ||   ||  |||||  |||  |||  |||||| |||  ||  |||||||   |||||  |||  |||
+                                ||         |||                             ||
+                                 |                                          |
+Nion: Truncheon
+v1.1.0, codename Katana
 
-! IMPORTANT !
+-----------------------------------------------------------------------------
 
-THIS BRANCH CONTAINS UNSTABLE CODE!
+ATTENTION!
 
-DO NOT USE SINCE IT IS NOT PRODUCTION READY YET!
-THIS BRANCH WILL BE MERGED AND DELETED TO THE
-MAIN BRANCH ONCE THE CODE HAS BEEN FINALIZED 
-AND TESTED.
+DO NOT USE THIS BRANCH!
 
-Please watch the repository for updates.
-The website is not updated currently, it shall
-be done so once the core code upgrade has been
-completed.
+This branch is still under development. It contains unfinished and unstable
+code that cannot be used as a daily driver.
+
+Please wait until this branch is merged into the Main branch. The Katana
+branch will be merged and deleted once the code has been finalized, tested
+and verified.
+
+The website is unfinished as of now. It will be updated and completed once
+the code has been complete.
+
+-----------------------------------------------------------------------------

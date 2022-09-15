@@ -1,3 +1,28 @@
+/*
+*                             |                                          |
+*                             ||                                         ||
+*   |||||||| |||||||  |||  || |||  |||  |||||| |||  || |||||||| |||||||  |||  |||
+*      |||         || |||  || |||| ||| |||     |||  ||                || |||| |||
+*      |||    ||||||  |||  || |||||||| |||     |||||||  |||||||  ||   || ||||||||
+*      |||    ||  ||  |||  || ||| |||| |||     |||  ||  |||      ||   || ||| ||||
+*      |||    ||   ||  |||||  |||  |||  |||||| |||  ||  |||||||   |||||  |||  |||
+*                                   ||         |||                             ||
+*                                    |                                          |
+*/
+
+/*
+* ---------------!DISCLAIMER!--------------- *
+*                                            *
+*   <INSERT THE DISCLAIMER HERE>             *
+*                                            *
+*   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
+*    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
+*        DISTRIBUTING THE SOURCE CODE.       *
+*   (SEE LICENSE FILE FOR MORE INFORMATION)  *
+*                                            *
+* ------------------------------------------ *
+*/
+
 package Truncheon.Core;
 
 //Import the required Java IO classes
@@ -25,13 +50,13 @@ import Truncheon.API.BuildInfo;
 import Truncheon.API.ExceptionHandler;
 
 /**
- * Loader class to load the Kernel up
- * Conforms to the Nion Program Structure
- * 
- * @author: DAK404 (https://github.com/DAK404)
- * @version: 
- * @since: 
- */
+* Loader class to load the Kernel up
+* Conforms to the Nion Program Structure
+*
+* @author: DAK404 (https://github.com/DAK404)
+* @version:
+* @since:
+*/
 public class Loader
 {
 
@@ -86,32 +111,51 @@ public class Loader
                 break;
 
                 case 1:
-                    IOStreams.printError("File Integrity Check Failure. Cannot Boot Program.");
-                    System.exit(4);
+                IOStreams.printError("File Integrity Check Failure. Cannot Boot Program.");
+                System.exit(4);
                 break;
 
                 case 2:
-                    IOStreams.printError("Manifest File Missing! Aborting startup...");
-                    System.exit(4);
+                IOStreams.printError("Manifest File Missing! Aborting startup...");
+                System.exit(4);
                 break;
 
                 case 3:
-                    IOStreams.printError("Failed to populate the files. Cannot Boot Program.");
-                    System.exit(4);
+                IOStreams.printError("Failed to populate the files. Cannot Boot Program.");
+                System.exit(4);
                 break;
 
                 case 4:
-                    new Setup().setupLogic();
+                new Setup().setupLogic();
                 break;
             }
 
             System.out.println("DEFAULT");
+            
+            String tempInput = "";
             do
             {
                 BuildInfo.viewBuildInfo();
                 debug();
+                tempInput = console.readLine("~X> ");
+                
+                switch(tempInput)
+                {
+                    case "usermgmt add":
+                        new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256("Administrator"));
+                        break;
+
+                    case "clear":
+                        BuildInfo.viewBuildInfo();
+                        break;
+
+                    case "login":
+                        System.out.println(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "))).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Password: ")), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Key: "))));
+                        console.readLine();
+                        break;
+                }
             }
-            while(! console.readLine("X> ").equalsIgnoreCase("exit"));
+            while(! tempInput.equalsIgnoreCase("exit"));
         }
         catch(Exception e)
         {
@@ -136,11 +180,11 @@ public class Loader
         Return value table:
 
         RETURN VALUE	MEANING
-            0           File integrity OK
-            1           File integrity FAILED
-            2           Manifest File Corrupt or Missing 
-            3           Kernel File Population Failed
-            4           Program Setup Required
+        0           File integrity OK
+        1           File integrity FAILED
+        2           Manifest File Corrupt or Missing
+        3           Kernel File Population Failed
+        4           Program Setup Required
 
         */
 
@@ -164,7 +208,7 @@ public class Loader
 
                     //Check if the program requires the first time setup
                     if(checkDirectoryStructure())
-                        IOStreams.printInfo("Setup Not Required. Booting Program...");
+                    IOStreams.printInfo("Setup Not Required. Booting Program...");
 
                     else
                     {
@@ -222,10 +266,10 @@ public class Loader
                 //Don't bother checking directories that can change over time
                 //The System, Users, .Manifest, SQLite Driver, JRE, Logs and the program runner are excluded
                 if(fileIgnoreList(f.getName()))
-                    continue;
+                continue;
 
                 if (f.isDirectory())
-                    populateFiles(f);
+                populateFiles(f);
 
                 if (f.isFile())
                 {
@@ -245,7 +289,7 @@ public class Loader
     private boolean checkFileHash()throws Exception
     {
         boolean kernelIntegrity = true;
-        
+
         try
         {
             Properties props = new Properties();
@@ -358,7 +402,7 @@ public class Loader
         System.out.println("*********************************************");
         System.out.println("\n   - Heap utilization statistics [MB] -  \n");
         System.out.println("      [*]  Process ID   : "+ProcessHandle.current().pid());
-         // available memory
+        // available memory
         System.out.println("      [*]  Total Memory : " + instance.totalMemory() + " Bytes");
         // free memory
         System.out.println("      [*]  Free Memory  : " + instance.freeMemory() + " Bytes");
@@ -377,6 +421,7 @@ public class Loader
         new Truncheon.API.Dragon.AccountModify();
         new Truncheon.API.Wraith.WraithRead();
         new Truncheon.API.Wraith.WraithEdit();
+        new Truncheon.Core.NionKernel();
     }
 
     /*
