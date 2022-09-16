@@ -93,7 +93,6 @@ public class LoginAuth
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             result = "ERROR";
         }
         System.gc();
