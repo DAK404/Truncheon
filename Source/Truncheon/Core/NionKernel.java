@@ -2,12 +2,15 @@ package Truncheon.Core;
 
 import java.io.Console;
 
-import Truncheon.API.Anvil;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
 import Truncheon.API.IOStreams;
 
 //Previously known as MainMenu.java
 //Implement all the older functionalities here
-public class NionKernel 
+public class NionKernel extends ClassLoader
 {
     private String _username = "DEFAULT_USER";
     private String _accountName = "DEFAULT_ACC_NAME";
@@ -58,10 +61,10 @@ public class NionKernel
         try
         {
             //pass the control to Anvil first to check for the core commandset
-            if(! new Truncheon.API.Anvil().anvilInterpreter(command))
+            if(! Truncheon.API.Anvil.anvilInterpreter(command))
             {
                 //then check the module related commandset
-                String[] commandArray = new Truncheon.API.Anvil().splitStringToArray(command);
+                String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
                 
                 switch(commandArray[0].toLowerCase())
                 {
@@ -74,6 +77,17 @@ public class NionKernel
 
                     case "exit":
                         System.exit(0);
+                    break;
+
+                    case "load":
+                        if(commandArray.length < 2)
+                        {
+                            System.out.println("goober");
+                        }
+                        else
+                        {
+                            moduleLoader(commandArray[1]);
+                        }
                     break;
 
                     case "logout":
@@ -91,6 +105,40 @@ public class NionKernel
             new Truncheon.API.ExceptionHandler().handleException(e);
         }
         System.gc();
+    }
+
+    //UNSTABLE! WORK IN PROGRESS! DO NOT USE AS PRODUCTION READY CODE!//
+
+    private void moduleLoader(String targetClassName)
+    {
+        try 
+        {
+            // Create a new JavaClassLoader 
+            ClassLoader classLoader = this.getClass().getClassLoader();
+             
+            // Load the target class using its binary name
+            Class loadedMyClass = classLoader.loadClass(targetClassName);
+             
+            System.out.println("Loaded class name: " + loadedMyClass.getName());
+             
+            // Create a new instance from the loaded class
+            Constructor constructor = loadedMyClass.getConstructor();
+            Object myClassObject = constructor.newInstance();
+             
+            // Getting the target method from the loaded class and invoke it using its name
+            Method method = loadedMyClass.getMethod("runModule");
+
+            System.out.println("Invoked method name: " + method.getName());
+            method.invoke(myClassObject);
+        } 
+        catch (ClassNotFoundException e)
+        {
+            IOStreams.printError("The specified module cannot be found!\n\nThe module is either malformed, corrupt, unreadable or does not exist.\nPlease check the module used and try again!");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void customBuildInfoViewer()

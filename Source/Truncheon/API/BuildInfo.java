@@ -20,6 +20,11 @@ public class BuildInfo
     public final static String _BuildID = "NION_21_AUG_22_2219";
     public final static String _BuildType = "Development";
 
+    public static void runModule()
+    {
+        System.out.println("text");
+    }
+
     public static void viewBuildInfo()
     {
         try

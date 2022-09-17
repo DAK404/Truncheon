@@ -109,7 +109,7 @@ public class BuildSigner
         try
         {
             Properties props = new Properties();
-            FileOutputStream output = new FileOutputStream("./.Manifest/Truncheon/Manifest.m1");
+            FileOutputStream output = new FileOutputStream("./.Manifest/Truncheon/Truncheon_Manifest.m1");
             //System.out.println(filePaths);
 
             for(String fileName: filePaths)
