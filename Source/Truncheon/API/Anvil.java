@@ -1,15 +1,12 @@
 package Truncheon.API;
 
-import java.io.Console;
-import java.io.File;
 //Scripting featureset
 
 // COMMON COMPONENTS LIKE WAIT, INPUT, ECHO ARE HERE. NO REDUNDANCY
 //ANY EXTRA FEATURES ARE PASSED BACK TO THE PROGRAM AND ARE PROCESSED BY THE CALLING PROGRAM
 public class Anvil
 {
-    Console console = System.console();
-    public boolean anvilInterpreter(String command)
+    public static boolean anvilInterpreter(String command)throws Exception
     {
         boolean status = true;
         String[] commandArray = splitStringToArray(command);
@@ -33,7 +30,6 @@ public class Anvil
                     {
                         IOStreams.printError("ANVIL : ERROR IN ECHO MODULE!");
                         e.printStackTrace();
-                        console.readLine();
                     }
                 }
             break;
@@ -61,7 +57,8 @@ public class Anvil
             break;
 
             case "confirm":
-                console.readLine("\n\nPress ENTER to Continue...");
+                IOStreams.printInfo("Press ENTER to Continue...");
+                System.in.read();
             break;
 
             default:
@@ -71,13 +68,8 @@ public class Anvil
         return status;
     }
 
-    public String[] splitStringToArray(String command)
+    public static String[] splitStringToArray(String command)
     {
-        return command.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)"); 
-    }
-
-    private void printError()
-    {
-        IOStreams.printError("Incorrect Syntax! Please use the following syntax:");
+        return command.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     }
 }

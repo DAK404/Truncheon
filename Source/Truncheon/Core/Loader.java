@@ -233,7 +233,7 @@ public class Loader
     private boolean manifestFileExists()
     {
         //Check if the manifest file exists
-        return new File("./.Manifest/Truncheon/Manifest.m1").exists();
+        return new File("./.Manifest/Truncheon/Truncheon_Manifest.m1").exists();
     }
 
     private boolean populateFiles(File checkDir)
@@ -275,7 +275,7 @@ public class Loader
         try
         {
             Properties props = new Properties();
-            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Manifest.m1");
+            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Truncheon_Manifest.m1");
             props.loadFromXML(manifestEntries);
             manifestEntries.close();
 
