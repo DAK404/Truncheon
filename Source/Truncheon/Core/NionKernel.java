@@ -3,8 +3,9 @@ package Truncheon.Core;
 import java.io.Console;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.util.Arrays;
 
 import Truncheon.API.IOStreams;
 
@@ -18,11 +19,11 @@ public class NionKernel extends ClassLoader
     private String _PIN = "ERROR_PIN";
     private boolean _admin = false;
 
+    private boolean moduleAckStatus = false;
+
     Console console = System.console();
     public void startNionKernel()throws Exception
     {
-        //Placeholder method for the implementation of the Kernel Logic
-
         IOStreams.printAttention("Work in progress.");
         if(!login())
         {
@@ -65,7 +66,7 @@ public class NionKernel extends ClassLoader
             {
                 //then check the module related commandset
                 String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
-                
+
                 switch(commandArray[0].toLowerCase())
                 {
                     case "mem":
@@ -86,7 +87,8 @@ public class NionKernel extends ClassLoader
                         }
                         else
                         {
-                            moduleLoader(commandArray[1]);
+                            String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+                            moduleLoader(commandArray[1], moduleCommandArray);
                         }
                     break;
 
@@ -109,31 +111,81 @@ public class NionKernel extends ClassLoader
 
     //UNSTABLE! WORK IN PROGRESS! DO NOT USE AS PRODUCTION READY CODE!//
 
-    private void moduleLoader(String targetClassName)
+    private void moduleLoader(String targetModuleName, String[] parameters)
     {
-        try 
-        {
-            // Create a new JavaClassLoader 
-            ClassLoader classLoader = this.getClass().getClassLoader();
-             
-            // Load the target class using its binary name
-            Class loadedMyClass = classLoader.loadClass(targetClassName);
-             
-            System.out.println("Loaded class name: " + loadedMyClass.getName());
-             
-            // Create a new instance from the loaded class
-            Constructor constructor = loadedMyClass.getConstructor();
-            Object myClassObject = constructor.newInstance();
-             
-            // Getting the target method from the loaded class and invoke it using its name
-            Method method = loadedMyClass.getMethod("runModule");
 
-            System.out.println("Invoked method name: " + method.getName());
-            method.invoke(myClassObject);
-        } 
+        if(! moduleAckStatus)
+        {
+            String message = """
+            YOU ARE LOADING A CUSTOM MODULE INTO TRUNCHEON!
+
+            Custom modules are written and loaded into Truncheon.
+            These modules reside in the memory until the program is restarted.
+
+            These programs are not official, and therefore
+            THIS ACTION REQUIRES THE USER TO ACKNOWLEDGE THIS MESSAGE!
+
+            BY LOADING CUSTOM MODULES, YOU ARE RESPONSIBLE FOR THE LOSS OF DATA 
+            OR ANY DAMAGES THAT MAY ARISE DUE TO THE USE OF THESE MODULES!
+            
+            Do you wish to still load the module? [ Y | N ]
+            """;
+
+            IOStreams.printAttention(message);
+
+            moduleAckStatus = console.readLine().equalsIgnoreCase("y")?true:false;
+        }
+
+        try
+        {
+            // Create a new JavaClassLoader
+            //ClassLoader classLoader = this.getClass().getClassLoader();
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+
+            // Load the target class using its binary name
+            Class moduleLoader = classLoader.loadClass("Truncheon.Modules." + targetModuleName + ".ModuleRunner");
+
+            //System.out.println("Loaded Module: " + loadedMyClass.getName());
+
+            // Create a new instance from the loaded class
+            //Constructor constructor = loadedMyClass.getConstructor();
+
+            Object moduleInstance = moduleLoader.getDeclaredConstructor().newInstance();
+
+            // Getting the target method from the loaded class and invoke it using its name
+            Method method = moduleLoader.getMethod("runModule", new Class[]{String[].class});
+
+            method.invoke(moduleInstance, new Object[]{parameters});
+
+            System.gc();
+        }
         catch (ClassNotFoundException e)
         {
             IOStreams.printError("The specified module cannot be found!\n\nThe module is either malformed, corrupt, unreadable or does not exist.\nPlease check the module used and try again!");
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
         }
         catch (Exception e)
         {

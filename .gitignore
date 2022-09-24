@@ -2,6 +2,7 @@ Source/*.bat
 Source/*.cmd
 Source/*.log
 Source/Truncheon/Core/DebugMainMenu.java
+Source/Truncheon/Modules
 
 Binaries/*
 

@@ -42,11 +42,12 @@ ECHO.
 ECHO  1. COMPILE EVERYTHING
 ECHO  2. COMPILE LAUNCHER ONLY
 ECHO  3. COMPILE TRUNCHEON ONLY
-ECHO  4. COMPILE DOCUMENTATION
-ECHO  5. OPEN COMMAND PROMPT HERE
-ECHO  6. OPEN WSL PROMPT HERE
-ECHO  7. HELP
-ECHO  8. EXIT
+ECHO  4. COMPILE TRUNCHEON MODULE
+ECHO  5. COMPILE DOCUMENTATION
+ECHO  6. OPEN COMMAND PROMPT HERE
+ECHO  7. OPEN WSL PROMPT HERE
+ECHO  8. HELP
+ECHO  9. EXIT
 ECHO.
 ECHO ------------------------
 ECHO.
@@ -150,11 +151,11 @@ GOTO MENU
 :MKALL
 
 :: Compile the ProgramLauncher.java file
-javac -d ../Binaries ProgramLauncher.java
-ECHO Completed compiling Program Launche
+javac -d ../Binaries Main.java
+ECHO Completed compiling Program Launcher
 
 :: Compile the Boot.java file
-javac -d ../Binaries ./Truncheon/Core/Boot.java
+javac -d ../Binaries ./Truncheon/Core/Loader.java
 ECHO Completed compiling Truncheon
 
 :: Compile the documentation
