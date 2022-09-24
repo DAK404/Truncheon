@@ -10,3 +10,14 @@ If a file is found, it is named as a file. If the file is a Truncheon Script fil
 make sure that the repair mode in the program to be automatic, without providing a shell to the user to interact with the system.
 by implementing a repair mode shell, it is increasing the attack surface of the system and bloating the system up
 
+-----------------
+
+Truncheon Module Loader
+
+Write a module with the package 
+
+package Truncheon.Modules;
+
+Then compile it with module compiling tool
+
+run it using the load command.
