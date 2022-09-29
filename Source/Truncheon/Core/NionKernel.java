@@ -111,86 +111,92 @@ public class NionKernel extends ClassLoader
 
     //UNSTABLE! WORK IN PROGRESS! DO NOT USE AS PRODUCTION READY CODE!//
 
-    private void moduleLoader(String targetModuleName, String[] parameters)
+    private void moduleLoader(String targetModuleName, String[] parameters)throws Exception
     {
-
-        if(! moduleAckStatus)
+        if(new Truncheon.API.Minotaur.PolicyEnforce().checkPolicyQuiet("module") | _admin)
         {
-            String message = """
-            YOU ARE LOADING A CUSTOM MODULE INTO TRUNCHEON!
+            if(! moduleAckStatus)
+            {
+                String message = """
+                YOU ARE LOADING A CUSTOM MODULE INTO TRUNCHEON!
 
-            Custom modules are written and loaded into Truncheon.
-            These modules reside in the memory until the program is restarted.
+                Custom modules are written and loaded into Truncheon.
+                These modules reside in the memory until the program is restarted.
 
-            These programs are not official, and therefore
-            THIS ACTION REQUIRES THE USER TO ACKNOWLEDGE THIS MESSAGE!
+                These programs are not official, and therefore
+                THIS ACTION REQUIRES THE USER TO ACKNOWLEDGE THIS MESSAGE!
 
-            BY LOADING CUSTOM MODULES, YOU ARE RESPONSIBLE FOR THE LOSS OF DATA 
-            OR ANY DAMAGES THAT MAY ARISE DUE TO THE USE OF THESE MODULES!
-            
-            Do you wish to still load the module? [ Y | N ]
-            """;
+                BY LOADING CUSTOM MODULES, YOU ARE RESPONSIBLE FOR THE LOSS OF DATA 
+                OR ANY DAMAGES THAT MAY ARISE DUE TO THE USE OF THESE MODULES!
+                
+                Do you wish to still load the module? [ Y | N ]
+                """;
 
-            IOStreams.printAttention(message);
+                IOStreams.printAttention(message);
 
-            moduleAckStatus = console.readLine().equalsIgnoreCase("y")?true:false;
+                moduleAckStatus = console.readLine("Load Custom Modules?> ").equalsIgnoreCase("y")?true:false;
+            }
+            else
+            {
+                try
+                {
+                    // Create a new JavaClassLoader
+                    //ClassLoader classLoader = this.getClass().getClassLoader();
+                    ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+
+                    // Load the target class using its binary name
+                    Class moduleLoader = classLoader.loadClass("Truncheon.Modules." + targetModuleName + ".ModuleRunner");
+
+                    //System.out.println("Loaded Module: " + loadedMyClass.getName());
+
+                    // Create a new instance from the loaded class
+                    //Constructor constructor = loadedMyClass.getConstructor();
+
+                    Object moduleInstance = moduleLoader.getDeclaredConstructor().newInstance();
+
+                    // Getting the target method from the loaded class and invoke it using its name
+                    Method method = moduleLoader.getMethod("runModule", new Class[]{String[].class});
+
+                    method.invoke(moduleInstance, new Object[]{parameters});
+
+                    System.gc();
+                }
+                catch (ClassNotFoundException e)
+                {
+                    IOStreams.printError("The specified module cannot be found!\n\nThe module is either malformed, corrupt, unreadable or does not exist.\nPlease check the module used and try again!");
+                }
+                catch (SecurityException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (InstantiationException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (NoSuchMethodException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (InvocationTargetException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
-
-        try
-        {
-            // Create a new JavaClassLoader
-            //ClassLoader classLoader = this.getClass().getClassLoader();
-            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-
-            // Load the target class using its binary name
-            Class moduleLoader = classLoader.loadClass("Truncheon.Modules." + targetModuleName + ".ModuleRunner");
-
-            //System.out.println("Loaded Module: " + loadedMyClass.getName());
-
-            // Create a new instance from the loaded class
-            //Constructor constructor = loadedMyClass.getConstructor();
-
-            Object moduleInstance = moduleLoader.getDeclaredConstructor().newInstance();
-
-            // Getting the target method from the loaded class and invoke it using its name
-            Method method = moduleLoader.getMethod("runModule", new Class[]{String[].class});
-
-            method.invoke(moduleInstance, new Object[]{parameters});
-
-            System.gc();
-        }
-        catch (ClassNotFoundException e)
-        {
-            IOStreams.printError("The specified module cannot be found!\n\nThe module is either malformed, corrupt, unreadable or does not exist.\nPlease check the module used and try again!");
-        }
-        catch (SecurityException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
-        catch (InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        else
+            IOStreams.printError("Module Loading has been restricted to user accounts with Administrator privileges only!\nPlease contact the Administrator for more information.");
     }
 
     public void customBuildInfoViewer()

@@ -21,3 +21,7 @@ package Truncheon.Modules;
 Then compile it with module compiling tool
 
 run it using the load command.
+
+module install/import, uninstall
+
+-----------------

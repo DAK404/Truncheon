@@ -378,7 +378,7 @@ public class Loader
 
     private void debug()
     {
-        int mb = 1024 * 1024;
+        //int mb = 1024 * 1024;
         // get Runtime instance
         Runtime instance = Runtime.getRuntime();
         System.out.println("\n*********************************************");
