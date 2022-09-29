@@ -187,5 +187,6 @@ public class PolicyEdit
             savePolicy(resetValues[i], "on");
 
         savePolicy("sysname", "SYSTEM" + ((int)(Math.random() * (999999 - 100000 + 1)) + 100000));
+        savePolicy("module", "off");
     }
 }

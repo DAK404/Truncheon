@@ -25,11 +25,12 @@ ADDITIONS:
 * Print streams to customize the output messages with
 color coding support
 * Refactored, Unified and modularized scripting system
+* Custom module loading logic and Module Compiling Tools
 * Kernel Prober 1.0 to check for bootable kernels by the loader
 
 IMPROVEMENTS:
 
-* Upgraded Java version and JRE to 18.0.1.1
+* Upgraded Java version and JRE to 19.0
 * Upgraded File structures to Nion program standards
 * Improved database handling logic and login authentication
 * Improved existing interactive tools
