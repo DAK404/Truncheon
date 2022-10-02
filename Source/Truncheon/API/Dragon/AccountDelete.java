@@ -50,7 +50,7 @@ public class AccountDelete
         {
             IOStreams.println("Please login to continue.");
             IOStreams.println("Username: " + new Truncheon.API.Dragon.LoginAuth(_currentUsername).getNameLogic());
-            status = new Truncheon.API.Dragon.LoginAuth(_currentUsername).authenticationLogic(String.valueOf(console.readPassword("Password: ")), String.valueOf(console.readPassword("Security Key: ")));
+            status = new Truncheon.API.Dragon.LoginAuth(_currentUsername).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
         }
         catch(Exception e)
         {

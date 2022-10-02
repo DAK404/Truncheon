@@ -9,8 +9,6 @@ import java.io.FileInputStream;
 //Import the required Java Util classes
 import java.util.Properties;
 
-import java.lang.Math;
-
 //Import the Truncheon classes
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
@@ -20,7 +18,9 @@ import Truncheon.API.IOStreams;
 */
 public class PolicyEdit
 {
-    public final String [] resetValues = {"auth", "update", "download", "script", "filemgmt", "read", "edit", "usermgmt"};
+    boolean _userIsAdmin = false;
+
+    public final String [] resetValues = {"auth", "update", "download", "script", "filemgmt", "read", "edit", "usermgmt", "policy"};
 
     private final String policyFileName = "./System/Truncheon/Private/Policy.burn";
 
@@ -46,10 +46,11 @@ public class PolicyEdit
     */
     public final void policyEditorLogic()throws Exception
     {
-        if(! authenticationLogic())
+        if(!authenticationLogic())
             IOStreams.printError("Authentication Failure. Exiting...");
         else
-            policyEditor();
+            if(new Truncheon.API.Minotaur.PolicyEnforce().checkPolicy("policy") || _userIsAdmin)
+                policyEditor();
     }
 
     /**
@@ -69,6 +70,8 @@ public class PolicyEdit
             String securityKey = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
             challengeStatus = (new Truncheon.API.Dragon.LoginAuth(username).authenticationLogic(password, securityKey)?(new Truncheon.API.Dragon.LoginAuth(username).checkPrivilegeLogic()?true:false):false);
+
+            _userIsAdmin = new Truncheon.API.Dragon.LoginAuth(username).checkPrivilegeLogic();
         }
         catch(Exception E)
         {
@@ -83,29 +86,37 @@ public class PolicyEdit
     */
     private final void policyEditor()throws Exception
     {
-        while(true)
+        String suggestedInputs = (_userIsAdmin?"[ MODIFY | RESET | HELP | EXIT ]":"[ MODIFY | HELP | EXIT ]");
+        String input;
+        do
         {
             props = new Properties();
             if(! new File(policyFileName).exists())
             resetPolicyFile();
             displaySettings();
 
-            // TODO: Accept a String and convert to a String Array and then parse the arguments for every option
+            input = console.readLine(suggestedInputs + "\n\nPolicyEditor)> ");
 
+            String[] policyCommandArray = Truncheon.API.Anvil.splitStringToArray(input);
 
-            switch(console.readLine("[ MODIFY | RESET | HELP | EXIT ]\n\nPolicyEditor)> ").toLowerCase())
+            switch(policyCommandArray[0].toLowerCase())
             {
                 case "modify":
-                editPolicy();
+                if(policyCommandArray.length < 2)
+                    System.out.println("Goober");
+                else
+                    savePolicy(policyCommandArray[1], policyCommandArray[2]);
                 break;
 
                 case "reset":
-                resetPolicyFile();
+                if(_userIsAdmin)
+                    resetPolicyFile();
+                else
+                    IOStreams.printError("Standard Users cannot reset the policy file!");
+                    console.readLine();
                 break;
 
                 case "exit":
-                return;
-
                 case "":
                 break;
 
@@ -113,7 +124,9 @@ public class PolicyEdit
                 System.out.println("Invalid command. Please try again.");
                 break;
             }
+            System.gc();
         }
+        while(! input.equalsIgnoreCase("exit"));
     }
 
     /**
@@ -122,7 +135,7 @@ public class PolicyEdit
     private final void displaySettings()throws Exception
     {
         BuildInfo.viewBuildInfo();
-        System.out.println("         Minotaur Policy Editor 1.3         ");
+        System.out.println("         Minotaur Policy Editor 2.0         ");
         System.out.println("--------------------------------------------");
         System.out.println("      - Current Policy Configuration -      ");
         System.out.println("--------------------------------------------");
@@ -137,24 +150,6 @@ public class PolicyEdit
     }
 
     /**
-    *
-    * @throws Exception : Handle exceptions thrown during program runtime.
-    */
-    private final void editPolicy()throws Exception
-    {
-        displaySettings();
-        do
-        {
-            String pName = console.readLine("Enter the name of the policy : ").toLowerCase();
-            String pValue = console.readLine("Enter the value for the policy : ");
-            System.out.println("Saving Policy...");
-            savePolicy(pName, pValue);
-            System.gc();
-        }
-        while(console.readLine("Do you want to modify another policy? [ Y | N ] > ").equalsIgnoreCase("y"));
-    }
-
-    /**
     * Saves a policy to the file, with the key and value structure
     *
     * The policies are stored in an XML structured file
@@ -162,13 +157,12 @@ public class PolicyEdit
     * @param policyValue
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    public final void savePolicy(String policyName, String policyValue)throws Exception
+    private final void savePolicy(String policyName, String policyValue)throws Exception
     {
         props.setProperty(policyName, policyValue);
         FileOutputStream output = new FileOutputStream(policyFileName);
         props.storeToXML(output, "TruncheonSettings");
         output.close();
-        System.out.println("Policy " + policyName + " has been saved successfully.");
         System.gc();
     }
 

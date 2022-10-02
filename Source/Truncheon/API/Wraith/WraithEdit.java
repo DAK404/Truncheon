@@ -2,7 +2,7 @@ package Truncheon.API.Wraith;
 
 //Import the required Java IO classes
 import java.io.BufferedWriter;
-import java.io.Console;
+//import java.io.Console;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.FileWriter;
@@ -18,9 +18,9 @@ import java.text.DateFormat;
 
 public class WraithEdit
 {
-    private Console console = System.console();
+    //private Console console = System.console();
 
-    public final void logger(String printToFile, String fileName)
+    public static final void logger(String printToFile, String fileName)
     {
         try
         {
@@ -55,7 +55,7 @@ public class WraithEdit
         System.gc();
     }
 
-    private boolean checkFileValidity(String fileName)throws Exception
+    private static final boolean checkFileValidity(String fileName)throws Exception
     {
         return !(fileName == null || fileName.equals("") || fileName.startsWith(" "));
     }

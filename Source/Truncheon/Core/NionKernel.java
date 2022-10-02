@@ -2,7 +2,6 @@ package Truncheon.Core;
 
 import java.io.Console;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -24,7 +23,8 @@ public class NionKernel extends ClassLoader
     Console console = System.console();
     public void startNionKernel()throws Exception
     {
-        IOStreams.printAttention("Work in progress.");
+        customBuildInfoViewer();
+
         if(!login())
         {
             IOStreams.printError("Invalid Credentials.");
@@ -42,11 +42,12 @@ public class NionKernel extends ClassLoader
     private boolean login()throws Exception
     {
         _username = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "));
-        return new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
+        return  new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
     }
 
     private void kernelLogic()
     {
+        customBuildInfoViewer();
         String tempInput = "";
         do
         {
@@ -61,14 +62,17 @@ public class NionKernel extends ClassLoader
     {
         try
         {
-            //pass the control to Anvil first to check for the core commandset
-            if(! Truncheon.API.Anvil.anvilInterpreter(command))
+            
             {
                 //then check the module related commandset
                 String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
 
                 switch(commandArray[0].toLowerCase())
                 {
+                    case "clear":
+                        customBuildInfoViewer();
+                    break;
+                    
                     case "mem":
                         debug();
                     break;
@@ -80,6 +84,10 @@ public class NionKernel extends ClassLoader
                         System.exit(0);
                     break;
 
+                    case "lock":
+                        System.out.println(_PIN);
+                    break;
+
                     case "load":
                         if(commandArray.length < 2)
                         {
@@ -87,8 +95,56 @@ public class NionKernel extends ClassLoader
                         }
                         else
                         {
+                            /* What to implement next:
+                             * Module listing
+                             * Module import
+                             * Module uninstall
+                             * Module download (optional)
+                             */
                             String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
                             moduleLoader(commandArray[1], moduleCommandArray);
+                        }
+                    break;
+
+                    case "update":
+                        new Truncheon.API.Grinch.Wyvern.Updater().updaterLogic();
+                    break;
+
+                    case "policy":
+                        new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
+                    break;
+
+                    case "sys":
+                    if(! _admin)
+                    {
+                        System.out.println("Cannot execute sys command as a standard user.");
+                        break;
+                    }
+                    if(commandArray.length < 2)
+                    {
+                        System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
+                        break;
+                    }
+                    if(System.getProperty("os.name").contains("Windows"))
+                        new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
+                    else
+                        new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                    break;
+
+                    case "usermgmt":
+                        switch(commandArray[1])
+                        {
+                            case "add":
+                                new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
+                            break;
+
+                            case "delete":
+                                new Truncheon.API.Dragon.AccountDelete(_username).userDeletionLogic();
+                            break;
+
+                            default:
+                                IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
+                            break;
                         }
                     break;
 
@@ -97,7 +153,9 @@ public class NionKernel extends ClassLoader
                     break;
 
                     default:
-                        IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
+                        //pass the control to Anvil first to check for the core commandset
+                        if(! Truncheon.API.Anvil.anvilInterpreter(command))
+                            IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
                     break;
                 }
             }
@@ -201,12 +259,15 @@ public class NionKernel extends ClassLoader
 
     public void customBuildInfoViewer()
     {
-        System.out.println("Work in progress.");
+        Truncheon.API.BuildInfo.clearScreen();
+        IOStreams.println("Nion: " + Truncheon.API.BuildInfo._KernelName + "\n");
+        IOStreams.println("Version: " + Truncheon.API.BuildInfo._Version + " (" + Truncheon.API.BuildInfo._VersionCodeName + ")\n");
+        IOStreams.printWarning("TEST BUILD!\nExpect Changes And Errors.\n");
     }
 
     private void debug()
     {
-        int mb = 1024 * 1024;
+        //int mb = 1024 * 1024;
         // get Runtime instance
         Runtime instance = Runtime.getRuntime();
         System.out.println("\n*********************************************");

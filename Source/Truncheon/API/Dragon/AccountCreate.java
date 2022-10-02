@@ -56,8 +56,8 @@ public class AccountCreate
             {
                 IOStreams.printAttention("The currently logged in user is an administrator.\n\nYou have the privileges to create other administrator accounts or standard user accounts.");
                 IOStreams.printWarning("Administrative rights have additional privileges over standard users! Beware on who the administrative privileges are granted to!");
-                IOStreams.println("Would you like to grant administrative privileges to the new user account?");
-                if(console.readLine().equalsIgnoreCase("Y"))
+                IOStreams.println("Would you like to grant administrative privileges to the new user account? [ Y | N ]");
+                if(console.readLine("Grant Administrator Privileges?> ").equalsIgnoreCase("Y"))
                     _newAccountAdmin = true;
             }
 
@@ -113,9 +113,9 @@ public class AccountCreate
         IOStreams.println("Username      : " + (_newAccountUsername.equalsIgnoreCase("")?"NOT SET":_newAccountUsername));
         IOStreams.println("Password      : " + (_newAccountPassword.equalsIgnoreCase("")?"NOT SET":"********"));
         IOStreams.println("SecurityKey   : " + (_newAccountSecurityKey.equalsIgnoreCase("")?"NOT SET":"********"));
-        IOStreams.println("PIN           : " + (_newAccountPIN.equalsIgnoreCase("")?"NOT SET":"****"));
-
-        IOStreams.printAttention("Account Privileges: " + (_newAccountAdmin?"Administrator":"Standard"));
+        IOStreams.println("PIN           : " + (_newAccountPIN.equalsIgnoreCase("")?"NOT SET":"****") + "\n");
+        IOStreams.printAttention("Account Privileges: " + (_newAccountAdmin?"Administrator":"Standard") + "\n");
+        IOStreams.println("========================================");
     }
 
     private boolean setAccountName()throws Exception
@@ -317,7 +317,7 @@ public class AccountCreate
             System.gc();
 
             credentialDashboard();
-            console.readLine("Account Creation Successful.\nPress ENTER to continue.");
+            IOStreams.printInfo("Account Creation Successful!");
         }
         catch(Exception e)
         {
@@ -357,6 +357,7 @@ public class AccountCreate
         while(!setAccountPIN());
 
         addAccountToDatabase();
+        console.readLine("Press ENTER to Continue.");
     }
 
     /*

@@ -30,7 +30,11 @@ public class Setup
     /**
      * Initialize a set of strings to show various statuses of the setup stages
      */
-    private String prereqInfoStatus = "PENDING", initDB = "PENDING", initDirs = "PENDING", initPolicies = "PENDING", initAdminAccount = "PENDING";
+    private String prereqInfoStatus = "PENDING";
+    private String initDB = "PENDING";
+    private String initDirs = "PENDING";
+    private String initPolicies = "PENDING";
+    private String initAdminAccount = "PENDING";
     
     /**
      * The main logic of the setup program
@@ -40,8 +44,8 @@ public class Setup
     public void setupLogic()throws Exception
     {
         displayPrerequisiteInformation();
-        initializeDirectories();
         initializeDatabase();
+        initializeDirectories();
         initializeDefaultPolicies();
         initializeAdministratorAccount();
 
@@ -95,7 +99,7 @@ public class Setup
     private void initializeDirectories()
     {
         displaySetupProgress();
-        String [] directoryNames = {"./System/Truncheon/Public/Logs", "./System/Truncheon/Private/Backups", "./Users/Truncheon"};
+        String [] directoryNames = {"./System/Truncheon/Public/Logs", "./Users/Truncheon"};
         for (String dirs: directoryNames)
             new File(dirs).mkdirs();
         initDirs = "COMPLETE";
@@ -110,6 +114,7 @@ public class Setup
         boolean initializeDatabaseStatus = false;
         try
         {
+            new File("./System/Truncheon/Private/Backups").mkdirs();
             String databasePath = "jdbc:sqlite:./System/Truncheon/Private/MUD.dbx";
             IOStreams.printInfo("Checking for existing Master User Database...");
             

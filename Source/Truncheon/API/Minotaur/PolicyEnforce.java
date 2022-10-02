@@ -64,7 +64,7 @@ public class PolicyEnforce
 
     public final boolean checkPolicyQuiet(String policyName)throws Exception
     {
-        return retrievePolicyValue(policyName).toLowerCase().equalsIgnoreCase("on")?true:false;
+        return retrievePolicyValue(policyName).equalsIgnoreCase("on")?true:false;
     }
 
     /**
@@ -101,7 +101,10 @@ public class PolicyEnforce
             //Set the string value to "error" if the given property is not found, unreadable or is misconfigured
             policyValue = "error";
         }
-
+        
+        if(policyValue == null)
+            policyValue = "Error";
+            
         //return the policy value in the string format
         return policyValue;
     }
