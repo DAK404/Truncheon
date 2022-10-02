@@ -29,21 +29,21 @@ package Truncheon.Core;
 import java.io.File;
 import java.io.Console;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+//import java.io.FileOutputStream;
 
 //Import the required Java NIO classes
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+// import java.nio.channels.Channels;
+// import java.nio.channels.ReadableByteChannel;
 
 //Import the required Java Util classes
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+// import java.util.zip.ZipEntry;
+// import java.util.zip.ZipInputStream;
 
 //Import the required Java Net package for URL parsing
-import java.net.URL;
+//import java.net.URL;
 
 import Truncheon.API.IOStreams;
 import Truncheon.API.BuildInfo;

@@ -41,12 +41,11 @@ public class ExceptionHandler
             System.err.println("This information will be written into a log file which can be used to debug the cause of the failure.\nAny additional information can be useful to find the root cause of the issue efficiently.");
 
             //write the user comments into the log file.
-            new Truncheon.API.Wraith.WraithEdit().logger("[--- TECHNICAL DETAILS ---]", "Error");
-            new Truncheon.API.Wraith.WraithEdit().logger(e.getClass().getName(), "Error");
-            new Truncheon.API.Wraith.WraithEdit().logger(e.getStackTrace().toString(), "Error");
-            new Truncheon.API.Wraith.WraithEdit().logger(exceptionStackTrace, "Error");
-            new Truncheon.API.Wraith.WraithEdit().logger("User Comment> " + console.readLine("User Comment> ") + "\n\n", "Error");
-            
+            Truncheon.API.Wraith.WraithEdit.logger("[--- TECHNICAL DETAILS ---]", "Error");
+            Truncheon.API.Wraith.WraithEdit.logger(e.getClass().getName(), "Error");
+            Truncheon.API.Wraith.WraithEdit.logger(e.getStackTrace().toString(), "Error");
+            Truncheon.API.Wraith.WraithEdit.logger(exceptionStackTrace, "Error");
+            Truncheon.API.Wraith.WraithEdit.logger("User Comment> " + console.readLine("User Comment> ") + "\n\n", "Error");
             
         }
         catch(Exception ex)

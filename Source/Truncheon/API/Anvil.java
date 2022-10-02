@@ -70,6 +70,10 @@ public class Anvil
 
     public static String[] splitStringToArray(String command)
     {
-        return command.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        String[] arr= command.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        for(int i = 0; i<arr.length; i++)
+            arr[i] = arr[i].replaceAll("\"", "");
+
+        return arr;
     }
 }

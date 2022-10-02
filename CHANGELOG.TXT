@@ -30,7 +30,7 @@ color coding support
 
 IMPROVEMENTS:
 
-* Upgraded Java version and JRE to 19.0
+* Upgraded Java version and JRE to 17+35.
 * Upgraded File structures to Nion program standards
 * Improved database handling logic and login authentication
 * Improved existing interactive tools
@@ -40,6 +40,7 @@ IMPROVEMENTS:
 * Fixed certain code issues
 * Removed unsafe code structures
 * Optimized resource usage and overall performance
+* Now runs on Android Termux Application!
 
 DELETIONS AND DEPRECATIONS:
 

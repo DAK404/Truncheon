@@ -30,7 +30,7 @@ public class LoginAuth
      * @return
      * @throws Exception
      */
-    public boolean authenticationLogic(String psw, String key)throws Exception
+    public final boolean authenticationLogic(String psw, String key)throws Exception
     {
         return retrieveDatabaseEntry("SELECT Password FROM MUD WHERE Username = ?", "Password").equals(psw) && retrieveDatabaseEntry("SELECT SecurityKey FROM MUD WHERE Username = ?", "SecurityKey").equals(key);
     }
@@ -40,7 +40,7 @@ public class LoginAuth
      * @return
      * @throws Exception
      */
-    public boolean checkPrivilegeLogic()throws Exception
+    public final boolean checkPrivilegeLogic()throws Exception
     {
         return retrieveDatabaseEntry("SELECT Privileges FROM MUD WHERE Username = ?", "Privileges").equals("Yes");
     }
@@ -50,7 +50,7 @@ public class LoginAuth
      * @return
      * @throws Exception
      */
-    public String getNameLogic()throws Exception
+    public final String getNameLogic()throws Exception
     {
         return retrieveDatabaseEntry("SELECT Name FROM MUD WHERE Username = ?", "Name");
     }
@@ -60,7 +60,7 @@ public class LoginAuth
      * @return
      * @throws Exception
      */
-    public String getPINLogic()throws Exception
+    public final String getPINLogic()throws Exception
     {
         return retrieveDatabaseEntry("SELECT PIN FROM MUD WHERE Username = ?", "PIN");
     }
@@ -72,7 +72,7 @@ public class LoginAuth
      * @return
      * @throws Exception
      */
-    private String retrieveDatabaseEntry(String sqlCommand, String parameter)throws Exception
+    private final String retrieveDatabaseEntry(String sqlCommand, String parameter)throws Exception
     {
         String result = "DEFAULT_STRING";
         try
@@ -95,6 +95,9 @@ public class LoginAuth
         {
             result = "ERROR";
         }
+        if(result == null)
+            result = "Error";
+
         System.gc();
         return result;
     }
