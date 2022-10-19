@@ -145,6 +145,7 @@ public class BuildSigner
 
     private final String hashFile(File file, String algorithm)throws Exception
     {
+        String result = null;
         if(file.exists())
         {
             try (FileInputStream inputStream = new FileInputStream(file))
@@ -161,7 +162,7 @@ public class BuildSigner
 
                 byte[] hashedBytes = digest.digest();
 
-                return convertByteArrayToHexString(hashedBytes);
+                result =  convertByteArrayToHexString(hashedBytes);
             }
             catch (NoSuchAlgorithmException E)
             {
@@ -169,6 +170,6 @@ public class BuildSigner
                 E.printStackTrace();
             }
         }
-        return null;
+        return result;
     }
 }

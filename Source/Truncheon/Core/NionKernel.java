@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import Truncheon.API.Anvil;
 import Truncheon.API.IOStreams;
 
 //Previously known as MainMenu.java
@@ -148,6 +149,13 @@ public class NionKernel extends ClassLoader
                         }
                     break;
 
+                    case "charm_1":
+                        String[] aaa = Truncheon.API.Anvil.splitStringToArray(console.readLine("DUMMY> "));
+
+                        for(String aa:aaa)
+                            System.out.println(aa);
+
+
                     case "logout":
                     case "":
                     break;
@@ -203,7 +211,7 @@ public class NionKernel extends ClassLoader
                     ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
                     // Load the target class using its binary name
-                    Class moduleLoader = classLoader.loadClass("Truncheon.Modules." + targetModuleName + ".ModuleRunner");
+                    Class<?> moduleLoader = classLoader.loadClass("Truncheon.Modules." + targetModuleName + ".ModuleRunner");
 
                     //System.out.println("Loaded Module: " + loadedMyClass.getName());
 
