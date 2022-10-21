@@ -160,7 +160,14 @@ public class AccountCreate
 
         _newAccountUsername = (console.readLine(message + " "));
 
-        if(_newAccountUsername == null | _newAccountUsername.equals("") | _newAccountUsername.equalsIgnoreCase("Administrator"))
+        if(! new Truncheon.API.Dragon.LoginAuth(_newAccountUsername).checkUserExistence())
+        {
+            IOStreams.printError("Username has already been enrolled! Please try again with another username.");
+            _status = false;
+            _newAccountUsername = "";
+            console.readLine();
+        }
+        else if(_newAccountUsername == null | _newAccountUsername.equals("") | _newAccountUsername.equalsIgnoreCase("Administrator"))
         {
             _newAccountUsername = "";
             _status = false;
@@ -321,7 +328,7 @@ public class AccountCreate
         }
         catch(Exception e)
         {
-            new Truncheon.API.ExceptionHandler().handleException(e);
+            IOStreams.printInfo("Account Creation Failed.");
         }
     }
 
