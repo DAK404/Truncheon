@@ -24,8 +24,10 @@ public class PolicyEdit
 
     private final String policyFileName = "./System/Truncheon/Private/Policy.burn";
 
+    private String suggestedInputs = "";
+
     private Console console = System.console();
-    Properties props = null;
+    private Properties props = null;
 
     public PolicyEdit()
     {
@@ -66,10 +68,8 @@ public class PolicyEdit
             System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
 
             String username = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "));
-            String password = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-            String securityKey = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
-            challengeStatus = (new Truncheon.API.Dragon.LoginAuth(username).authenticationLogic(password, securityKey)?(new Truncheon.API.Dragon.LoginAuth(username).checkPrivilegeLogic()?true:false):false);
+            challengeStatus = (new Truncheon.API.Dragon.LoginAuth(username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")))));
 
             _userIsAdmin = new Truncheon.API.Dragon.LoginAuth(username).checkPrivilegeLogic();
         }
@@ -77,7 +77,7 @@ public class PolicyEdit
         {
             //Handle any exceptions thrown during runtime
         }
-        return challengeStatus;
+        return challengeStatus & _userIsAdmin;
     }
 
     /**
@@ -86,16 +86,17 @@ public class PolicyEdit
     */
     private final void policyEditor()throws Exception
     {
-        String suggestedInputs = (_userIsAdmin?"[ MODIFY | RESET | HELP | EXIT ]":"[ MODIFY | HELP | EXIT ]");
+        suggestedInputs = "[ MODIFY " + (_userIsAdmin?"| RESET ":"") + "| UPDATE | HELP | EXIT ]";
+        props = new Properties();
+        if(! new File(policyFileName).exists())
+            resetPolicyFile();
+        viewPolicyInfo();
+        
         String input;
+        
         do
         {
-            props = new Properties();
-            if(! new File(policyFileName).exists())
-            resetPolicyFile();
-            displaySettings();
-
-            input = console.readLine(suggestedInputs + "\n\nPolicyEditor)> ");
+            input = console.readLine("PolicyEditor)> ");
 
             String[] policyCommandArray = Truncheon.API.Anvil.splitStringToArray(input);
 
@@ -110,10 +111,14 @@ public class PolicyEdit
 
                 case "reset":
                 if(_userIsAdmin)
+                {
+                    IOStreams.printAttention("Resetting Policy File...");
                     resetPolicyFile();
-                else
-                    IOStreams.printError("Standard Users cannot reset the policy file!");
-                    console.readLine();
+                }
+                break;
+
+                case "update":
+                    viewPolicyInfo();
                 break;
 
                 case "exit":
@@ -127,6 +132,12 @@ public class PolicyEdit
             System.gc();
         }
         while(! input.equalsIgnoreCase("exit"));
+    }
+
+    private void viewPolicyInfo()throws Exception
+    {
+        displaySettings();
+        IOStreams.println(suggestedInputs + "\n");
     }
 
     /**

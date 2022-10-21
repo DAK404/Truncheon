@@ -154,7 +154,11 @@ public class NionKernel extends ClassLoader
 
                         for(String aa:aaa)
                             System.out.println(aa);
+                    break;
 
+                    case "charm_2":
+                        System.out.println(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username> "))).checkUserExistence());
+                    break;
 
                     case "logout":
                     case "":

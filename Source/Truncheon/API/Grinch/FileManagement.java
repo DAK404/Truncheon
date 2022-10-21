@@ -6,59 +6,58 @@ import Truncheon.API.IOStreams;
 
 class FileManagement
 {
-    // public void grinchInterface()
-    // {
-    //     //get policy for authentication
+    private String _username = "";
+    private String _name = "";
 
-    //     //login
+    public FileManagement(String username)
+    {
+        _username = username;
+    }
 
-    //     //begin filemanagement system logic
-    // }
-
-    // private void fileManagerLogic(String command)
-    // {
-    //     String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);  
-    
-    //     switch(commandArray[0])
-    //     {
-    //         case "":
-    //         break;
-
-    //         case "mkdir":
-    //         break;
-
-    //         case "rmdir":
-    //         break;
-
-    //         case "dir":
-    //         case "ls":
-    //         break;
-
-    //         case "edit":
-    //         break;
-
-    //         case "open":
-    //         break;
-
-    //         case "del":
-    //         case "rm":
-    //         break;
-
-    //         case "rename":
-    //         case "ren":
-    //         break;
-
-    //         case "tree":
-    //         break;
-
-    //         default:
-    //             IOStreams.printError("Unrecognized command.");
-    //         break;
-    //     }
-    //}
+    public boolean fileManagerLogic()
+    {
+        if(! login)
+        {
+            IOStreams.printError("Invalid Credentials! Grinch aborted!")
+        }
+        else
+        {
+            String inputValue = "";
+            do
+            {
+                inputValue = console.readLine();
+                grinchInterpreter(inputValue);
+            }
+            while(inputValue.equalsIgnoreCase("exit"));
+        }
+    }
 
     public boolean fileManagerLogic(File scriptFileName, int lineNumber)
     {
+        IOStreams.printError("WORK IN PROGRESS!");
         return false;
-    }    
+    }
+
+    private boolean loginChallenge()
+    {
+        boolean status = false;
+        if(! (_username == null || _username.equalsIgnoreCase("")))
+        {
+            IOStreams.println("Username: " + _name);
+            status =  new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
+        }
+        return status;
+    }
+
+    private void grinchInterpreter(String command)throws Exception
+    {
+        try
+        {
+
+        }
+        catch(Exception E)
+        {
+
+        }
+    }
 }

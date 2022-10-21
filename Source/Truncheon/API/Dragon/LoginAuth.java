@@ -65,6 +65,11 @@ public class LoginAuth
         return retrieveDatabaseEntry("SELECT PIN FROM MUD WHERE Username = ?", "PIN");
     }
 
+    public final boolean checkUserExistence()throws Exception
+    {
+        return checkForExistingAccount();
+    }
+
     /**
      * 
      * @param sqlCommand
@@ -93,6 +98,7 @@ public class LoginAuth
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             result = "ERROR";
         }
         if(result == null)
@@ -100,5 +106,33 @@ public class LoginAuth
 
         System.gc();
         return result;
+    }
+
+    private boolean checkForExistingAccount()throws Exception
+    {
+        boolean userExists = false;
+
+        Class.forName("org.sqlite.JDBC");
+        String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
+
+        Connection dbConnection = DriverManager.getConnection(databasePath);
+
+        String query = "SELECT (count(*) > 0) FROM MUD WHERE Username LIKE ?";
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+        preparedStatement.setString(1, _username);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) 
+        {
+            if (resultSet.next()) 
+                userExists = resultSet.getBoolean(1);
+
+            preparedStatement.close();
+            dbConnection.close();
+            resultSet.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return userExists;
     }
 }
