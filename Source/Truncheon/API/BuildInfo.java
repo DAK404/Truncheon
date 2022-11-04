@@ -3,21 +3,21 @@ package Truncheon.API;
 public class BuildInfo
 {
     public final static String _Branding = """
-                          |                                          |      
-                          ||                                         ||     
-|||||||| |||||||  |||  || |||  |||  |||||| |||  || |||||||| |||||||  |||  |||
-   |||         || |||  || |||| ||| |||     |||  ||                || |||| |||
-   |||    ||||||  |||  || |||||||| |||     |||||||  |||||||  ||   || ||||||||
-   |||    ||  ||  |||  || ||| |||| |||     |||  ||  |||      ||   || ||| ||||
-   |||    ||   ||  |||||  |||  |||  |||||| |||  ||  |||||||   |||||  |||  |||
-                                ||         |||                             ||
-                                 |                                          |""";
+                           |                                           |      
+                           ||                                          ||     
+|||||||| |||||||  |||  ||| |||  |||  |||||| |||  ||| |||||||| |||||||  |||  |||
+   |||         || |||  ||| |||| ||| |||     |||  |||                || |||| |||
+   |||    ||||||  |||  ||| |||||||| |||     ||||||||  |||||||  ||   || ||||||||
+   |||    ||  ||  |||  ||| ||| |||| |||     |||  |||  |||      ||   || ||| ||||
+   |||    ||   ||  ||||||  |||  |||  |||||| |||  |||  |||||||   |||||  |||  |||
+                                 ||         |||                              ||
+                                  |                                           |""";
 
     public final static String _KernelName = "Truncheon";
     public final static String _Version = "1.1.0";
     public final static String _VersionCodeName = "Katana";
-    public final static String _BuildDate = "02-OCTOBER-2022";
-    public final static String _BuildID = "NION_02_OCT_22_0108";
+    public final static String _BuildDate = "02-NOV-2022";
+    public final static String _BuildID = "NION_04_NOV_22_0108";
     public final static String _BuildType = "DEV_TEST_WIP";
 
     public static void viewBuildInfo()

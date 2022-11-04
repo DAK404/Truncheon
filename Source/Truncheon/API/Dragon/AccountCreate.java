@@ -300,7 +300,7 @@ public class AccountCreate
     {
         try
         {
-            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
+            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
             String sqlCommand = "INSERT INTO MUD(Username, Name, Password, SecurityKey, PIN, Privileges) VALUES(?,?,?,?,?,?)";
 
             Class.forName("org.sqlite.JDBC");

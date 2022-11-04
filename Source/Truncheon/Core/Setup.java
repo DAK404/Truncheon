@@ -115,7 +115,7 @@ public class Setup
         try
         {
             new File("./System/Truncheon/Private/Backups").mkdirs();
-            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/MUD.dbx";
+            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
             IOStreams.printInfo("Checking for existing Master User Database...");
             
             if(new File(databasePath).exists())

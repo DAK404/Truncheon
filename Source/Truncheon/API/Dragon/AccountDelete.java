@@ -65,7 +65,7 @@ public class AccountDelete
     {
         try
         {
-            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
+            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
             String sqlCommand = "DELETE FROM MUD WHERE Username = ?";
 
             Class.forName("org.sqlite.JDBC");

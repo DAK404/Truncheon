@@ -1,6 +1,9 @@
 package Truncheon.Core;
 
 import java.io.Console;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,6 +21,8 @@ public class NionKernel extends ClassLoader
     private String _systemName = "";
     private String _PIN = "ERROR_PIN";
     private boolean _admin = false;
+
+    private boolean _scriptMode = false;
 
     private boolean moduleAckStatus = false;
 
@@ -49,6 +54,9 @@ public class NionKernel extends ClassLoader
     private void kernelLogic()
     {
         customBuildInfoViewer();
+
+        //add logic to check if there is a startup script file
+
         String tempInput = "";
         do
         {
@@ -57,6 +65,74 @@ public class NionKernel extends ClassLoader
             System.gc();
         }
         while(! tempInput.equalsIgnoreCase("logout"));
+    }
+
+    private boolean anvilScriptEngine(String scriptFileName)throws Exception
+    {
+        boolean status = false;
+
+        //Line number in case the script file needs to be passed on to a different module for processing
+        int lineNumber = 0;
+
+        if(! _admin && ! new Truncheon.API.Minotaur.PolicyEnforce().checkPolicy("script"))
+        {
+            //to process the anvil script files
+            try
+            {
+                //Check if the name of the script file is a valid string
+                if(scriptFileName == null || scriptFileName.equalsIgnoreCase("") || scriptFileName.startsWith(" "))
+                    System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
+
+                //Check if the script file specified exists.
+                else if(! new File(scriptFileName).exists())
+                    //Return an error and pass the control back in case the file is not found.
+                    System.out.println("[ ATTENTION ] : Script file "+scriptFileName.replace(_username, _accountName)+" has not been found.\nPlease check the directory of the script file and try again.");
+
+                else
+                {
+                    //Activate the script mode.
+                    _scriptMode = true;
+
+                    //Initialize a stream to read the given file.
+                    BufferedReader br = new BufferedReader(new FileReader(scriptFileName));
+
+                    //Initialize a string to hold the contents of the script file being executed.
+                    String scriptLine = "";
+
+                    //Read the script file, line by line.
+                    while ((scriptLine = br.readLine()) != null)
+                    {
+                        //Check if the line is a comment or is blank in the script file and skip the line.
+                        if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
+                        continue;
+
+                        //Check if End Script command is encountered, which will stop the execution of the script.
+                        else if(scriptLine.equalsIgnoreCase("End Script"))
+                        break;
+                        
+                        //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
+                        commandProcessor(scriptLine);
+                        lineNumber++;
+                    }
+
+                    //Close the streams, run the garbage collector and clean.
+                    br.close();
+                    System.gc();
+
+                    //Deactivate the script mode.
+                    _scriptMode = false;
+                }
+            }
+            catch(Exception e)
+            {
+                //handle exception
+            }
+        }
+        else
+        {
+            IOStreams.printError("Insufficient Privileges to run scripts! Please contact the Administrator for more information.");
+        }
+        return status;
     }
 
     private void commandProcessor(String command)
@@ -117,21 +193,48 @@ public class NionKernel extends ClassLoader
 
                     case "sys":
                     if(! _admin)
-                    {
                         System.out.println("Cannot execute sys command as a standard user.");
-                        break;
-                    }
-                    if(commandArray.length < 2)
+                    else if(commandArray.length < 2)
                     {
                         System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
                         break;
                     }
-                    if(System.getProperty("os.name").contains("Windows"))
-                        new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
                     else
-                        new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                    {
+                        if(System.getProperty("os.name").contains("Windows"))
+                            new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
+                        else
+                            new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                    }
                     break;
 
+                    case "syshell":
+                    if(! _admin)
+                        IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
+                    
+                    else
+                    {
+                        //Catch any potential errors that may arise from trying to invoke the system shells
+                        try
+                        {
+                            //Condition to detect if the OS is Windows
+                            if(System.getProperty("os.name").contains("Windows"))
+                            new ProcessBuilder("cmd").inheritIO().start().waitFor();
+
+                            //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
+                            else
+                            new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+                        }
+                        //Catch any exceptions raised when trying to invoke the Shell
+                        catch(Exception E)
+                        {
+                            IOStreams.printError("CANNOT INVOKE SYSTEM SHELL!\nPlease contact the System Administrator for more information.");
+                            IOStreams.printError("\nERROR DETAILS:\n\n" + E + "\n"); 
+                        }
+                    }
+                    break;
+
+                    //User management logic
                     case "usermgmt":
                         switch(commandArray[1])
                         {
@@ -147,17 +250,6 @@ public class NionKernel extends ClassLoader
                                 IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
                             break;
                         }
-                    break;
-
-                    case "charm_1":
-                        String[] aaa = Truncheon.API.Anvil.splitStringToArray(console.readLine("DUMMY> "));
-
-                        for(String aa:aaa)
-                            System.out.println(aa);
-                    break;
-
-                    case "charm_2":
-                        System.out.println(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username> "))).checkUserExistence());
                     break;
 
                     case "logout":
@@ -272,9 +364,10 @@ public class NionKernel extends ClassLoader
     public void customBuildInfoViewer()
     {
         Truncheon.API.BuildInfo.clearScreen();
-        IOStreams.println("Nion: " + Truncheon.API.BuildInfo._KernelName + "\n");
+        IOStreams.println(Truncheon.API.BuildInfo._Branding);
         IOStreams.println("Version: " + Truncheon.API.BuildInfo._Version + " (" + Truncheon.API.BuildInfo._VersionCodeName + ")\n");
         IOStreams.printWarning("TEST BUILD!\nExpect Changes And Errors.\n");
+        IOStreams.println("Privileges: " + (_admin?"Administrator":"Standard\n"));
     }
 
     private void debug()
