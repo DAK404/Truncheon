@@ -138,6 +138,7 @@ public class PolicyEdit
     {
         displaySettings();
         IOStreams.println(suggestedInputs + "\n");
+        IOStreams.println("Add or Modify Policy Syntax:\nmodify <policy_name> <policy_value>");
     }
 
     /**

@@ -83,7 +83,7 @@ public class LoginAuth
         try
         {
             Class.forName("org.sqlite.JDBC");
-            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
+            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
 
             Connection dbConnection = DriverManager.getConnection(databasePath);
             PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
@@ -113,7 +113,7 @@ public class LoginAuth
         boolean userExists = false;
 
         Class.forName("org.sqlite.JDBC");
-        String databasePath = "jdbc:sqlite:./System/Truncheon/Private/mud.dbx";
+        String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
 
         Connection dbConnection = DriverManager.getConnection(databasePath);
 
