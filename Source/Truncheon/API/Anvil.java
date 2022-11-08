@@ -48,7 +48,7 @@ public class Anvil
                 }
                 catch(NumberFormatException e)
                 {
-                    System.err.println("error! Please provide a numeric input for the wait timer!");
+                    IOStreams.printError("Please provide a numeric input for the wait timer!");
                 }
                 catch(Exception e)
                 {
