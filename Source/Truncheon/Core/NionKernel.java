@@ -296,7 +296,7 @@ public class NionKernel extends ClassLoader
 
                 IOStreams.printAttention(message);
 
-                moduleAckStatus = console.readLine("Load Custom Modules?> ").equalsIgnoreCase("y")?true:false;
+                moduleAckStatus = console.readLine("Load Custom Modules?> ").equalsIgnoreCase("y");
             }
             else
             {
@@ -367,7 +367,8 @@ public class NionKernel extends ClassLoader
         IOStreams.println(Truncheon.API.BuildInfo._Branding);
         IOStreams.println("Version: " + Truncheon.API.BuildInfo._Version + " (" + Truncheon.API.BuildInfo._VersionCodeName + ")\n");
         IOStreams.printWarning("TEST BUILD!\nExpect Changes And Errors.\n");
-        IOStreams.println("Privileges: " + (_admin?"Administrator":"Standard\n"));
+        IOStreams.println("=============================");
+        IOStreams.println("Privileges: " + (_admin?"Administrator":"Standard") + "\n");
     }
 
     private void debug()

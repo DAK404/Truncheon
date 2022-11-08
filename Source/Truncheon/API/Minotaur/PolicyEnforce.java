@@ -64,7 +64,7 @@ public class PolicyEnforce
 
     public final boolean checkPolicyQuiet(String policyName)throws Exception
     {
-        return retrievePolicyValue(policyName).equalsIgnoreCase("on")?true:false;
+        return retrievePolicyValue(policyName).equalsIgnoreCase("on");
     }
 
     /**

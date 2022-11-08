@@ -50,8 +50,6 @@ public class Main
     If the shell is unable to boot even after providing
     the right inputs, please try to download the latest
     version and installing the same.
-    
-    Press RETURN to exit.
     """;
     
     private static final String KERNEL_NOT_FOUND = """
@@ -69,8 +67,6 @@ public class Main
     bootable or not:
     
     java <arguments> Main probe <kernel_name>
-    
-    Press RETURN to exit.
     """;
     
     private static final String UNDEFINED_BOOTMODE = """
@@ -81,8 +77,6 @@ public class Main
     set of boot modes. For more information, please
     try to refer to the documentation or contact the
     developer to fix this issue.
-    
-    Press RETURN to exit.
     """;
     
     private static final String FATAL_ERROR_EXIT = """
@@ -93,8 +87,6 @@ public class Main
     
     ALL unsaved data will be lost and the program shall
     exit.
-    
-    Press RETURN to exit.
     """;
     
     private static final String FATAL_ERROR_RESTART = """
@@ -105,8 +97,6 @@ public class Main
     session.
     
     ALL unsaved data might be lost.
-    
-    Press RETURN to restart.
     """;
     
     private static final String RESTART_UPDATE = """
@@ -123,8 +113,6 @@ public class Main
     files are corrupt. To provide a safe environment to
     the users, the program shall restart to recovery mode
     to repair it.
-    
-    Press RETURN to restart.
     """;
     
     public static void main(String[] args)throws Exception
