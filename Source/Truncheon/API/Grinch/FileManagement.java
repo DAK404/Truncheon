@@ -17,7 +17,7 @@ class FileManagement
     public final boolean fileManagerLogic()
     {
         if(! login)
-        IOStreams.printError("Invalid Credentials! Grinch aborted!")
+            IOStreams.printError("Invalid Credentials! Grinch aborted!");
         else
         {
             String inputValue = "";
@@ -33,6 +33,7 @@ class FileManagement
     public boolean fileManagerLogic(File scriptFileName, int lineNumber)
     {
         boolean status = true;
+        int i = 0;
 
         try
         {
@@ -48,16 +49,20 @@ class FileManagement
             
             while ((scriptLine = br.readLine()) != null)
             {
-                //Check if the line is a comment or is blank in the script file and skip the line.
-                if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
-                    continue;
+                if(! i < lineNumber)
+                {
+                    //Check if the line is a comment or is blank in the script file and skip the line.
+                    if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
+                        continue;
                 
-                //Check if End Script command is encountered, which will stop the execution of the script.
-                else if(scriptLine.equalsIgnoreCase("End Script"))
-                    break;
-                
-                //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
-                grinchInterpreter(scriptLine);
+                    //Check if End Script command is encountered, which will stop the execution of the script.
+                    else if(scriptLine.equalsIgnoreCase("End Script"))
+                        break;
+                    
+                    //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
+                    grinchInterpreter(scriptLine);
+                }
+                i++;
             }
             
             br.close();
@@ -69,7 +74,7 @@ class FileManagement
         
         System.gc();
 
-        return false;
+        return status;
     }
     
     private boolean loginChallenge()
@@ -81,7 +86,8 @@ class FileManagement
             status =  new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
         }
         else
-        System.exit(1);
+            System.exit(1);
+        
         return status;
     }
     
@@ -136,7 +142,7 @@ class FileManagement
                 
                 //Override exit to quit the module than to quit the program
                 case "exit":
-                case ""
+                case "":
                 break;
                 
                 //Use the Anvil functions if none of the cases are followed
