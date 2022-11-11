@@ -1,11 +1,21 @@
 Download link of the latest release asset: https://github.com/DAK404/Truncheon/releases/latest/download/Truncheon.zip
 
-Remove all return statements for void methods and remove all the return statements that occurs before the end of the method.
+Remove all return statements for void methods and remove all the return statements that occurs before the end of the method with no return type.
 
 In file management "Tree" command, make sure that the file type is checked, if it is a folder, state the file size as "DIRECTORY"
 If a file is found, it is named as a file. If the file is a Truncheon Script file, the type describes it as a Nion Script File.
 
+File description can be added to the following files:
+
+txt - Plain text File
+tsx - Truncheon Script Executable
+<DIR> - DIRECTORY
+
+for other files, the extension is displayed by default.
+
 --- IMPORTANT ---
+
+** CONTEMPLATING AND PROTOTYPING **
 
 make sure that the repair mode in the program to be automatic, without providing a shell to the user to interact with the system.
 by implementing a repair mode shell, it is increasing the attack surface of the system and bloating the system up
@@ -22,6 +32,16 @@ Then compile it with module compiling tool
 
 run it using the load command.
 
-module install/import, uninstall
+module install/import, uninstall - contemplating and prototyping...
+
+-----------------
+
+Script files are integrated. Grinch Script Files and the Nion Shell files are now integrated into a single file.
+
+Any file that contains a script to the grinch code, it passes on the file line number to the script engine found inside Grinch
+The script engine would then navigate to that line and begin reading from that line in the script file.
+
+<END SCRIPT> will stop executing the script, will only work in the script engine found in the Kernel
+<END GRINCH> will stop executing a grinch script and return to the kernel and continue executing the script file
 
 -----------------
