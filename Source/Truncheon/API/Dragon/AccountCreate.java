@@ -364,7 +364,8 @@ public class AccountCreate
         while(!setAccountPIN());
 
         addAccountToDatabase();
-        console.readLine("Press ENTER to Continue.");
+        
+        Truncheon.API.IOStreams.confirmReturnToContinue();
     }
 
     /*
