@@ -1,5 +1,7 @@
 package Truncheon.API;
 
+import java.io.Console;
+
 public class IOStreams
 {
     public static void printInfo(String message)
@@ -30,5 +32,11 @@ public class IOStreams
     {
         System.out.println(message);
         message = null;
-    }    
+    }
+
+    public static void confirmReturnToContinue()
+    {
+        Console console = System.console();
+        console.readLine("Press RETURN to Continue...");
+    }
 }

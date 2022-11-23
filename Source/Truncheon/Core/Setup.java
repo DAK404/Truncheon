@@ -78,7 +78,7 @@ public class Setup
 
         displaySetupProgress();
         IOStreams.printAttention("THE PROGRAM LICENSE SHALL BE DISPLAYED TO YOU. IF YOU ACCEPT IT, PRESS Y. ELSE, PRESS N.\nBY PROCEEDING TO SETTING UP AND USE THE PROGRAM, YOU HEREBY AGREE THAT YOU ACCEPT THE PROGRAM LICENSE CLAUSES.\nIF YOU DO NOT WANT TO AGREE TO THE LICENSE CLAUSES IN THE FUTURE, PLEASE UNINSTALL THE PROGRAM IMMEDIATELY.");
-        console.readLine("Press ENTER to continue, or press CTRL + C to quit.");
+        console.readLine("Press RETURN to continue, or press CTRL + C to quit.");
 
         //Read the EULA file
         IOStreams.printAttention("Do you agree to the clauses specified in the license?");
