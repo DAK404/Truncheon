@@ -29,6 +29,7 @@ public class BuildInfo
             System.out.println(" Version    : " + _Version);
             System.out.println(" Build Date : " + _BuildDate);
             System.out.println(" Build ID   : " + _BuildID);
+            System.out.println();
             System.out.println("\n CAUTION! " + _BuildType + " build!\n Expect changes and crashes.");
             System.out.println("---------------------------------------------\n");
         }

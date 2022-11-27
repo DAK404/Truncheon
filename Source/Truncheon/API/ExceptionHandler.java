@@ -1,7 +1,7 @@
 package Truncheon.API;
 
+//Import the required Java IO classes
 import java.io.Console;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -10,6 +10,7 @@ public class ExceptionHandler
     Console console = System.console();
     public void handleException(Exception e)
     {
+        String errorLogFileName = "ExceptionLog";
         try
         {
             StringWriter sw = new StringWriter();
@@ -17,15 +18,14 @@ public class ExceptionHandler
 
             String stackTrace = sw.toString();
 
-
             String exceptionStackTrace = """
 
             ***************************************
             !         PROGRAM STACK TRACE         !
             ***************************************
-            
+
             """ + stackTrace + """
-            
+
             ***************************************
             !           STACK TRACE END           !
             ***************************************
@@ -41,17 +41,17 @@ public class ExceptionHandler
             System.err.println("This information will be written into a log file which can be used to debug the cause of the failure.\nAny additional information can be useful to find the root cause of the issue efficiently.");
 
             //write the user comments into the log file.
-            Truncheon.API.Wraith.WraithEdit.logger("[--- TECHNICAL DETAILS ---]", "Error");
-            Truncheon.API.Wraith.WraithEdit.logger(e.getClass().getName(), "Error");
-            Truncheon.API.Wraith.WraithEdit.logger(e.getStackTrace().toString(), "Error");
-            Truncheon.API.Wraith.WraithEdit.logger(exceptionStackTrace, "Error");
-            Truncheon.API.Wraith.WraithEdit.logger("User Comment> " + console.readLine("User Comment> ") + "\n\n", "Error");
-            
+            Truncheon.API.Wraith.WraithEdit.logger("[--- TECHNICAL DETAILS ---]", errorLogFileName);
+            Truncheon.API.Wraith.WraithEdit.logger(e.getClass().getName(), errorLogFileName);
+            Truncheon.API.Wraith.WraithEdit.logger(e.getStackTrace().toString(), errorLogFileName);
+            Truncheon.API.Wraith.WraithEdit.logger(exceptionStackTrace, errorLogFileName);
+            Truncheon.API.Wraith.WraithEdit.logger("User Comment> " + console.readLine("User Comment> ") + "\n\n", errorLogFileName);
+
         }
         catch(Exception ex)
         {
             e.printStackTrace();
         }
         System.exit((console.readLine("Do you want to restart the program? [ Y | N ]> ").equalsIgnoreCase("y")?5:4));
-    } 
+    }
 }
