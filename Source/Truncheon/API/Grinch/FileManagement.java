@@ -1,22 +1,28 @@
 package Truncheon.API.Grinch;
 
+import java.io.Console;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 
 import Truncheon.API.IOStreams;
 
-class FileManagement
+public class FileManagement
 {
     private String _username = "";
     private String _name = "";
+
+    Console console = System.console();
     
     public FileManagement(String username)
     {
         _username = username;
     }
     
-    public final boolean fileManagerLogic()
+    public final void fileManagerLogic()throws Exception
     {
-        if(! login)
+        if(! loginChallenge())
             IOStreams.printError("Invalid Credentials! Grinch aborted!");
         else
         {
@@ -38,18 +44,14 @@ class FileManagement
         try
         {
             //Initialize a stream to read the given file.
-            BufferedReader br = new BufferedReader(new FileReader(_scriptName));
+            BufferedReader br = new BufferedReader(new FileReader(scriptFileName));
             
             //Initialize a string to hold the contents of the script file being executed.
             String scriptLine;
             
-            for(int i = 0; i < lineNumber; i++)
-                // Keep skipping until that specific line number has been reached
-                br.readLine();
-            
             while ((scriptLine = br.readLine()) != null)
             {
-                if(! i < lineNumber)
+                if(! (i < lineNumber))
                 {
                     //Check if the line is a comment or is blank in the script file and skip the line.
                     if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
@@ -67,9 +69,9 @@ class FileManagement
             
             br.close();
         }
-        catch(Exception E)
+        catch(Exception e)
         {
-            IOStreams.printError(e);
+            IOStreams.printError(e.toString());
         }
         
         System.gc();
@@ -77,7 +79,7 @@ class FileManagement
         return status;
     }
     
-    private boolean loginChallenge()
+    private boolean loginChallenge()throws Exception
     {
         boolean status = false;
         if(! (_username == null || _username.equalsIgnoreCase("")))

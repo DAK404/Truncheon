@@ -16,7 +16,7 @@ public class WraithRead
 
     private static final boolean checkFileValidity()throws Exception
     {
-        return !(fileName == null || fileName.equals("") || fileName.getName().startsWith(" "));
+        return !(fileName.getName() == null || fileName.getName().equals("") || fileName.getName().startsWith(" "));
     }
 
     private void readFileLogic()throws Exception

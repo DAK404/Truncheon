@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import Truncheon.API.Anvil;
 import Truncheon.API.IOStreams;
 
 //Previously known as MainMenu.java
@@ -23,8 +22,12 @@ public class NionKernel extends ClassLoader
     private boolean _admin = false;
 
     private boolean _scriptMode = false;
+    private String _scriptFileName = "";
+    private int _lineNumber = 0;
 
-    private boolean moduleAckStatus = false;
+    private boolean _moduleAckStatus = false;
+
+    private char _prompt;
 
     Console console = System.console();
     public void startNionKernel()throws Exception
@@ -41,6 +44,7 @@ public class NionKernel extends ClassLoader
             _accountName = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
             _PIN = new Truncheon.API.Dragon.LoginAuth(_username).getPINLogic();
             _systemName = new Truncheon.API.Minotaur.PolicyEnforce().retrievePolicyValue("sysname");
+            _prompt = (_admin)?'!':'*';
             kernelLogic();
         }
     }
@@ -60,7 +64,7 @@ public class NionKernel extends ClassLoader
         String tempInput = "";
         do
         {
-            tempInput = console.readLine(_accountName + "@" + _systemName +"> ");
+            tempInput = console.readLine(_accountName + "@" + _systemName + _prompt + "> ");
             commandProcessor(tempInput);
             System.gc();
         }
@@ -71,9 +75,6 @@ public class NionKernel extends ClassLoader
     {
         boolean status = false;
 
-        //Line number in case the script file needs to be passed on to a different module for processing
-        int lineNumber = 0;
-
         if(! _admin && ! new Truncheon.API.Minotaur.PolicyEnforce().checkPolicy("script"))
         {
             //to process the anvil script files
@@ -81,12 +82,12 @@ public class NionKernel extends ClassLoader
             {
                 //Check if the name of the script file is a valid string
                 if(scriptFileName == null || scriptFileName.equalsIgnoreCase("") || scriptFileName.startsWith(" "))
-                    System.out.println("[ ERROR ] : The name of the script file cannot be be blank.");
+                    IOStreams.printError("The name of the script file cannot be be blank.");
 
                 //Check if the script file specified exists.
                 else if(! new File(scriptFileName).exists())
                     //Return an error and pass the control back in case the file is not found.
-                    System.out.println("[ ATTENTION ] : Script file "+scriptFileName.replace(_username, _accountName)+" has not been found.\nPlease check the directory of the script file and try again.");
+                    IOStreams.printAttention("Script file "+scriptFileName.replace(_username, _accountName)+" has not been found.\nPlease check the directory of the script file and try again.");
 
                 else
                 {
@@ -112,11 +113,12 @@ public class NionKernel extends ClassLoader
                         
                         //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
                         commandProcessor(scriptLine);
-                        lineNumber++;
+                        _lineNumber++;
                     }
 
                     //Close the streams, run the garbage collector and clean.
                     br.close();
+                    _lineNumber = 0;
                     System.gc();
 
                     //Deactivate the script mode.
@@ -211,7 +213,6 @@ public class NionKernel extends ClassLoader
                     case "syshell":
                     if(! _admin)
                         IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
-                    
                     else
                     {
                         //Catch any potential errors that may arise from trying to invoke the system shells
@@ -252,6 +253,13 @@ public class NionKernel extends ClassLoader
                         }
                     break;
 
+                    case "grinch":
+                    if(_scriptMode)
+                        new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
+                    else
+                        new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
+                    break;
+
                     case "logout":
                     case "":
                     break;
@@ -277,7 +285,7 @@ public class NionKernel extends ClassLoader
     {
         if(new Truncheon.API.Minotaur.PolicyEnforce().checkPolicyQuiet("module") | _admin)
         {
-            if(! moduleAckStatus)
+            if(! _moduleAckStatus)
             {
                 String message = """
                 YOU ARE LOADING A CUSTOM MODULE INTO TRUNCHEON!
@@ -296,7 +304,7 @@ public class NionKernel extends ClassLoader
 
                 IOStreams.printAttention(message);
 
-                moduleAckStatus = console.readLine("Load Custom Modules?> ").equalsIgnoreCase("y");
+                _moduleAckStatus = console.readLine("Load Custom Modules?> ").equalsIgnoreCase("y");
             }
             else
             {

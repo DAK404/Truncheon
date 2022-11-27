@@ -45,3 +45,6 @@ The script engine would then navigate to that line and begin reading from that l
 <END GRINCH> will stop executing a grinch script and return to the kernel and continue executing the script file
 
 -----------------
+
+Since the setup program is used only once, the code is adapted to reside within the Loader.java class.
+This means that the 3rd party java classes cannot access the same from outside and it should not, due to the inherent security reasons.
