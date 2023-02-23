@@ -71,6 +71,10 @@ public class Loader
 
             case "debug_ex_ha":
             new Loader().debugExceptionHandler();
+            
+            case "iostreams":
+            new Loader().printTest();
+            break;
 
             default:
             System.exit(3);
@@ -295,15 +299,14 @@ public class Loader
                     if(!manifestHash.equals(fileHash))
                     {
                         kernelIntegrity = false;
-                        IOStreams.printError("Integrity Failure: " + fileName);
-                        IOStreams.printError("File Hash        : " + fileHash);
+                        IOStreams.printError("Integrity Failure: " + fileHash + "\t" + fileName);
+                        //IOStreams.printError("File Hash        : " + fileHash);
                         System.out.println();
                     }
                 }
                 catch(NullPointerException unknownFileFound)
                 {
-                    IOStreams.printAttention("Unrecognized File Found : " + fileName);
-                    IOStreams.printAttention("Unrecognized File Hash  : " + fileHash);
+                    IOStreams.printAttention("Unrecognized File Found : " + fileHash + "\t" + fileName);
                     System.out.println();
                 }
             }
@@ -371,6 +374,18 @@ public class Loader
             new ExceptionHandler().handleException(e);
         }
 
+    }
+
+    private void printTest()throws Exception
+    {
+        IOStreams.printInfo("Test");
+        IOStreams.printAttention("Test");
+        IOStreams.printError("Test");
+        IOStreams.printWarning("Test");
+
+        IOStreams.println(0, 7, "Hello World!");
+        IOStreams.println(3, 8, "Hello World!");
+        IOStreams.println(8, 1, "Hello World!");
     }
 
     private void debug()
