@@ -4,34 +4,64 @@ import java.io.Console;
 
 public class IOStreams
 {
+    /*
+        +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
+        | Index |  fg  |  bg  |  color    |
+        +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
+        |   0   |  30  |  40  |  black    |
+        |   1   |  31  |  41  |  red      |
+        |   2   |  32  |  42  |  green    |
+        |   3   |  33  |  43  |  yellow   |
+        |   4   |  34  |  44  |  blue     |
+        |   5   |  35  |  45  |  magenta  |
+        |   6   |  36  |  46  |  cyan     |
+        |   7   |  37  |  47  |  white    |
+        |   8   |  39  |  49  |  default  |
+        +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
+     */
+
+    static String[] _textColorForeground = {"[30", "[31", "[32", "[33", "[34", "[35", "[36", "[37", "[39"};
+    static String[] _textColorBackground = {"40", "41", "42", "43", "44", "45", "46", "47", "49"};
+    
     public static void printInfo(String message)
     {
-        System.out.println((char)27 + "[32m[ INFORMATION ] " + message + (char)27 + "[0m");
-        message = null;
+        println(2, 8, "[ INFORMATION ] " + message);
     }
 
     public static void printError(String message)
     {
-        System.err.println((char)27 + "[31m[    ERROR    ] " + message + (char)27 + "[0m");
-        message = null;
+        println(1, 0, "[    ERROR    ] " + message);
     }
 
     public static void printWarning(String message)
     {
-        System.err.println((char)27 + "[33m[   WARNING   ] " + message + (char)27 + "[0m");
-        message = null;
+        println(3, 8, "[   WARNING   ] " + message);
     }
 
     public static void printAttention(String message)
     {
-        System.out.println((char)27 + "[36m[  ATTENTION  ] " + message + (char)27 + "[0m");
-        message = null;
+        println(5, 0, "[  ATTENTION  ] " + message);
     }
 
     public static void println(String message)
     {
         System.out.println(message);
-        message = null;
+    }
+
+    public static void println(int foregroundIndex, int backgroundIndex, String message)
+    {
+        try
+        {
+            System.out.println((char)27 + _textColorForeground[foregroundIndex] + ";" + _textColorBackground[backgroundIndex] + "m" + message + (char)27 + "[0m");
+        }
+        catch(ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println(e + "Invalid Syntax.");
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
     }
 
     public static void confirmReturnToContinue()

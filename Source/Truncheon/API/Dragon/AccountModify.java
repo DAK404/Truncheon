@@ -1,5 +1,6 @@
 package Truncheon.API.Dragon;
 
-public class AccountModify {
+public class AccountModify
+{
     
 }
