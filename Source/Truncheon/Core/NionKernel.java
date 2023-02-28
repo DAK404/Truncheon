@@ -32,7 +32,7 @@ public class NionKernel extends ClassLoader
     Console console = System.console();
     public void startNionKernel()throws Exception
     {
-        customBuildInfoViewer();
+        Truncheon.API.BuildInfo.viewBuildInfo();
 
         if(!login())
         {
@@ -69,6 +69,7 @@ public class NionKernel extends ClassLoader
             System.gc();
         }
         while(! tempInput.equalsIgnoreCase("logout"));
+        Truncheon.API.BuildInfo.viewBuildInfo();
     }
 
     private boolean anvilScriptEngine(String scriptFileName)throws Exception
@@ -367,6 +368,7 @@ public class NionKernel extends ClassLoader
         }
         else
             IOStreams.printError("Module Loading has been restricted to user accounts with Administrator privileges only!\nPlease contact the Administrator for more information.");
+        System.gc();
     }
 
     public void customBuildInfoViewer()
