@@ -120,19 +120,24 @@ public class LoginAuth
         String query = "SELECT (count(*) > 0) FROM MUD WHERE Username LIKE ?";
         PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
         preparedStatement.setString(1, _username);
-        try (ResultSet resultSet = preparedStatement.executeQuery()) 
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        try 
         {
             if (resultSet.next()) 
                 userExists = resultSet.getBoolean(1);
-
-            preparedStatement.close();
-            dbConnection.close();
-            resultSet.close();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
+        finally
+        {
+            preparedStatement.close();
+            dbConnection.close();
+            resultSet.close();
+        }
+        System.gc();
         return userExists;
     }
 }
