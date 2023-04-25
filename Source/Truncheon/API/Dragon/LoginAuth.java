@@ -1,5 +1,7 @@
 package Truncheon.API.Dragon;
 
+import java.io.Console;
+
 //Import the required Java SQL classes
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,6 +15,8 @@ public class LoginAuth
 {
     private String _username;
 
+    Console console = System.console();
+
     /**
      * 
      * @param usn
@@ -20,7 +24,21 @@ public class LoginAuth
      */
     public LoginAuth(String usn)throws Exception
     {
-        _username = usn;
+        _username = (usn == "" | usn == null)?"DEFAULT USER":usn;
+    }
+
+    public LoginAuth()throws Exception
+    {
+
+    }
+
+    public final boolean loginCommon()throws Exception
+    {
+        _username = console.readLine();
+        String password = console.readLine();
+        String securitykey = console.readLine();
+
+        return authenticationLogic(password, securitykey); 
     }
 
     /**

@@ -34,7 +34,8 @@ public class NionKernel extends ClassLoader
     {
         Truncheon.API.BuildInfo.viewBuildInfo();
 
-        if(!login())
+
+        if(! new Truncheon.API.Dragon.LoginAuth().loginCommon())
         {
             IOStreams.printError("Invalid Credentials.");
         }
