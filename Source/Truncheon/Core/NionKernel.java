@@ -18,7 +18,6 @@ public class NionKernel extends ClassLoader
     private String _username = "DEFAULT_USER";
     private String _accountName = "DEFAULT_ACC_NAME";
     private String _systemName = "";
-    private String _PIN = "ERROR_PIN";
     private boolean _admin = false;
 
     private boolean _scriptMode = false;
@@ -35,17 +34,13 @@ public class NionKernel extends ClassLoader
         Truncheon.API.BuildInfo.viewBuildInfo();
 
 
-        if(! new Truncheon.API.Dragon.LoginAuth().loginCommon())
+        if(! login())
         {
             IOStreams.printError("Invalid Credentials.");
         }
         else
         {
-            _admin = new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic();
-            _accountName = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
-            _PIN = new Truncheon.API.Dragon.LoginAuth(_username).getPINLogic();
-            _systemName = new Truncheon.API.Minotaur.PolicyEnforce().retrievePolicyValue("sysname");
-            _prompt = (_admin)?'!':'*';
+            loadSysUserDetails();
             kernelLogic();
         }
     }
@@ -54,6 +49,14 @@ public class NionKernel extends ClassLoader
     {
         _username = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "));
         return  new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
+    }
+
+    private void loadSysUserDetails()throws Exception
+    {
+        _admin = new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic();
+        _accountName = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
+        _systemName = new Truncheon.API.Minotaur.PolicyEnforce().retrievePolicyValue("sysname");
+        _prompt = (_admin)?'!':'*';
     }
 
     private void kernelLogic()
@@ -84,12 +87,12 @@ public class NionKernel extends ClassLoader
             {
                 //Check if the name of the script file is a valid string
                 if(scriptFileName == null || scriptFileName.equalsIgnoreCase("") || scriptFileName.startsWith(" "))
-                    IOStreams.printError("The name of the script file cannot be be blank.");
+                IOStreams.printError("The name of the script file cannot be be blank.");
 
                 //Check if the script file specified exists.
                 else if(! new File(scriptFileName).exists())
-                    //Return an error and pass the control back in case the file is not found.
-                    IOStreams.printAttention("Script file "+scriptFileName.replace(_username, _accountName)+" has not been found.\nPlease check the directory of the script file and try again.");
+                //Return an error and pass the control back in case the file is not found.
+                IOStreams.printAttention("Script file "+scriptFileName.replace(_username, _accountName)+" has not been found.\nPlease check the directory of the script file and try again.");
 
                 else
                 {
@@ -112,7 +115,7 @@ public class NionKernel extends ClassLoader
                         //Check if End Script command is encountered, which will stop the execution of the script.
                         else if(scriptLine.equalsIgnoreCase("End Script"))
                         break;
-                        
+
                         //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
                         commandProcessor(scriptLine);
                         _lineNumber++;
@@ -143,61 +146,75 @@ public class NionKernel extends ClassLoader
     {
         try
         {
-            
+
             {
                 //then check the module related commandset
                 String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
 
                 switch(commandArray[0].toLowerCase())
                 {
-                    case "clear":
-                        customBuildInfoViewer();
+                    case "refresh":
+                    loadSysUserDetails();
                     break;
-                    
+
+                    case "whoami":
+                    IOStreams.println(new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic());
+                    IOStreams.println(_username);
+                    IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic()));
+                    break;
+
+                    case "clear":
+                    customBuildInfoViewer();
+                    break;
+
                     case "mem":
-                        debug();
+                    debug();
                     break;
 
                     case "bsod":
-                        throw new Exception("Debug BSOD. You failed successfully!");
+                    throw new Exception("Debug BSOD. You failed successfully!");
 
                     case "exit":
-                        System.exit(0);
+                    System.exit(0);
+                    break;
+
+                    case "restart":
+                    System.exit(211);
                     break;
 
                     case "lock":
-                        System.out.println(_PIN);
+                    //System.out.println(_PIN);
                     break;
 
                     case "load":
-                        if(commandArray.length < 2)
-                        {
-                            System.out.println("goober");
-                        }
-                        else
-                        {
-                            /* What to implement next:
-                             * Module listing
-                             * Module import
-                             * Module uninstall
-                             * Module download (optional)
-                             */
-                            String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
-                            moduleLoader(commandArray[1], moduleCommandArray);
-                        }
+                    if(commandArray.length < 2)
+                    {
+                        System.out.println("goober");
+                    }
+                    else
+                    {
+                        /* What to implement next:
+                        * Module listing
+                        * Module import
+                        * Module uninstall
+                        * Module download (optional)
+                        */
+                        String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+                        moduleLoader(commandArray[1], moduleCommandArray);
+                    }
                     break;
 
                     case "update":
-                        new Truncheon.API.Grinch.Wyvern.Updater().updaterLogic();
+                    new Truncheon.API.Grinch.Wyvern.Updater().updaterLogic();
                     break;
 
                     case "policy":
-                        new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
+                    new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
                     break;
 
                     case "sys":
                     if(! _admin)
-                        System.out.println("Cannot execute sys command as a standard user.");
+                    System.out.println("Cannot execute sys command as a standard user.");
                     else if(commandArray.length < 2)
                     {
                         System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
@@ -206,15 +223,15 @@ public class NionKernel extends ClassLoader
                     else
                     {
                         if(System.getProperty("os.name").contains("Windows"))
-                            new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
+                        new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
                         else
-                            new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                        new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
                     }
                     break;
 
                     case "syshell":
                     if(! _admin)
-                        IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
+                    IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
                     else
                     {
                         //Catch any potential errors that may arise from trying to invoke the system shells
@@ -232,34 +249,34 @@ public class NionKernel extends ClassLoader
                         catch(Exception E)
                         {
                             IOStreams.printError("CANNOT INVOKE SYSTEM SHELL!\nPlease contact the System Administrator for more information.");
-                            IOStreams.printError("\nERROR DETAILS:\n\n" + E + "\n"); 
+                            IOStreams.printError("\nERROR DETAILS:\n\n" + E + "\n");
                         }
                     }
                     break;
 
                     //User management logic
                     case "usermgmt":
-                        switch(commandArray[1])
-                        {
-                            case "add":
-                                new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
-                            break;
+                    switch(commandArray[1])
+                    {
+                        case "add":
+                        new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
+                        break;
 
-                            case "delete":
-                                new Truncheon.API.Dragon.AccountDelete(_username).userDeletionLogic();
-                            break;
+                        case "delete":
+                        new Truncheon.API.Dragon.AccountDelete(_username).userDeletionLogic();
+                        break;
 
-                            default:
-                                IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
-                            break;
-                        }
+                        default:
+                        IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
+                        break;
+                    }
                     break;
 
                     case "grinch":
                     if(_scriptMode)
-                        new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
+                    new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
                     else
-                        new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
+                    new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
                     break;
 
                     case "logout":
@@ -267,9 +284,9 @@ public class NionKernel extends ClassLoader
                     break;
 
                     default:
-                        //pass the control to Anvil first to check for the core commandset
-                        if(! Truncheon.API.Anvil.anvilInterpreter(command))
-                            IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
+                    //pass the control to Anvil first to check for the core commandset
+                    if(! Truncheon.API.Anvil.anvilInterpreter(command))
+                    IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
                     break;
                 }
             }
@@ -298,9 +315,9 @@ public class NionKernel extends ClassLoader
                 These programs are not official, and therefore
                 THIS ACTION REQUIRES THE USER TO ACKNOWLEDGE THIS MESSAGE!
 
-                BY LOADING CUSTOM MODULES, YOU ARE RESPONSIBLE FOR THE LOSS OF DATA 
+                BY LOADING CUSTOM MODULES, YOU ARE RESPONSIBLE FOR THE LOSS OF DATA
                 OR ANY DAMAGES THAT MAY ARISE DUE TO THE USE OF THESE MODULES!
-                
+
                 Do you wish to still load the module? [ Y | N ]
                 """;
 
@@ -368,7 +385,7 @@ public class NionKernel extends ClassLoader
             }
         }
         else
-            IOStreams.printError("Module Loading has been restricted to user accounts with Administrator privileges only!\nPlease contact the Administrator for more information.");
+        IOStreams.printError("Module Loading has been restricted to user accounts with Administrator privileges only!\nPlease contact the Administrator for more information.");
         System.gc();
     }
 

@@ -160,7 +160,7 @@ public class AccountCreate
 
         _newAccountUsername = (console.readLine(message + " "));
 
-        if(! new Truncheon.API.Dragon.LoginAuth(_newAccountUsername).checkUserExistence())
+        if(new Truncheon.API.Dragon.LoginAuth(_newAccountUsername).checkUserExistence())
         {
             IOStreams.printError("Username has already been enrolled! Please try again with another username.");
             _status = false;
