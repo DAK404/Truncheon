@@ -49,9 +49,17 @@ ECHO DATE    : 13-MAY-2022
 ECHO ------------------------
 
 :: Compile the launcher first
-ECHO Compiling Launcher...
+ECHO [1] Compiling Launcher...
 javac -d ../Binaries Main.java
 
 :: Compile the Program then
-ECHO Compiling Program...
+ECHO [2] Compiling Program...
 javac -d ../Binaries ./Truncheon/Core/Loader.java
+
+:: Sign the build binaries for use
+ECHO [3] Signing Build...
+cd  ../Binaries/
+java BuildSigner.java
+
+:: Confirm the status
+ECHO [ ATTENTION ] Build complete.

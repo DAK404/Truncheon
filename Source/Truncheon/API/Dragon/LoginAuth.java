@@ -27,20 +27,6 @@ public class LoginAuth
         _username = (usn == "" | usn == null)?"DEFAULT USER":usn;
     }
 
-    public LoginAuth()throws Exception
-    {
-
-    }
-
-    public final boolean loginCommon()throws Exception
-    {
-        _username = console.readLine();
-        String password = console.readLine();
-        String securitykey = console.readLine();
-
-        return authenticationLogic(password, securitykey); 
-    }
-
     /**
      * 
      * @param psw

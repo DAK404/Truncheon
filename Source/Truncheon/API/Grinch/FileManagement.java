@@ -5,19 +5,28 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-
+import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
 public class FileManagement
 {
     private String _username = "";
     private String _name = "";
+    private String _defaultPath = "";
+    private String _presentWorkingDir = "/";
+
+    //during ops, do the following
+    // _defaultPath + _presentWorkingDir
+    //_default Path need not be repeated for all ops
+    //Also the string is shorter and is able to be managed well.
 
     Console console = System.console();
     
-    public FileManagement(String username)
+    public FileManagement(String username)throws Exception
     {
         _username = username;
+        _name = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
+        _defaultPath = "./Users/Truncheon/" + _username;
     }
     
     public final void fileManagerLogic()throws Exception
@@ -26,13 +35,14 @@ public class FileManagement
             IOStreams.printError("Invalid Credentials! Grinch aborted!");
         else
         {
+            BuildInfo.viewBuildInfo();
             String inputValue = "";
             do
             {
-                inputValue = console.readLine();
+                inputValue = console.readLine(_name + "@" + _presentWorkingDir + "&> ");
                 grinchInterpreter(inputValue);
             }
-            while(inputValue.equalsIgnoreCase("exit"));
+            while(! inputValue.equalsIgnoreCase("exit"));
         }
     }
     
@@ -116,6 +126,10 @@ public class FileManagement
                 break;
                 
                 case "mkdir":
+                if(commandArray.length < 2)
+                    IOStreams.printError("Invalid Syntax for command \'mkdir\'.");
+                else
+                    makeDir(commandArray[1]);
                 break;
                 
                 case "edit":
@@ -128,9 +142,15 @@ public class FileManagement
                 break;
                 
                 case "pwd":
+                IOStreams.println(_defaultPath);
+                IOStreams.println(_defaultPath + _presentWorkingDir);
                 break;
                 
                 case "cd":
+                if(commandArray.length < 2)
+                    IOStreams.printError("Invalid Syntax for command \'cd\'.");
+                else
+                    changeDirectory(commandArray[1]);
                 break;
                 
                 case "tree":
@@ -157,5 +177,55 @@ public class FileManagement
         {
             
         }
+    }
+
+    private void changeDirectory(String destination)throws Exception
+    {
+        if(destination.equals(".."))
+        {
+            navToPreviousDir();
+        }
+        else
+        {
+            if(destination.startsWith("/")) 
+                destination = destination.substring(1, destination.length());
+            if(destination.endsWith("/"))
+                destination = destination.substring(0, destination.length()-1);
+
+            String tempPath = _presentWorkingDir + destination + "/";
+            if(checkFileExistence(_defaultPath + tempPath))
+                _presentWorkingDir = tempPath;
+            else
+                IOStreams.printError("The specified destination path/file does not exist.");
+        }
+    }
+
+    private boolean checkFileExistence(String fileName)throws Exception
+    {
+        return new File(fileName).exists();
+    }
+
+    private void navToPreviousDir()throws Exception
+    {
+        if(_presentWorkingDir.length() > 1)
+        {
+            _presentWorkingDir = _presentWorkingDir.substring(0, _presentWorkingDir.length()-1);
+            _presentWorkingDir = _presentWorkingDir.replace(_presentWorkingDir.substring(_presentWorkingDir.lastIndexOf('/'), _presentWorkingDir.length()), "/");
+        }
+        else
+        {
+            IOStreams.printError("Illegal Operation. Permission Denied.");
+            resetToHomeDir();
+        }
+    }
+
+    private void resetToHomeDir()throws Exception
+    {
+        _presentWorkingDir = "/";
+    }
+
+    private void makeDir(String fileName)throws Exception
+    {
+        new File(_defaultPath + _presentWorkingDir + fileName).mkdirs();
     }
 }

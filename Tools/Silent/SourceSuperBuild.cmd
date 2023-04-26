@@ -50,14 +50,15 @@ ECHO ------------------------
 ECHO "Tulzscha Tools 3.1" > "CompileDoc.log" 2>&1
 
 :: Compile the launcher first
-ECHO Compiling Launcher...
+ECHO [1] Compiling Launcher...
 javac -d ../Binaries Main.java
 
 :: Compile the Program then
-ECHO Compiling Program...
+ECHO [2] Compiling Program...
 javac -d ../Binaries ./Truncheon/Core/Loader.java
 
 :: Compile the documentation
+ECHO [3] Compiling Documentation
 ECHO Compiling Documentation >> "CompileDoc.log" 2>&1
 
 :: List all the files in Source directory and its subdirectories to a sources.txt file
@@ -65,8 +66,17 @@ dir /s /B *.java > sources.txt
 
 :: Run the javadoc command to compile the documentation by parsing every file found in sources.txt
 :: additionally, write the statuses to the compile log
+ECHO [4] Creating Javadoc documentation...
 javadoc -d ../../TruncheonDocs/InternalDocs -author -version --show-members private @sources.txt >> "CompileDoc.log" 2>&1
 javadoc -d ../../TruncheonDocs/DeveloperDocs -author -version @sources.txt >> "CompileDoc.log" 2>&1
 
 :: Delete the sources.txt file after use
 DEL /s /q sources.txt
+
+:: Sign the build binaries for use
+ECHO [5] Signing Build...
+cd  ../Binaries/
+java BuildSigner.java
+
+:: Confirm the status
+ECHO [ ATTENTION ] Build (Super) complete.
