@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
 //Previously known as MainMenu.java
@@ -43,6 +44,7 @@ public class NionKernel extends ClassLoader
             loadSysUserDetails();
             kernelLogic();
         }
+        BuildInfo.viewBuildInfo();
     }
 
     private boolean login()throws Exception
@@ -210,6 +212,7 @@ public class NionKernel extends ClassLoader
 
                     case "policy":
                     new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
+                    customBuildInfoViewer();
                     break;
 
                     case "sys":
@@ -226,6 +229,7 @@ public class NionKernel extends ClassLoader
                         new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
                         else
                         new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                        customBuildInfoViewer();
                     }
                     break;
 
@@ -239,11 +243,13 @@ public class NionKernel extends ClassLoader
                         {
                             //Condition to detect if the OS is Windows
                             if(System.getProperty("os.name").contains("Windows"))
-                            new ProcessBuilder("cmd").inheritIO().start().waitFor();
+                                new ProcessBuilder("cmd").inheritIO().start().waitFor();
 
                             //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
                             else
-                            new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+                                new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+                            
+                            customBuildInfoViewer();
                         }
                         //Catch any exceptions raised when trying to invoke the Shell
                         catch(Exception E)
@@ -270,6 +276,7 @@ public class NionKernel extends ClassLoader
                         IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
                         break;
                     }
+                    customBuildInfoViewer();
                     break;
 
                     case "grinch":
@@ -277,6 +284,7 @@ public class NionKernel extends ClassLoader
                     new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
                     else
                     new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
+                    customBuildInfoViewer();
                     break;
 
                     case "logout":
