@@ -34,7 +34,7 @@ public class WraithEdit
 
                 File logFile = new File(logfilePath);
                 if(! logFile.exists())
-                    logFile.mkdir();
+                    logFile.mkdirs();
 
                 BufferedWriter obj = new BufferedWriter(new FileWriter(logfilePath + fileName + ".log", true));
                 PrintWriter pr = new PrintWriter(obj);

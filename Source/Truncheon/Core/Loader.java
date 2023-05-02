@@ -93,21 +93,22 @@ public class Loader
                 break;
 
                 case 1:
+                case 2:
                 IOStreams.printError("File Integrity Check Failure. Cannot Boot Program.");
                 System.exit(4);
                 break;
 
-                case 2:
+                case 3:
                 IOStreams.printError("Manifest File Missing! Aborting startup...");
                 System.exit(4);
                 break;
 
-                case 3:
+                case 4:
                 IOStreams.printError("Failed to populate the files. Cannot Boot Program.");
                 System.exit(4);
                 break;
 
-                case 4:
+                case 5:
                 new Setup().setupLogic();
                 break;
             }
@@ -155,86 +156,93 @@ public class Loader
     */
 
     private byte abraxisLogic()throws Exception
+{
+    byte abraxisResult = 55;
+    /*
+    Return value table:
+    
+    ----------------------------------------------------
+    | RETURN VALUE |    	MEANING                    |
+    ----------------------------------------------------
+    |       0      |  File integrity OK                |
+    |       1      |  Kernel integrity FAILED          |
+    |       2      |  File checking FAILED             |
+    |       3      |  Kernel File Population Failed    |
+    |       4      |  Manifest File Corrupt or Missing |
+    |       5      |  Program Setup Required           |
+    ----------------------------------------------------
+    */
+    
+    //check if Manifest File exists
+    if(manifestFileExists())
     {
-        byte abraxisResult = 55;
-        /*
-        Return value table:
-
-        ----------------------------------------------------
-        | RETURN VALUE |    	MEANING                    |
-        ----------------------------------------------------
-        |       0      |  File integrity OK                |
-        |       1      |  File integrity FAILED            |
-        |       2      |  Manifest File Corrupt or Missing |
-        |       3      |  Kernel File Population Failed    |
-        |       4      |  Program Setup Required           |
-        ----------------------------------------------------
-        */
-
-        //Check if the manifest File is found
-        if(manifestFileExists())
+        IOStreams.printInfo("Manifest file found. Populating files and directories...");
+        
+        //begin the population of files in directory
+        
+        //Begin the population of the files in the installed directory of Truncheon
+        if(populateFiles(new File("./")))
         {
-            IOStreams.printInfo("Manifest file found.");
-
-            //Begin the population of the files in the installed directory of Truncheon
-            if(populateFiles(new File("./")))
+            IOStreams.printInfo("Files and Directories populated! Running Integrity Checks...");
+            //check core files first
+            
+            IOStreams.printInfo("Checking Core Files...");
+            if(checkCoreFiles())
             {
-                IOStreams.printInfo("Kernel Files Population Complete.");
-
-                //Begin checking the file hashes to enforce integrity
+                IOStreams.printInfo("Checking Kernel Integrity...");
                 if(checkFileHash())
                 {
-                    IOStreams.printInfo("File Hash Check Complete.");
-
-                    //Set the return value result to 0, denoting that the File Integrity is okay
                     abraxisResult = 0;
-
-                    //Check if the program requires the first time setup
+                    
+                    IOStreams.printInfo("Checking Program Setup status...");
+                    
                     if(checkDirectoryStructure())
-                    IOStreams.printInfo("Setup Not Required. Booting Program...");
-
+                        IOStreams.printInfo("Setup Completed! Booting Program...");
                     else
                     {
                         IOStreams.printAttention("Setup Incomplete.");
-
+                        
                         //Set the return value to be 4, denoting that the program requires setup
-                        abraxisResult = 4;
+                        abraxisResult = 5;
                     }
                 }
-
                 else
                 {
-                    IOStreams.printError("File Integrity Checks failed!");
-
-                    //Set the return value to be 1, denoting that the File Integrity has failed
+                    IOStreams.printError("Kernel Integrity Failed! Aborting.");
+                    
                     abraxisResult = 1;
                 }
             }
-
             else
             {
-                IOStreams.printError("Kernel Files Population failed!");
-
-                //Set the return value to be 3, denoting that the Kernel File Population has failed
-                abraxisResult = 3;
+                IOStreams.printError("Kernel File Checking Failed! Aborting.");
+                
+                abraxisResult = 2;
             }
         }
-
         else
         {
-            IOStreams.printError("Manifest file not found! Aborting...");
-
-            //Set the return value to be 2, denoting that the Manifest File is missing
-            abraxisResult = 2;
+            IOStreams.printError("Kernel File Population Failed! Aborting.");
+            
+            abraxisResult = 3;
         }
-        System.gc();
-        return abraxisResult;
     }
+    else
+    {
+        IOStreams.printError("Manifest File Error! Aborting.");
+        
+        abraxisResult = 4;
+    }
+
+    System.gc();
+    return abraxisResult;
+}
+
 
     private boolean manifestFileExists()
     {
         //Check if the manifest file exists
-        return new File("./.Manifest/Truncheon/Truncheon_Manifest.m1").exists();
+        return new File("./.Manifest/Truncheon/KernelFilesHashes.m1").exists();
     }
 
     private boolean populateFiles(File checkDir)
@@ -269,6 +277,53 @@ public class Loader
         return filePopulationStatus;
     }
 
+    //read the files that are supposed to be in a Manifest .m2 file and check if the contents are the same as the directory structure before file hash checks
+    private boolean checkCoreFiles()throws Exception
+    {
+        System.out.println("A");
+        boolean returnValue = true;
+
+        // Properties props = new Properties();
+        // FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/KernelFiles.m2");
+        // props.loadFromXML(manifestEntries);
+        // manifestEntries.close();
+
+        // // DEBUG CODE //
+        // //props.list(System.out);
+        // // DEBUG CODE //
+
+        
+
+        // System.out.println("A");
+        // String fileName;
+
+        // File dir = new File("./");
+        // File[] files = dir.listFiles((d, name) -> name.endsWith(".class"));
+
+        // System.out.println(files.length);
+
+        // for(String temp: filePath)
+        // {
+        
+            
+            
+        //     // if(temp.endsWith(".class"))
+        //     // {
+        //     //     fileName = temp;
+        //     //     String manifestFiles = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(convertSlashFormat(fileName))).toString();
+        //     //     if(!fileName.equals(manifestFiles))
+        //     //     {
+        //     //         returnValue = false;
+        //     //         break;
+        //     //     }
+        //     // }
+        // }
+
+        // System.out.println(returnValue);
+        // console.readLine();
+        return !returnValue;
+    }
+
     private boolean checkFileHash()throws Exception
     {
         boolean kernelIntegrity = true;
@@ -276,7 +331,7 @@ public class Loader
         try
         {
             Properties props = new Properties();
-            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/Truncheon_Manifest.m1");
+            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/KernelFilesHashes.m1");
             props.loadFromXML(manifestEntries);
             manifestEntries.close();
 
@@ -294,7 +349,7 @@ public class Loader
 
                 try
                 {
-                    String manifestHash = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(fileName.replaceAll(File.separator, "\\\\"))).toString();
+                    String manifestHash = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(convertSlashFormat(fileName))).toString();
 
                     if(!manifestHash.equals(fileHash))
                     {
@@ -321,6 +376,10 @@ public class Loader
         return kernelIntegrity;
     }
 
+    private String convertSlashFormat(String path)
+    {
+        return path.replaceAll(File.separator, "\\\\");
+    }
 
     private boolean checkDirectoryStructure()
     {
