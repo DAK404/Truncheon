@@ -55,15 +55,15 @@ import java.sql.Statement;
 */
 public class Loader
 {
-    
+
     private Console console = System.console();
-    
+
     private static List<String> filePath = new  ArrayList<String>();
-    
+
     public static void main(String[] args)throws Exception
     {
         BuildInfo.viewBuildInfo();
-        
+
         switch(args[0].toLowerCase())
         {
             case "normal":
@@ -71,7 +71,7 @@ public class Loader
 
             case "debug_ex_ha":
             new Loader().debugExceptionHandler();
-            
+
             case "iostreams":
             new Loader().printTest();
             break;
@@ -112,7 +112,7 @@ public class Loader
                 new Setup().setupLogic();
                 break;
             }
-            
+
             System.out.println();
 
             //Start a limited shell here.
@@ -120,20 +120,20 @@ public class Loader
             do
             {
                 tempInput = console.readLine("~lounge> ");
-                
+
                 switch(tempInput.toLowerCase())
                 {
                     case "login":
-                        new Truncheon.Core.NionKernel().startNionKernel();
-                        System.gc();
+                    new Truncheon.Core.NionKernel().startNionKernel();
+                    System.gc();
                     break;
 
                     case "clear":
-                        BuildInfo.viewBuildInfo();
+                    BuildInfo.viewBuildInfo();
                     break;
 
                     case "mem":
-                        debug();
+                    debug();
                     break;
                 }
             }
@@ -156,87 +156,87 @@ public class Loader
     */
 
     private byte abraxisLogic()throws Exception
-{
-    byte abraxisResult = 55;
-    /*
-    Return value table:
-    
-    ----------------------------------------------------
-    | RETURN VALUE |    	MEANING                    |
-    ----------------------------------------------------
-    |       0      |  File integrity OK                |
-    |       1      |  Kernel integrity FAILED          |
-    |       2      |  File checking FAILED             |
-    |       3      |  Kernel File Population Failed    |
-    |       4      |  Manifest File Corrupt or Missing |
-    |       5      |  Program Setup Required           |
-    ----------------------------------------------------
-    */
-    
-    //check if Manifest File exists
-    if(manifestFileExists())
     {
-        IOStreams.printInfo("Manifest file found. Populating files and directories...");
-        
-        //begin the population of files in directory
-        
-        //Begin the population of the files in the installed directory of Truncheon
-        if(populateFiles(new File("./")))
+        byte abraxisResult = 55;
+        /*
+        Return value table:
+
+        ----------------------------------------------------
+        | RETURN VALUE |    	MEANING                    |
+        ----------------------------------------------------
+        |       0      |  File integrity OK                |
+        |       1      |  Kernel integrity FAILED          |
+        |       2      |  File checking FAILED             |
+        |       3      |  Kernel File Population Failed    |
+        |       4      |  Manifest File Corrupt or Missing |
+        |       5      |  Program Setup Required           |
+        ----------------------------------------------------
+        */
+
+        //check if Manifest File exists
+        if(manifestFileExists())
         {
-            IOStreams.printInfo("Files and Directories populated! Running Integrity Checks...");
-            //check core files first
-            
-            IOStreams.printInfo("Checking Core Files...");
-            if(checkCoreFiles())
+            IOStreams.printInfo("Manifest file found. Populating files and directories...");
+
+            //begin the population of files in directory
+
+            //Begin the population of the files in the installed directory of Truncheon
+            if(populateFiles(new File("./")))
             {
-                IOStreams.printInfo("Checking Kernel Integrity...");
-                if(checkFileHash())
+                IOStreams.printInfo("Files and Directories populated! Running Integrity Checks...");
+                //check core files first
+
+                IOStreams.printInfo("Checking Core Files...");
+                if(checkCoreFiles())
                 {
-                    abraxisResult = 0;
-                    
-                    IOStreams.printInfo("Checking Program Setup status...");
-                    
-                    if(checkDirectoryStructure())
+                    IOStreams.printInfo("Checking Kernel Integrity...");
+                    if(checkFileHash())
+                    {
+                        abraxisResult = 0;
+
+                        IOStreams.printInfo("Checking Program Setup status...");
+
+                        if(checkDirectoryStructure())
                         IOStreams.printInfo("Setup Completed! Booting Program...");
+                        else
+                        {
+                            IOStreams.printAttention("Setup Incomplete.");
+
+                            //Set the return value to be 4, denoting that the program requires setup
+                            abraxisResult = 5;
+                        }
+                    }
                     else
                     {
-                        IOStreams.printAttention("Setup Incomplete.");
-                        
-                        //Set the return value to be 4, denoting that the program requires setup
-                        abraxisResult = 5;
+                        IOStreams.printError("Kernel Integrity Failed! Aborting.");
+
+                        abraxisResult = 1;
                     }
                 }
                 else
                 {
-                    IOStreams.printError("Kernel Integrity Failed! Aborting.");
-                    
-                    abraxisResult = 1;
+                    IOStreams.printError("Kernel File Checking Failed! Aborting.");
+
+                    abraxisResult = 2;
                 }
             }
             else
             {
-                IOStreams.printError("Kernel File Checking Failed! Aborting.");
-                
-                abraxisResult = 2;
+                IOStreams.printError("Kernel File Population Failed! Aborting.");
+
+                abraxisResult = 3;
             }
         }
         else
         {
-            IOStreams.printError("Kernel File Population Failed! Aborting.");
-            
-            abraxisResult = 3;
-        }
-    }
-    else
-    {
-        IOStreams.printError("Manifest File Error! Aborting.");
-        
-        abraxisResult = 4;
-    }
+            IOStreams.printError("Manifest File Error! Aborting.");
 
-    System.gc();
-    return abraxisResult;
-}
+            abraxisResult = 4;
+        }
+
+        System.gc();
+        return abraxisResult;
+    }
 
 
     private boolean manifestFileExists()
@@ -280,48 +280,44 @@ public class Loader
     //read the files that are supposed to be in a Manifest .m2 file and check if the contents are the same as the directory structure before file hash checks
     private boolean checkCoreFiles()throws Exception
     {
-        System.out.println("A");
+        int fileCount = 0;
         boolean returnValue = true;
 
-        // Properties props = new Properties();
-        // FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/KernelFiles.m2");
-        // props.loadFromXML(manifestEntries);
-        // manifestEntries.close();
+        try
+        {
+            Properties props = new Properties();
+            FileInputStream manifestEntries = new FileInputStream("./.Manifest/Truncheon/KernelFiles.m2");
+            props.loadFromXML(manifestEntries);
+            manifestEntries.close();
 
-        // // DEBUG CODE //
-        // //props.list(System.out);
-        // // DEBUG CODE //
+            // DEBUG CODE //
+            //props.list(System.out);
+            // DEBUG CODE //
 
-        
+            for(String fp : filePath)
+            {
+                if(fp.endsWith(".class"))
+                {
+                    if((System.getProperty("os.name").contains("Windows")?fp:convertSlashFormat(fp)) == (props.get(fp)))
+                    {
+                        System.out.println(props.get(fp).getClass());
+                        System.out.println(fp);
+                        returnValue = false;
+                        break;
+                    }
+                    fileCount++;
+                }
+            }
 
-        // System.out.println("A");
-        // String fileName;
+            if(props.size() > fileCount)
+            returnValue = false;
+        }
+        catch(Exception e)
+        {
 
-        // File dir = new File("./");
-        // File[] files = dir.listFiles((d, name) -> name.endsWith(".class"));
+        }
 
-        // System.out.println(files.length);
-
-        // for(String temp: filePath)
-        // {
-        
-            
-            
-        //     // if(temp.endsWith(".class"))
-        //     // {
-        //     //     fileName = temp;
-        //     //     String manifestFiles = (System.getProperty("os.name").contains("Windows")?props.get(fileName):props.get(convertSlashFormat(fileName))).toString();
-        //     //     if(!fileName.equals(manifestFiles))
-        //     //     {
-        //     //         returnValue = false;
-        //     //         break;
-        //     //     }
-        //     // }
-        // }
-
-        // System.out.println(returnValue);
-        // console.readLine();
-        return !returnValue;
+        return returnValue;
     }
 
     private boolean checkFileHash()throws Exception
@@ -489,33 +485,33 @@ public class Loader
 }
 
 /**
- * Program to make Truncheon ready for normal use
- * 
- * @author: DAK404 (https://github.com/DAK404)
- * @version: 7.3.6
- * @since: 2018
- */
+* Program to make Truncheon ready for normal use
+*
+* @author: DAK404 (https://github.com/DAK404)
+* @version: 7.3.6
+* @since: 2018
+*/
 class Setup
 {
     /**
-     * Instantiate the Console class to accept input operations through the console
-     */
+    * Instantiate the Console class to accept input operations through the console
+    */
     Console console = System.console();
 
     /**
-     * Initialize a set of strings to show various statuses of the setup stages
-     */
+    * Initialize a set of strings to show various statuses of the setup stages
+    */
     private String prereqInfoStatus = "PENDING";
     private String initDB = "PENDING";
     private String initDirs = "PENDING";
     private String initPolicies = "PENDING";
     private String initAdminAccount = "PENDING";
-    
+
     /**
-     * The main logic of the setup program
-     * 
-     * @throws Exception
-     */
+    * The main logic of the setup program
+    *
+    * @throws Exception
+    */
     public void setupLogic()throws Exception
     {
         displayPrerequisiteInformation();
@@ -529,16 +525,16 @@ class Setup
         console.readLine();
         System.exit(101);
     }
-    
+
     /**
-     * Shows a set of prerequisite information to the user before the setup starts.
-     */
+    * Shows a set of prerequisite information to the user before the setup starts.
+    */
     private void displayPrerequisiteInformation()
     {
         displaySetupProgress();
         String displaySetupMessage = """
         Welcome to Truncheon!
-        
+
         This program needs to be setup before it can be used normally.
         If you are a System Administrator, please continue the setup. If not, please contact the System Administrator for more information.
 
@@ -567,22 +563,22 @@ class Setup
         }
         prereqInfoStatus = "COMPLETE";
     }
-    
+
     /**
-     * Initialize a set of directories required by Truncheon
-     */
+    * Initialize a set of directories required by Truncheon
+    */
     private void initializeDirectories()
     {
         displaySetupProgress();
         String [] directoryNames = {"./System/Truncheon/Public/Logs", "./Users/Truncheon"};
         for (String dirs: directoryNames)
-            new File(dirs).mkdirs();
+        new File(dirs).mkdirs();
         initDirs = "COMPLETE";
     }
-    
+
     /**
-     * Initialize the database file and its table for user credential operations
-     */
+    * Initialize the database file and its table for user credential operations
+    */
     private void initializeDatabase()
     {
         displaySetupProgress();
@@ -592,7 +588,7 @@ class Setup
             new File("./System/Truncheon/Private/Backups").mkdirs();
             String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
             IOStreams.printInfo("Checking for existing Master User Database...");
-            
+
             if(new File(databasePath).exists())
             IOStreams.printError("Master User Database already exists! Aborting...");
             else
@@ -605,16 +601,16 @@ class Setup
                 "PIN TEXT NOT NULL," +
                 "Privileges TEXT NOT NULL," +
                 "PRIMARY KEY(Username));";
-                
+
                 Class.forName("org.sqlite.JDBC");
                 Connection dbConnection = DriverManager.getConnection(databasePath);
                 Statement statement = dbConnection.createStatement();
-                
+
                 statement.execute(createMUDTable);
-                
+
                 statement.close();
                 dbConnection.close();
-                
+
                 System.gc();
 
                 initializeDatabaseStatus = true;
@@ -626,29 +622,29 @@ class Setup
         }
         initDB = (initializeDatabaseStatus?"COMPLETE":"FAILED");
     }
-    
+
     /**
-     * Initialize the first administrator account
-     */
+    * Initialize the first administrator account
+    */
     private void initializeAdministratorAccount()throws Exception
     {
         new Truncheon.API.Dragon.AccountCreate().createDefaultAdministratorAccount();
         initAdminAccount = "COMPLETE";
     }
-    
+
     /**
-     * Initialize all the default policies along with a system name appended by a set of random numbers
-     */
+    * Initialize all the default policies along with a system name appended by a set of random numbers
+    */
     private void initializeDefaultPolicies()
     {
         displaySetupProgress();
         new Truncheon.API.Minotaur.PolicyEdit();
         initPolicies = "COMPLETE";
     }
-    
+
     /**
-     * Display the progress of the setup program to the user
-     */
+    * Display the progress of the setup program to the user
+    */
     private void displaySetupProgress()
     {
         BuildInfo.viewBuildInfo();
