@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
+import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
 public class AccountDelete
@@ -28,6 +29,7 @@ public class AccountDelete
             Truncheon.API.IOStreams.printError("You cannot delete the Administrator account!");
         else
         {
+            BuildInfo.viewBuildInfo();
             if(! login())
                 Truncheon.API.IOStreams.printError("Invalid Login Credentials. Please Try Again.");
             else
@@ -37,7 +39,7 @@ public class AccountDelete
                     deleteFromDatabase();
                     Truncheon.API.IOStreams.printAttention("Account Successfully Deleted. Press ENTER to continue.");
                     console.readLine();
-                    System.exit(0);
+                    System.exit(211);
                 }
             }
         }

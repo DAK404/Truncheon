@@ -243,12 +243,12 @@ public class NionKernel extends ClassLoader
                         {
                             //Condition to detect if the OS is Windows
                             if(System.getProperty("os.name").contains("Windows"))
-                                new ProcessBuilder("cmd").inheritIO().start().waitFor();
+                            new ProcessBuilder("cmd").inheritIO().start().waitFor();
 
                             //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
                             else
-                                new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
-                            
+                            new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+
                             customBuildInfoViewer();
                         }
                         //Catch any exceptions raised when trying to invoke the Shell

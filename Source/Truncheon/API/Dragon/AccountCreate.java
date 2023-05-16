@@ -52,10 +52,11 @@ public class AccountCreate
             IOStreams.println("Failed to authenticate user. Exiting...");
         else
         {
+            BuildInfo.viewBuildInfo();
             if(_currentAccountAdmin)
             {
-                IOStreams.printAttention("The currently logged in user is an administrator.\n\nYou have the privileges to create other administrator accounts or standard user accounts.");
-                IOStreams.printWarning("Administrative rights have additional privileges over standard users! Beware on who the administrative privileges are granted to!");
+                IOStreams.printAttention("The currently logged in user is an administrator.\nYou have the privileges to create other administrator accounts or standard user accounts.\n");
+                IOStreams.printWarning("Administrative rights have additional privileges over standard users! Beware on who the administrative privileges are granted to!\n");
                 IOStreams.println("Would you like to grant administrative privileges to the new user account? [ Y | N ]");
                 if(console.readLine("Grant Administrator Privileges?> ").equalsIgnoreCase("Y"))
                     _newAccountAdmin = true;
@@ -67,6 +68,7 @@ public class AccountCreate
             while(!setAccountSecurityKey());
             while(!setAccountPIN());
             addAccountToDatabase();
+            IOStreams.confirmReturnToContinue();
         }
         System.gc();
     }
