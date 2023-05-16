@@ -62,8 +62,7 @@ public class Loader
 
     public static void main(String[] args)throws Exception
     {
-        BuildInfo.viewBuildInfo();
-
+        
         switch(args[0].toLowerCase())
         {
             case "normal":
@@ -93,8 +92,11 @@ public class Loader
                 break;
 
                 case 1:
-                case 2:
                 IOStreams.printError("File Integrity Check Failure. Cannot Boot Program.");
+                break;
+
+                case 2:
+                IOStreams.printError("Kernel File Integrity Violation! Aborting Program Boot.");
                 System.exit(4);
                 break;
 
@@ -115,6 +117,7 @@ public class Loader
 
             System.out.println();
 
+            BuildInfo.viewBuildInfo();
             //Start a limited shell here.
             String tempInput = "";
             do
@@ -134,6 +137,10 @@ public class Loader
 
                     case "mem":
                     debug();
+                    break;
+
+                    case "restart":
+                    System.exit(211);
                     break;
                 }
             }
@@ -208,14 +215,14 @@ public class Loader
                     }
                     else
                     {
-                        IOStreams.printError("Kernel Integrity Failed! Aborting.");
+                        IOStreams.printError("Kernel File Checking Failed! Aborting.");
 
                         abraxisResult = 1;
                     }
                 }
                 else
                 {
-                    IOStreams.printError("Kernel File Checking Failed! Aborting.");
+                    IOStreams.printError("Kernel Integrity Failed! Aborting.");
 
                     abraxisResult = 2;
                 }

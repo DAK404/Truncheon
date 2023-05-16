@@ -16,9 +16,9 @@ public class BuildInfo
     public final static String _KernelName = "Truncheon";
     public final static String _Version = "1.1.0";
     public final static String _VersionCodeName = "Katana";
-    public final static String _BuildDate = "26-APR-2023";
-    public final static String _BuildID = "NION_26_APR_23_0318";
-    public final static String _BuildType = "DEV_TEST_WIP";
+    public final static String _BuildDate = "16-MAY-2023";
+    public final static String _BuildID = "NION_16_MAY_23_2108";
+    public final static String _BuildType = "DEBUG_&_TEST_0";
 
     public static void viewBuildInfo()
     {
@@ -37,6 +37,7 @@ public class BuildInfo
         {
             e.printStackTrace();
         }
+        System.gc();
     }
 
     public static void aboutProgram()
@@ -61,6 +62,7 @@ public class BuildInfo
         {
             e.printStackTrace();
         }
+        System.gc();
     }
 
     public static void clearScreen()
