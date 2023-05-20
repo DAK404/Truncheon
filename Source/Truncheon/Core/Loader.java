@@ -18,6 +18,7 @@
 *   THIS CODE FALLS UNDER THE LGPL LICENSE.  *
 *    YOU MUST INCLUDE THIS DISCLAIMER WHEN   *
 *        DISTRIBUTING THE SOURCE CODE.       *
+*                                            *
 *   (SEE LICENSE FILE FOR MORE INFORMATION)  *
 *                                            *
 * ------------------------------------------ *
@@ -471,19 +472,6 @@ public class Loader
         System.out.println("\n*********************************************\n\n");
     }
 
-    //logic to handle the compilation of non-linked/under development modules
-
-    private void compileDeez()throws Exception
-    {
-        new Truncheon.API.Dragon.AccountDelete("test");
-        new Truncheon.API.Dragon.AccountModify();
-        new Truncheon.API.Wraith.WraithRead();
-        new Truncheon.API.Wraith.WraithEdit();
-        new Truncheon.Core.NionKernel();
-        new Truncheon.API.Anvil();
-        new Truncheon.API.Grinch.FileManagement("");
-    }
-
     /*
     ----------------------------------------------------------------------------------
     END OF DEBUG LOGIC
@@ -661,6 +649,6 @@ class Setup
         IOStreams.println("[*] Initialize Database System   : " + initDB);
         IOStreams.println("[*] Initialize Program Policies  : " + initPolicies);
         IOStreams.println("[*] Create Administrator Account : " + initAdminAccount);
-        IOStreams.println("[ ----------------------------- ]");
+        IOStreams.println("[ ----------------------------- ]\n");
     }
 }
