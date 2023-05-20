@@ -75,7 +75,7 @@ public class NionKernel extends ClassLoader
             System.gc();
         }
         while(! tempInput.equalsIgnoreCase("logout"));
-        Truncheon.API.BuildInfo.viewBuildInfo();
+        BuildInfo.viewBuildInfo();
     }
 
     private boolean anvilScriptEngine(String scriptFileName)throws Exception
@@ -148,155 +148,153 @@ public class NionKernel extends ClassLoader
     {
         try
         {
+            //then check the module related commandset
+            String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
 
+            switch(commandArray[0].toLowerCase())
             {
-                //then check the module related commandset
-                String[] commandArray = Truncheon.API.Anvil.splitStringToArray(command);
+                case "refresh":
+                loadSysUserDetails();
+                break;
 
-                switch(commandArray[0].toLowerCase())
+                case "whoami":
+                IOStreams.println(new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic());
+                IOStreams.println(_username);
+                IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic()));
+                break;
+
+                case "clear":
+                customBuildInfoViewer();
+                break;
+
+                case "mem":
+                debug();
+                break;
+
+                case "bsod":
+                throw new Exception("Debug BSOD. You failed successfully!");
+
+                case "exit":
+                System.exit(0);
+                break;
+
+                case "restart":
+                System.exit(211);
+                break;
+
+                case "lock":
+                //System.out.println(_PIN);
+                break;
+
+                case "load":
+                if(commandArray.length < 2)
                 {
-                    case "refresh":
-                    loadSysUserDetails();
+                    System.out.println("goober");
+                }
+                else
+                {
+                    /* What to implement next:
+                    * Module listing
+                    * Module import
+                    * Module uninstall
+                    * Module download (optional)
+                    */
+                    String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+                    moduleLoader(commandArray[1], moduleCommandArray);
+                }
+                break;
+
+                case "update":
+                new Truncheon.API.Grinch.Wyvern.Updater().updaterLogic();
+                break;
+
+                case "policy":
+                new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
+                customBuildInfoViewer();
+                break;
+
+                case "sys":
+                if(! _admin)
+                System.out.println("Cannot execute sys command as a standard user.");
+                else if(commandArray.length < 2)
+                {
+                    System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
                     break;
-
-                    case "whoami":
-                    IOStreams.println(new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic());
-                    IOStreams.println(_username);
-                    IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic()));
-                    break;
-
-                    case "clear":
-                    customBuildInfoViewer();
-                    break;
-
-                    case "mem":
-                    debug();
-                    break;
-
-                    case "bsod":
-                    throw new Exception("Debug BSOD. You failed successfully!");
-
-                    case "exit":
-                    System.exit(0);
-                    break;
-
-                    case "restart":
-                    System.exit(211);
-                    break;
-
-                    case "lock":
-                    //System.out.println(_PIN);
-                    break;
-
-                    case "load":
-                    if(commandArray.length < 2)
-                    {
-                        System.out.println("goober");
-                    }
+                }
+                else
+                {
+                    if(System.getProperty("os.name").contains("Windows"))
+                    new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
                     else
-                    {
-                        /* What to implement next:
-                        * Module listing
-                        * Module import
-                        * Module uninstall
-                        * Module download (optional)
-                        */
-                        String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
-                        moduleLoader(commandArray[1], moduleCommandArray);
-                    }
-                    break;
+                    new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
+                }
+                break;
 
-                    case "update":
-                    new Truncheon.API.Grinch.Wyvern.Updater().updaterLogic();
-                    break;
-
-                    case "policy":
-                    new Truncheon.API.Minotaur.PolicyEdit().policyEditorLogic();
-                    customBuildInfoViewer();
-                    break;
-
-                    case "sys":
-                    if(! _admin)
-                    System.out.println("Cannot execute sys command as a standard user.");
-                    else if(commandArray.length < 2)
+                case "syshell":
+                if(! _admin)
+                IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
+                else
+                {
+                    //Catch any potential errors that may arise from trying to invoke the system shells
+                    try
                     {
-                        System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
-                        break;
-                    }
-                    else
-                    {
+                        //Condition to detect if the OS is Windows
                         if(System.getProperty("os.name").contains("Windows"))
-                        new ProcessBuilder("cmd", "/c", commandArray[1]).inheritIO().start().waitFor();
+                        new ProcessBuilder("cmd").inheritIO().start().waitFor();
+
+                        //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
                         else
-                        new ProcessBuilder("/bin/bash", "-c" , commandArray[1]).inheritIO().start().waitFor();
-                        customBuildInfoViewer();
+                        new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
                     }
-                    break;
-
-                    case "syshell":
-                    if(! _admin)
-                    IOStreams.printError("Cannot execute SYSHELL command as a standard user.");
-                    else
+                    //Catch any exceptions raised when trying to invoke the Shell
+                    catch(Exception E)
                     {
-                        //Catch any potential errors that may arise from trying to invoke the system shells
-                        try
-                        {
-                            //Condition to detect if the OS is Windows
-                            if(System.getProperty("os.name").contains("Windows"))
-                            new ProcessBuilder("cmd").inheritIO().start().waitFor();
-
-                            //Defaults to a linux style of BASH, trying to invoke the system shell, inside Truncheon
-                            else
-                            new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
-
-                            customBuildInfoViewer();
-                        }
-                        //Catch any exceptions raised when trying to invoke the Shell
-                        catch(Exception E)
-                        {
-                            IOStreams.printError("CANNOT INVOKE SYSTEM SHELL!\nPlease contact the System Administrator for more information.");
-                            IOStreams.printError("\nERROR DETAILS:\n\n" + E + "\n");
-                        }
+                        IOStreams.printError("CANNOT INVOKE SYSTEM SHELL!\nPlease contact the System Administrator for more information.");
+                        IOStreams.printError("\nERROR DETAILS:\n\n" + E + "\n");
                     }
+                }
+                break;
+
+                //User management logic
+                case "usermgmt":
+                switch(commandArray[1])
+                {
+                    case "add":
+                    new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
                     break;
 
-                    //User management logic
-                    case "usermgmt":
-                    switch(commandArray[1])
-                    {
-                        case "add":
-                        new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
-                        break;
-
-                        case "delete":
-                        new Truncheon.API.Dragon.AccountDelete(_username).userDeletionLogic();
-                        break;
-
-                        default:
-                        IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
-                        break;
-                    }
-                    customBuildInfoViewer();
+                    case "delete":
+                    new Truncheon.API.Dragon.AccountDelete(_username).userDeletionLogic();
                     break;
 
-                    case "grinch":
-                    if(_scriptMode)
-                    new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
-                    else
-                    new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
-                    customBuildInfoViewer();
-                    break;
-
-                    case "logout":
-                    case "":
+                    case "modify":
+                    new Truncheon.API.Dragon.AccountModify(_username, _accountName).accountModifyLogic();
                     break;
 
                     default:
-                    //pass the control to Anvil first to check for the core commandset
-                    if(! Truncheon.API.Anvil.anvilInterpreter(command))
-                    IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
+                    IOStreams.printError(commandArray[1] + " is not a valid User Management program.");
                     break;
                 }
+                customBuildInfoViewer();
+                break;
+
+                case "grinch":
+                if(_scriptMode)
+                new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic(new File(_scriptFileName), _lineNumber);
+                else
+                new Truncheon.API.Grinch.FileManagement(_username).fileManagerLogic();
+                customBuildInfoViewer();
+                break;
+
+                case "logout":
+                case "":
+                break;
+
+                default:
+                //pass the control to Anvil first to check for the core commandset
+                if(! Truncheon.API.Anvil.anvilInterpreter(command))
+                IOStreams.printError(command + " is not recognized as an internal or external command, operable program or batch file");
+                break;
             }
         }
         catch(Exception e)
