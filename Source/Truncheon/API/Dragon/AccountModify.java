@@ -199,10 +199,7 @@ public class AccountModify
             
             //Check if the specified user exists in the database
             if(new Truncheon.API.Dragon.LoginAuth(targetUser).checkUserExistence())
-            {
-                
-                if(new Truncheon.API.Dragon.LoginAuth(targetUser).checkPrivilegeLogic())
-                
+            {                
                 //Confirm if the user selected is to be promoted to or demoted from an account with administrator rights
                 IOStreams.printAttention("YOU ARE ABOUT TO " + action.toUpperCase() + " \""  + new LoginAuth(targetUser).getNameLogic() + "\". ARE YOU SURE? [ Y | N ]");
                 
