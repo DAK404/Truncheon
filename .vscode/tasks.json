@@ -9,6 +9,9 @@
             "windows": {
                 "command": ".\\SourceCompileProgram.cmd"
             },
+            "linux": {
+                "command": "sh SourceCompileProgram.sh"
+            },
             "options": {
                 "cwd": "${workspaceFolder}/Source"
             },
@@ -16,28 +19,6 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
-        },
-        {
-            "label": "Run",
-            "type": "shell",
-            "windows": {
-                "command": "java",
-                "args": ["Main", "Truncheon", "normal"]
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/Binaries"
-            }
-        },
-        {
-            "label": "RunDebug",
-            "type": "shell",
-            "windows": {
-                "command": "java",
-                "args": ["Main", "Truncheon", "debug"]
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/Binaries"
             }
         }
     ]

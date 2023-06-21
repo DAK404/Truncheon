@@ -7,10 +7,10 @@ import java.io.FileOutputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-import Truncheon.API.IOStreams;
-
 //Import the required Java Net classes
 import java.net.URL;
+
+import Truncheon.API.IOStreams;
 
 /**
 *

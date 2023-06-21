@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
-public class AccountCreate 
+public final class AccountCreate 
 {
     /*
     ----------------------------------------------------------------------------------
@@ -24,46 +24,46 @@ public class AccountCreate
     ----------------------------------------------------------------------------------
     */
 
-    protected String _accountNamePolicy = """
-        Account Name Policy Information
-        -------------------------------
-        * Name cannot be \'Administrator\'
-        * Name must contain English Alphabet, can have numbers
-        * Name must have atleast 2 characters or more
-        * Name cannot contain spaces
-        -------------------------------
+    protected final static String _accountNamePolicy = """
+    Account Name Policy Information
+    -------------------------------
+    * Name cannot be \'Administrator\'
+    * Name must contain English Alphabet, can have numbers
+    * Name must have atleast 2 characters or more
+    * Name cannot contain spaces
+    -------------------------------
     """;
 
-    protected String _accountUsernamePolicy = """
-        Account Username Policy Information
-        -----------------------------------
-        * Username cannot contain the word \'Administrator\'
-        * Username can contain numbers, special characters and symbols.
-        -----------------------------------
+    protected final static String _accountUsernamePolicy = """
+    Account Username Policy Information
+    -----------------------------------
+    * Username cannot contain the word \'Administrator\'
+    * Username can contain numbers, special characters and symbols.
+    -----------------------------------
     """;
 
-    protected String _accountPasswordPolicy = """
-        Account Password Policy Information
-        -----------------------------------
-        * Password must contain atleast 8 characters
-        * Password is recommended to have special characters and numbers
-        -----------------------------------
+    protected final static String _accountPasswordPolicy = """
+    Account Password Policy Information
+    -----------------------------------
+    * Password must contain atleast 8 characters
+    * Password is recommended to have special characters and numbers
+    -----------------------------------
     """;
     
-    protected String _accountSecurityKeyPolicy = """
-        Account Security Key Policy Information
-        -----------------------------------
-        * Security Key must contain atleast 8 characters
-        * Security Key is recommended to have special characters and numbers
-        -----------------------------------
+    protected final static String _accountSecurityKeyPolicy = """
+    Account Security Key Policy Information
+    -----------------------------------
+    * Security Key must contain atleast 8 characters
+    * Security Key is recommended to have special characters and numbers
+    -----------------------------------
     """;
 
-    protected String _accountPINPolicy = """
-        Account PIN Policy Information
-        -------------------------------
-        * PIN must contain atleast 4 characters
-        * PIN is recommended to have special characters and numbers
-        -------------------------------
+    protected final static String _accountPINPolicy = """
+    Account PIN Policy Information
+    -------------------------------
+    * PIN must contain atleast 4 characters
+    * PIN is recommended to have special characters and numbers
+    -------------------------------
     """;
 
 
@@ -87,7 +87,7 @@ public class AccountCreate
     ----------------------------------------------------------------------------------
     */
 
-    public void AccountCreateLogic(String username)throws Exception
+    public final void AccountCreateLogic(String username)throws Exception
     {
         _currentUsername = username;
 
@@ -116,7 +116,7 @@ public class AccountCreate
         System.gc();
     }
 
-    private boolean authenticateCurrentUser()throws Exception
+    private final boolean authenticateCurrentUser()throws Exception
     {
         BuildInfo.viewBuildInfo();
 
@@ -150,7 +150,7 @@ public class AccountCreate
     */
 
     //Displays a dashboard to the user, pertaining to the details entered.
-    private void credentialDashboard()
+    private final void credentialDashboard()
     {
         BuildInfo.viewBuildInfo();
 
@@ -163,7 +163,7 @@ public class AccountCreate
         IOStreams.println("========================================");
     }
 
-    private boolean setAccountName()throws Exception
+    private final boolean setAccountName()throws Exception
     {
         credentialDashboard();
 
@@ -181,7 +181,7 @@ public class AccountCreate
         return _status;
     }
 
-    private boolean setAccountUsername()throws Exception
+    private final boolean setAccountUsername()throws Exception
     {
         credentialDashboard();
 
@@ -209,7 +209,7 @@ public class AccountCreate
         return _status;
     }
 
-    private boolean setAccountPassword()throws Exception
+    private final boolean setAccountPassword()throws Exception
     {
         credentialDashboard();
         
@@ -232,7 +232,7 @@ public class AccountCreate
         return _status;
     }
 
-    private boolean setAccountSecurityKey()throws Exception
+    private final boolean setAccountSecurityKey()throws Exception
     {
         credentialDashboard();
 
@@ -255,14 +255,14 @@ public class AccountCreate
         return _status;
     }
 
-    private boolean setAccountPIN()throws Exception
+    private final boolean setAccountPIN()throws Exception
     {
         credentialDashboard();
 
         _newAccountPIN = String.valueOf(console.readPassword(_accountPINPolicy + "Account Key> "));
         String confirmPIN = String.valueOf(console.readPassword("Confirm PIN> "));
 
-        if(_newAccountPIN == null | !(_newAccountPIN.equals(confirmPIN)))
+        if(_newAccountPIN == null | _newAccountPIN.equals("") | _newAccountPIN.length() < 4 | !(_newAccountPIN.equals(confirmPIN)))
         {
             _newAccountPIN = "";
             confirmPIN = "";
@@ -299,7 +299,7 @@ public class AccountCreate
     AUTHOR       : Deepak Anil Kumar (@DAK404)
     ----------------------------------------------------------------------------------
     */
-    private void addAccountToDatabase()
+    private final void addAccountToDatabase()
     {
         try
         {
@@ -352,7 +352,7 @@ public class AccountCreate
     ----------------------------------------------------------------------------------
     */
 
-    public void createDefaultAdministratorAccount()throws Exception
+    public final void createDefaultAdministratorAccount()throws Exception
     {
         _newAccountAdmin = true;
         _newAccountName = "Administrator";
