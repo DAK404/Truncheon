@@ -16,7 +16,7 @@ import Truncheon.API.IOStreams;
 //Previously known as MainMenu.java
 //Implement all the older functionalities here
 public class NionKernel extends ClassLoader
-{    
+{
     private String _username = "DEFAULT_USER";
     private String _accountName = "DEFAULT_ACC_NAME";
     private String _systemName = "";
@@ -165,8 +165,13 @@ public class NionKernel extends ClassLoader
                 break;
 
                 case "whois":
-                IOStreams.println(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).getNameLogic());
-                IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkPrivilegeLogic()));
+                if(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkUserExistence())
+                {
+                    IOStreams.println("Name: " + new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).getNameLogic());
+                    IOStreams.println("Privileges: " + (new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkPrivilegeLogic()?"Administrator":"Standard User"));
+                }
+                else
+                     IOStreams.printError("User does not exist!");
                 break;
 
                 case "clear":
@@ -205,7 +210,7 @@ public class NionKernel extends ClassLoader
                     * Module uninstall
                     * Module download (optional)
                     */
-                    
+
                     switch(commandArray[1])
                     {
                         case "remove":
@@ -222,7 +227,7 @@ public class NionKernel extends ClassLoader
                         break;
                     }
 
-                    
+
                 }
                 break;
 
