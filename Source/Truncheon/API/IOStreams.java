@@ -4,7 +4,36 @@ import java.io.Console;
 
 public class IOStreams
 {
-    /*
+    static String[] _textColorForeground = {"[30", "[31", "[32", "[33", "[34", "[35", "[36", "[37", "[39"};
+    static String[] _textColorBackground = {"40", "41", "42", "43", "44", "45", "46", "47", "49"};
+    
+    public static void printInfo(String message)
+    {
+        println(2, 8, "[ INFORMATION ] " + message);
+    }
+
+    public static void printError(String message)
+    {
+        println(1, 8, "[    ERROR    ] " + message);
+    }
+
+    public static void printWarning(String message)
+    {
+        println(3, 8, "[   WARNING   ] " + message);
+    }
+
+    public static void printAttention(String message)
+    {
+        println(5, 8, "[  ATTENTION  ] " + message);
+    }
+
+    public static void println(String message)
+    {
+        System.out.println(message);
+    }
+
+    /**
+     *  <pre>
         +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
         | Index |  fg  |  bg  |  color    |
         +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
@@ -18,36 +47,12 @@ public class IOStreams
         |   7   |  37  |  47  |  white    |
         |   8   |  39  |  49  |  default  |
         +~~~~~~~+~~~~~~+~~~~~~+~~~~~~~~~~~+
+        </pre>
+     * 
+     * @param foregroundIndex: Index value for the foreground color
+     * @param backgroundIndex: Index value for the background color
+     * @param message: The intended message that needs to be printed on the screen
      */
-
-    static String[] _textColorForeground = {"[30", "[31", "[32", "[33", "[34", "[35", "[36", "[37", "[39"};
-    static String[] _textColorBackground = {"40", "41", "42", "43", "44", "45", "46", "47", "49"};
-    
-    public static void printInfo(String message)
-    {
-        println(2, 8, "[ INFORMATION ] " + message);
-    }
-
-    public static void printError(String message)
-    {
-        println(1, 0, "[    ERROR    ] " + message);
-    }
-
-    public static void printWarning(String message)
-    {
-        println(3, 8, "[   WARNING   ] " + message);
-    }
-
-    public static void printAttention(String message)
-    {
-        println(5, 0, "[  ATTENTION  ] " + message);
-    }
-
-    public static void println(String message)
-    {
-        System.out.println(message);
-    }
-
     public static void println(int foregroundIndex, int backgroundIndex, String message)
     {
         try

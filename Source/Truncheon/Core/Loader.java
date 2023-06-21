@@ -56,7 +56,6 @@ import java.sql.Statement;
 */
 public class Loader
 {
-
     private Console console = System.console();
 
     private static List<String> filePath = new  ArrayList<String>();
@@ -74,7 +73,7 @@ public class Loader
 
             case "iostreams":
             new Loader().printTest();
-            break;
+            return;
 
             default:
             System.exit(3);
@@ -181,18 +180,13 @@ public class Loader
         ----------------------------------------------------
         */
 
-        //check if Manifest File exists
         if(manifestFileExists())
         {
             IOStreams.printInfo("Manifest file found. Populating files and directories...");
 
-            //begin the population of files in directory
-
-            //Begin the population of the files in the installed directory of Truncheon
             if(populateFiles(new File("./")))
             {
                 IOStreams.printInfo("Files and Directories populated! Running Integrity Checks...");
-                //check core files first
 
                 IOStreams.printInfo("Checking Core Files...");
                 if(checkCoreFiles())
@@ -205,12 +199,12 @@ public class Loader
                         IOStreams.printInfo("Checking Program Setup status...");
 
                         if(checkDirectoryStructure())
-                        IOStreams.printInfo("Setup Completed! Booting Program...");
+                            IOStreams.printInfo("Booting Program...");
+                        
                         else
                         {
                             IOStreams.printAttention("Setup Incomplete.");
 
-                            //Set the return value to be 4, denoting that the program requires setup
                             abraxisResult = 5;
                         }
                     }

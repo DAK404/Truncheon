@@ -7,6 +7,7 @@ import java.io.FileReader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import java.util.Arrays;
 
 import Truncheon.API.BuildInfo;
@@ -15,7 +16,7 @@ import Truncheon.API.IOStreams;
 //Previously known as MainMenu.java
 //Implement all the older functionalities here
 public class NionKernel extends ClassLoader
-{
+{    
     private String _username = "DEFAULT_USER";
     private String _accountName = "DEFAULT_ACC_NAME";
     private String _systemName = "";
@@ -163,6 +164,11 @@ public class NionKernel extends ClassLoader
                 IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic()));
                 break;
 
+                case "whois":
+                IOStreams.println(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).getNameLogic());
+                IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkPrivilegeLogic()));
+                break;
+
                 case "clear":
                 customBuildInfoViewer();
                 break;
@@ -186,7 +192,7 @@ public class NionKernel extends ClassLoader
                 //System.out.println(_PIN);
                 break;
 
-                case "load":
+                case "module":
                 if(commandArray.length < 2)
                 {
                     System.out.println("goober");
@@ -199,8 +205,24 @@ public class NionKernel extends ClassLoader
                     * Module uninstall
                     * Module download (optional)
                     */
-                    String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
-                    moduleLoader(commandArray[1], moduleCommandArray);
+                    
+                    switch(commandArray[1])
+                    {
+                        case "remove":
+                            //logic to delete the module
+                        break;
+
+                        case "load":
+                            String[] moduleCommandArray = Arrays.copyOfRange(commandArray, 2, commandArray.length);
+                            moduleLoader(commandArray[2], moduleCommandArray);
+                        break;
+
+                        default:
+                        IOStreams.printError("Module Loader: Invalid option.");
+                        break;
+                    }
+
+                    
                 }
                 break;
 
@@ -268,7 +290,7 @@ public class NionKernel extends ClassLoader
                     break;
 
                     case "modify":
-                    new Truncheon.API.Dragon.AccountModify(_username, _accountName).accountModifyLogic();
+                    new Truncheon.API.Dragon.AccountModify(_username).accountModifyLogic();
                     break;
 
                     default:
@@ -276,6 +298,7 @@ public class NionKernel extends ClassLoader
                     break;
                 }
                 customBuildInfoViewer();
+                IOStreams.printInfo("Please use the refresh command, if required, to reflect the changes.");
                 break;
 
                 case "grinch":

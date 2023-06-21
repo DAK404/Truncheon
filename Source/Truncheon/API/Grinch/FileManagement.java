@@ -156,7 +156,9 @@ public class FileManagement
                 case "tree":
                 break;
                 
+                case "dir":
                 case "ls":
+                    listEntitiesInDirectory();
                 break;
                 
                 case "download":
@@ -227,5 +229,28 @@ public class FileManagement
     private void makeDir(String fileName)throws Exception
     {
         new File(_defaultPath + _presentWorkingDir + fileName).mkdirs();
+    }
+
+    private void listEntitiesInDirectory()throws Exception
+    {
+        //String format = "%1$-60s|%2$-50s|%3$-20s\n";
+        String format = "%1$-32s| %2$-24s| %3$-10s\n";
+        String c = "-";
+        if(checkFileExistence(_presentWorkingDir))
+        {
+            File dPath=new File(_defaultPath + _presentWorkingDir);
+            System.out.println("\n");
+            String disp = (String.format(format, "Directory/File Name", "File Size [In KB]","Type"));
+            System.out.println(disp + c.repeat(disp.length()) + "\n");
+            for(File file : dPath.listFiles())
+            {
+                //System.out.format(String.format(format, file.getPath().replace(User,Name), file.getName().replace(User,Name), file.length()/1024+" KB"));
+                System.out.format(String.format(format, file.getName().replace(_username, _name), file.length()/1024+" KB", file.isDirectory()?"Directory":"File"));
+            }
+            System.out.println();
+        }
+        else
+        System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.gc();
     }
 }

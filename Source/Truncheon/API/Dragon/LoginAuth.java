@@ -84,26 +84,29 @@ public class LoginAuth
     private final String retrieveDatabaseEntry(String sqlCommand, String parameter)throws Exception
     {
         String result = "DEFAULT_STRING";
+        Class.forName("org.sqlite.JDBC");
+        String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
+
+        Connection dbConnection = DriverManager.getConnection(databasePath);
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
+        ResultSet resultSet = null;
+        
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            String databasePath = "jdbc:sqlite:./System/Truncheon/Private/Mud.dbx";
-
-            Connection dbConnection = DriverManager.getConnection(databasePath);
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
-            
             preparedStatement.setString(1, _username);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
+            resultSet = preparedStatement.executeQuery();
             result = resultSet.getString(parameter);
-            preparedStatement.close();
-            dbConnection.close();
-            resultSet.close();
         }
         catch(Exception e)
         {
             e.printStackTrace();
             result = "ERROR";
+        }
+        finally
+        {
+            preparedStatement.close();
+            dbConnection.close();
+            resultSet.close();
         }
         if(result == null)
             result = "Error";

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import Truncheon.API.Wraith.WraithEdit;
+
 /**
 *
 */
@@ -26,9 +28,9 @@ final class Installer
     */
     protected boolean installPackage()
     {
-        // new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG START ---", "Logs/Update");
-        // new Truncheon.API.Wraith.WriteFile().logToFile("Program Update Requested.", "Logs/Update");
-        // new Truncheon.API.Wraith.WriteFile().logToFile("Attempting to install the the update file...", "Logs/Update");
+        WraithEdit.logger("--- UPDATE LOG START ---", "Logs/Update");
+        WraithEdit.logger("Program Update Requested.", "Logs/Update");
+        WraithEdit.logger("Attempting to install the the update file...", "Logs/Update");
         return new Truncheon.API.Grinch.Wyvern.Installer().installPackageLogic(INPUT_ZIP_FILE, OUTPUT_FOLDER);
     }
 
@@ -72,7 +74,7 @@ final class Installer
                 }
 
                 Truncheon.API.IOStreams.printInfo("Installed - " + newFile.getAbsoluteFile());
-                //new Truncheon.API.Wraith.WriteFile().logToFile("Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
+                WraithEdit.logger("Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
 
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
@@ -89,15 +91,14 @@ final class Installer
             zis.closeEntry();
             zis.close();
             new File(INPUT_ZIP_FILE).delete();
-            // new Truncheon.API.Wraith.WriteFile().logToFile("[ ATTENTION ] : UPDATE INSTALL SUCCESSFUL!", "Logs/Update");
-            // new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG END ---", "Logs/Update");
+            WraithEdit.logger("[ ATTENTION ] : UPDATE INSTALL SUCCESSFUL!", "Logs/Update");
             status = true;
         }
         catch (Exception ex)
         {
-            // new Truncheon.API.Wraith.WriteFile().logToFile("[ ATTENTION ] : UPDATE INSTALL FAILED!", "Logs/Update");
-            // new Truncheon.API.Wraith.WriteFile().logToFile("--- UPDATE LOG END ---", "Logs/Update");
+            WraithEdit.logger("Update Failed! Installation Error.", "Logs/Update");            
         }
+        WraithEdit.logger("--- UPDATE LOG END ---", "Logs/Update");
         System.gc();
         return status;
     }
