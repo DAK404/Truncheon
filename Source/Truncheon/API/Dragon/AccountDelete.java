@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
+//Import Truncheon APIs
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
 
@@ -26,18 +27,22 @@ public class AccountDelete
     public void userDeletionLogic()throws Exception
     {
         if(_currentUsername.equals(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256("Administrator")))
-            Truncheon.API.IOStreams.printError("You cannot delete the Administrator account!");
+            IOStreams.printError("You cannot delete the Administrator account!");
         else
         {
             BuildInfo.viewBuildInfo();
             if(! login())
-                Truncheon.API.IOStreams.printError("Invalid Login Credentials. Please Try Again.");
+                IOStreams.printError("Invalid Login Credentials. Please Try Again.");
             else
             {
+                IOStreams.println("-------------------------------------------------");
+                IOStreams.println("|   User Management Console: Account Deletion   |");
+                IOStreams.println("-------------------------------------------------\n");
+                
                 if(console.readLine("Are you sure you wish to delete your user account? [ YES | NO ]\n> ").equalsIgnoreCase("yes"))
                 {
                     deleteFromDatabase();
-                    Truncheon.API.IOStreams.printAttention("Account Successfully Deleted. Press ENTER to continue.");
+                    IOStreams.printAttention("Account Successfully Deleted. Press ENTER to continue.");
                     console.readLine();
                     System.exit(211);
                 }

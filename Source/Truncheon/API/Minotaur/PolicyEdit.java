@@ -65,7 +65,7 @@ public class PolicyEdit
         try
         {
             BuildInfo.viewBuildInfo();
-            System.out.println("[ ATTENTION ] : This module requires the user to authenticate to continue. Please enter the user credentials.");
+            IOStreams.printAttention("This module requires the user to authenticate to continue. Please enter the user credentials.");
 
             String username = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "));
 
@@ -126,7 +126,7 @@ public class PolicyEdit
                 break;
 
                 default:
-                System.out.println("Invalid command. Please try again.");
+                IOStreams.printError("Invalid command. Please try again.");
                 break;
             }
             System.gc();
@@ -139,7 +139,7 @@ public class PolicyEdit
         displaySettings();
         IOStreams.println(suggestedInputs + "\n");
         IOStreams.println("Add or Modify Policy Syntax:\nmodify <policy_name> <policy_value>");
-        System.out.println();
+        IOStreams.println("");
     }
 
     /**
@@ -148,17 +148,17 @@ public class PolicyEdit
     private final void displaySettings()throws Exception
     {
         BuildInfo.viewBuildInfo();
-        System.out.println("         Minotaur Policy Editor 2.0         ");
-        System.out.println("--------------------------------------------");
-        System.out.println("      - Current Policy Configuration -      ");
-        System.out.println("--------------------------------------------");
-        System.out.println("\nPolicy File  : " + policyFileName);
-        System.out.println("Policy Format: XML\n");
+        IOStreams.println("         Minotaur Policy Editor 2.0         ");
+        IOStreams.println("--------------------------------------------");
+        IOStreams.println("      - Current Policy Configuration -      ");
+        IOStreams.println("--------------------------------------------");
+        IOStreams.println("\nPolicy File  : " + policyFileName);
+        IOStreams.println("Policy Format: XML\n");
         FileInputStream configStream = new FileInputStream(policyFileName);
         props.loadFromXML(configStream);
         configStream.close();
         props.list(System.out);
-        System.out.println("\n--------------------------------------------\n");
+        IOStreams.println("\n--------------------------------------------\n");
         System.gc();
     }
 

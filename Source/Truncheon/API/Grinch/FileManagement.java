@@ -21,14 +21,14 @@ public class FileManagement
     //Also the string is shorter and is able to be managed well.
 
     Console console = System.console();
-    
+
     public FileManagement(String username)throws Exception
     {
         _username = username;
         _name = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
         _defaultPath = "./Users/Truncheon/" + _username;
     }
-    
+
     public final void fileManagerLogic()throws Exception
     {
         if(! loginChallenge())
@@ -45,7 +45,7 @@ public class FileManagement
             while(! inputValue.equalsIgnoreCase("exit"));
         }
     }
-    
+
     public boolean fileManagerLogic(File scriptFileName, int lineNumber)
     {
         boolean status = true;
@@ -55,10 +55,10 @@ public class FileManagement
         {
             //Initialize a stream to read the given file.
             BufferedReader br = new BufferedReader(new FileReader(scriptFileName));
-            
+
             //Initialize a string to hold the contents of the script file being executed.
             String scriptLine;
-            
+
             while ((scriptLine = br.readLine()) != null)
             {
                 if(! (i < lineNumber))
@@ -66,29 +66,29 @@ public class FileManagement
                     //Check if the line is a comment or is blank in the script file and skip the line.
                     if(scriptLine.startsWith("#") || scriptLine.equalsIgnoreCase(""))
                         continue;
-                
+
                     //Check if End Script command is encountered, which will stop the execution of the script.
                     else if(scriptLine.equalsIgnoreCase("End Script"))
                         break;
-                    
+
                     //Read the command in the script file, and pass it on to menuLogic(<command>) for it to be processed.
                     grinchInterpreter(scriptLine);
                 }
                 i++;
             }
-            
+
             br.close();
         }
         catch(Exception e)
         {
             IOStreams.printError(e.toString());
         }
-        
+
         System.gc();
 
         return status;
     }
-    
+
     private boolean loginChallenge()throws Exception
     {
         boolean status = false;
@@ -99,10 +99,10 @@ public class FileManagement
         }
         else
             System.exit(1);
-        
+
         return status;
     }
-    
+
     private void grinchInterpreter(String command)throws Exception
     {
         try
@@ -115,60 +115,62 @@ public class FileManagement
 
                 case "cut":
                 break;
-                
+
                 case "copy":
                 break;
-                
+
                 case "delete":
                 break;
-                
+
                 case "rename":
                 break;
-                
+
                 case "mkdir":
                 if(commandArray.length < 2)
                     IOStreams.printError("Invalid Syntax for command \'mkdir\'.");
                 else
                     makeDir(commandArray[1]);
                 break;
-                
+
                 case "edit":
                 break;
-                
+
                 case "open":
                 break;
-                
+
                 case "home":
+                resetToHomeDir();
                 break;
-                
+
                 case "pwd":
                 IOStreams.println(_defaultPath);
                 IOStreams.println(_defaultPath + _presentWorkingDir);
                 break;
-                
+
                 case "cd":
                 if(commandArray.length < 2)
                     IOStreams.printError("Invalid Syntax for command \'cd\'.");
                 else
                     changeDirectory(commandArray[1]);
                 break;
-                
+
                 case "tree":
+                viewDirTree();
                 break;
-                
+
                 case "dir":
                 case "ls":
                     listEntitiesInDirectory();
                 break;
-                
+
                 case "download":
                 break;
-                
+
                 //Override exit to quit the module than to quit the program
                 case "exit":
                 case "":
                 break;
-                
+
                 //Use the Anvil functions if none of the cases are followed
                 default:
                 Truncheon.API.Anvil.anvilInterpreter(commandArray[0]);
@@ -177,7 +179,7 @@ public class FileManagement
         }
         catch(Exception E)
         {
-            
+
         }
     }
 
@@ -189,7 +191,7 @@ public class FileManagement
         }
         else
         {
-            if(destination.startsWith("/")) 
+            if(destination.startsWith("/"))
                 destination = destination.substring(1, destination.length());
             if(destination.endsWith("/"))
                 destination = destination.substring(0, destination.length()-1);
@@ -239,18 +241,52 @@ public class FileManagement
         if(checkFileExistence(_presentWorkingDir))
         {
             File dPath=new File(_defaultPath + _presentWorkingDir);
-            System.out.println("\n");
+            IOStreams.println("\n");
             String disp = (String.format(format, "Directory/File Name", "File Size [In KB]","Type"));
-            System.out.println(disp + c.repeat(disp.length()) + "\n");
+            IOStreams.println(disp + c.repeat(disp.length()) + "\n");
             for(File file : dPath.listFiles())
             {
                 //System.out.format(String.format(format, file.getPath().replace(User,Name), file.getName().replace(User,Name), file.length()/1024+" KB"));
                 System.out.format(String.format(format, file.getName().replace(_username, _name), file.length()/1024+" KB", file.isDirectory()?"Directory":"File"));
             }
-            System.out.println();
+            IOStreams.println("");
         }
         else
-        System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        IOStreams.printError("The specified file/directory does not exist.");
         System.gc();
+    }
+
+    private void viewDirTree()throws Exception
+    {
+        try
+        {
+            File tree = new File(_defaultPath + _presentWorkingDir);
+            IOStreams.println("\n--- [ TREE VIEW ] ---\n");
+            viewDirTreeHelper(0, tree);
+            IOStreams.println("");
+            System.gc();
+        }
+        catch(Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
+    private final void viewDirTreeHelper(int indent, File file)
+    {
+        System.out.print("|");
+
+        for (int i = 0; i < indent; ++i)
+        System.out.print('-');
+
+        System.out.println(file.getName().replace(_username, _name + " [ USER ROOT DIRECTORY ]"));
+
+        if (file.isDirectory())
+        {
+            File[] files = file.listFiles();
+
+            for (int i = 0; i < files.length; ++i)
+            viewDirTreeHelper(indent + 2, files[i]);
+        }
     }
 }
