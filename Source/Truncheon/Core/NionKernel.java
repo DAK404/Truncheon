@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import Truncheon.API.BuildInfo;
 import Truncheon.API.IOStreams;
+import Truncheon.API.Dragon.LoginAuth;
 
 //Previously known as MainMenu.java
 //Implement all the older functionalities here
@@ -51,13 +52,13 @@ public class NionKernel extends ClassLoader
     private boolean login()throws Exception
     {
         _username = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(console.readLine("Username: "));
-        return  new Truncheon.API.Dragon.LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
+        return  new LoginAuth(_username).authenticationLogic(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: "))), new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: "))));
     }
 
     private void loadSysUserDetails()throws Exception
     {
-        _admin = new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic();
-        _accountName = new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic();
+        _admin = new LoginAuth(_username).checkPrivilegeLogic();
+        _accountName = new LoginAuth(_username).getNameLogic();
         _systemName = new Truncheon.API.Minotaur.PolicyEnforce().retrievePolicyValue("sysname");
         _prompt = (_admin)?'!':'*';
     }
@@ -159,16 +160,16 @@ public class NionKernel extends ClassLoader
                 break;
 
                 case "whoami":
-                IOStreams.println(new Truncheon.API.Dragon.LoginAuth(_username).getNameLogic());
+                IOStreams.println(new LoginAuth(_username).getNameLogic());
                 IOStreams.println(_username);
-                IOStreams.println(String.valueOf(new Truncheon.API.Dragon.LoginAuth(_username).checkPrivilegeLogic()));
+                IOStreams.println(String.valueOf(new LoginAuth(_username).checkPrivilegeLogic()));
                 break;
 
                 case "whois":
-                if(new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkUserExistence())
+                if(new LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkUserExistence())
                 {
-                    IOStreams.println("Name: " + new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).getNameLogic());
-                    IOStreams.println("Privileges: " + (new Truncheon.API.Dragon.LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkPrivilegeLogic()?"Administrator":"Standard User"));
+                    IOStreams.println("Name: " + new LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).getNameLogic());
+                    IOStreams.println("Privileges: " + (new LoginAuth(new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(commandArray[1])).checkPrivilegeLogic()?"Administrator":"Standard User"));
                 }
                 else
                      IOStreams.printError("User does not exist!");
@@ -194,7 +195,6 @@ public class NionKernel extends ClassLoader
                 break;
 
                 case "lock":
-                //System.out.println(_PIN);
                 break;
 
                 case "module":
@@ -242,10 +242,10 @@ public class NionKernel extends ClassLoader
 
                 case "sys":
                 if(! _admin)
-                System.out.println("Cannot execute sys command as a standard user.");
+                IOStreams.printError("Cannot execute sys command as a standard user.");
                 else if(commandArray.length < 2)
                 {
-                    System.out.println("Syntax:\n\nsys \"<host_OS_command>\"");
+                    IOStreams.printInfo("Syntax:\n\nsys \"<host_OS_command>\"");
                     break;
                 }
                 else
@@ -287,7 +287,7 @@ public class NionKernel extends ClassLoader
                 switch(commandArray[1])
                 {
                     case "add":
-                    new Truncheon.API.Dragon.AccountCreate().AccountCreateLogic(_username);
+                    new Truncheon.API.Dragon.AccountCreate().accountCreateLogic(_username);
                     break;
 
                     case "delete":

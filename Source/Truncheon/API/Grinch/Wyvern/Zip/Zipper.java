@@ -1,3 +1,5 @@
+package Truncheon.API.Grinch.Wyvern.Zip;
+
 import java.io.*;
 import java.util.zip.*;
 

@@ -25,11 +25,11 @@ public class BuildInfo
         try
         {
             clearScreen();
-            System.out.println(_Branding);
-            System.out.println("Nion: " + _KernelName);
-            System.out.println("Version: " + _Version + " [" + _BuildID + "]\n");
-            System.out.println("[ CAUTION ] - " + _BuildType + " Build! Expect Errors and Crashes!\n");
-            System.out.println("-----------------------------------------------------------------------------\n");
+            IOStreams.println(_Branding);
+            IOStreams.println("Nion: " + _KernelName);
+            IOStreams.println("Version: " + _Version + " [" + _BuildID + "]\n");
+            IOStreams.println("[ CAUTION ] - " + _BuildType + " Build! Expect Errors and Crashes!\n");
+            IOStreams.println("-----------------------------------------------------------------------------\n");
         }
         catch(Exception e)
         {
@@ -43,18 +43,16 @@ public class BuildInfo
         try
         {
             clearScreen();
-            System.out.println(_Branding);
-            System.out.println("Nion: Truncheon");
-
-            System.out.println("\nAn easy to use, cross-platform shell written in Java\nfor the ease of use and convenience for all users!");
-            
-            System.out.println("\nBuild Version    : " + _Version);
-            System.out.println("Version Codename : " + _VersionCodeName);
-            System.out.println("Build Date       : " + _BuildDate);
-            System.out.println("Build Identifier : " + _BuildID);
-            System.out.println("Build Type/Branch: " + _BuildType);
-            System.out.println("Kernel Name      : " + _KernelName);
-            System.out.println("---------------------------------------------\n");
+            IOStreams.println(_Branding);
+            IOStreams.println("Nion: Truncheon");
+            IOStreams.println("\nAn easy to use, cross-platform shell written in Java\nfor the ease of use and convenience for all users!");
+            IOStreams.println("\nBuild Version    : " + _Version);
+            IOStreams.println("Version Codename : " + _VersionCodeName);
+            IOStreams.println("Build Date       : " + _BuildDate);
+            IOStreams.println("Build Identifier : " + _BuildID);
+            IOStreams.println("Build Type/Branch: " + _BuildType);
+            IOStreams.println("Kernel Name      : " + _KernelName);
+            IOStreams.println("---------------------------------------------\n");
         }
         catch(Exception e)
         {

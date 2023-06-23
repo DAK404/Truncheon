@@ -58,7 +58,7 @@ public class WraithRead
                     }
                     else if(fileContents.equalsIgnoreCase("<end of help>"))
                     {
-                        System.out.println("\n\nEnd of Help File.");
+                        IOStreams.println("\n\nEnd of Help File.");
                         break;
                     }
                     else if(fileContents.startsWith("#"))

@@ -24,7 +24,7 @@ public class LoginAuth
      */
     public LoginAuth(String usn)throws Exception
     {
-        _username = (usn == "" | usn == null)?"DEFAULT USER":usn;
+        _username = (usn.equals("") | usn == null)?"DEFAULT USER":usn;
     }
 
     /**

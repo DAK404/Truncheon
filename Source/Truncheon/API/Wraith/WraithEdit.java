@@ -43,10 +43,7 @@ public class WraithEdit
                 obj.close();
             }
             else
-            {
-                System.out.println(fileName);
                 IOStreams.printError("The provided file name is invalid. Please provide a valid file name to continue.");
-            }
         }
         catch(Exception e)
         {

@@ -137,7 +137,7 @@ public record Cryptography()
             }
             catch (NoSuchAlgorithmException E)
             {
-                System.out.println("Unsupported Algorithm.\n\n");
+                Truncheon.API.IOStreams.printError("Unsupported Algorithm.\n\n");
                 E.printStackTrace();
             }
         }
@@ -166,7 +166,7 @@ public record Cryptography()
             }
             catch (NoSuchAlgorithmException | UnsupportedEncodingException E)
             {
-                System.out.println("Unsupported Algorithm or Encoding.\n\n");
+                Truncheon.API.IOStreams.printError("Unsupported Algorithm or Encoding.\n\n");
                 E.printStackTrace();
             }
         }

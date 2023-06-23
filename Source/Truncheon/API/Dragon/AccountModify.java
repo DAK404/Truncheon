@@ -30,20 +30,6 @@ public class AccountModify
     private boolean _currentAccountAdmin = false;
     
     /* ----------------------------------------------
-    *  Variables to store the new credential values
-    * ----------------------------------------------
-    */
-    
-    /**Stores the new account name */
-    private String _newAccountName = "";
-    /**Stores the new account password */
-    private String _newPassword = "";
-    /**Stores the new security key */
-    private String _newSecKey = "";
-    /**Stores the new PIN value */
-    private String _newPIN = "";
-    
-    /* ----------------------------------------------
     * Stores the policies to be shown while changing
     * the specified credential. Copied from the
     * AccountCreate class in Dragon for consistency
@@ -74,7 +60,7 @@ public class AccountModify
     public AccountModify(String user)throws Exception
     {
         _currentUsername = user;
-        _currentAccountName = new Truncheon.API.Dragon.LoginAuth(user).getNameLogic();
+        _currentAccountName = new LoginAuth(user).getNameLogic();
         _currentAccountAdmin = new LoginAuth(user).checkPrivilegeLogic();
     }
     
@@ -101,7 +87,7 @@ public class AccountModify
         String password = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
         String key = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
         
-        return new Truncheon.API.Dragon.LoginAuth(_currentUsername).authenticationLogic(password, key);
+        return new LoginAuth(_currentUsername).authenticationLogic(password, key);
     }
     
     private void accountManagementMenu()throws Exception
@@ -198,7 +184,7 @@ public class AccountModify
             targetUser = new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(targetUser);
             
             //Check if the specified user exists in the database
-            if(new Truncheon.API.Dragon.LoginAuth(targetUser).checkUserExistence())
+            if(new LoginAuth(targetUser).checkUserExistence())
             {                
                 //Confirm if the user selected is to be promoted to or demoted from an account with administrator rights
                 IOStreams.printAttention("YOU ARE ABOUT TO " + action.toUpperCase() + " \""  + new LoginAuth(targetUser).getNameLogic() + "\". ARE YOU SURE? [ Y | N ]");
@@ -229,19 +215,19 @@ public class AccountModify
     
     private void changeAccountName()
     {
-        _newAccountName = console.readLine(_accountNamePolicy + "Account Name> ");
+        String _newAccountName = console.readLine(_accountNamePolicy + "Account Name> ");
         
         if(_newAccountName == null | _newAccountName.contains(" ") | _newAccountName.equals("") | !(_newAccountName.matches("^[a-zA-Z0-9]*$")) | _newAccountName.equalsIgnoreCase("Administrator") | _newAccountName.length() < 2)
         console.readLine("Invalid Account Name. Press ENTER to try again.");
         else
         commitChangesToDatabase("Name", _newAccountName, targetUser);
         
-        _newAccountName = "";
+        System.gc();
     }
     
     private void changeAccountPassword()throws Exception
     {
-        _newPassword = String.valueOf(console.readPassword(_accountPasswordPolicy + "Account Password> "));
+        String _newPassword = String.valueOf(console.readPassword(_accountPasswordPolicy + "Account Password> "));
         String confirmPassword = String.valueOf(console.readPassword("Confirm Password> "));
         
         if(_newPassword == null | _newPassword.equals("") | _newPassword.length() < 8 | !(_newPassword.equals(confirmPassword)))
@@ -249,13 +235,12 @@ public class AccountModify
         else
         commitChangesToDatabase("Password", new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(_newPassword), targetUser);
         
-        _newPassword = "";
-        confirmPassword = "";
+        System.gc();
     }
     
     private void changeAccountSecurityKey()throws Exception
     {
-        _newSecKey = String.valueOf(console.readPassword(_accountKeyPolicy + "Account Security Key> "));
+        String _newSecKey = String.valueOf(console.readPassword(_accountKeyPolicy + "Account Security Key> "));
         String confirmKey = String.valueOf(console.readPassword("Confirm Security Key> "));
         
         if(_newSecKey == null | !(_newSecKey.equals(confirmKey)))
@@ -263,22 +248,20 @@ public class AccountModify
         else
         commitChangesToDatabase("Password", new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(_newSecKey), targetUser);
         
-        _newSecKey = "";
-        confirmKey = "";
+        System.gc();
     }
     
     private void changeAccountPIN()throws Exception
     {
-        _newPIN = String.valueOf(console.readPassword(_accountPINPolicy + "Account Key> "));
+        String _newPIN = String.valueOf(console.readPassword(_accountPINPolicy + "Account Key> "));
         String confirmPIN = String.valueOf(console.readPassword("Confirm PIN> "));
         
         if(_newPIN == null | !(_newPIN.equals(confirmPIN)))
         console.readLine("Invalid Account PIN. Press ENTER to try again.");
         else
         commitChangesToDatabase("PIN", new Truncheon.API.Minotaur.Cryptography().stringToSHA3_256(_newPIN), targetUser);
-        
-        _newPIN = "";
-        confirmPIN = "";
+
+        System.gc();
     }
     
     private void commitChangesToDatabase(String parameter, String value, String targetUser)
