@@ -28,9 +28,9 @@ final class Installer
     */
     protected boolean installPackage()
     {
-        WraithEdit.logger("--- UPDATE LOG START ---", "Logs/Update");
-        WraithEdit.logger("Program Update Requested.", "Logs/Update");
-        WraithEdit.logger("Attempting to install the the update file...", "Logs/Update");
+        WraithEdit.logger("--- UPDATE LOG START ---", "/Update");
+        WraithEdit.logger("Program Update Requested.", "/Update");
+        WraithEdit.logger("Attempting to install the the update file...", "/Update");
         return new Truncheon.API.Grinch.Wyvern.Installer().installPackageLogic(INPUT_ZIP_FILE, OUTPUT_FOLDER);
     }
 
@@ -74,7 +74,7 @@ final class Installer
                 }
 
                 Truncheon.API.IOStreams.printInfo("Installed - " + newFile.getAbsoluteFile());
-                WraithEdit.logger("Installed : " + newFile.getAbsoluteFile(), "Logs/Update");
+                WraithEdit.logger("Installed : " + newFile.getAbsoluteFile(), "/Update");
 
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
@@ -91,14 +91,14 @@ final class Installer
             zis.closeEntry();
             zis.close();
             new File(INPUT_ZIP_FILE).delete();
-            WraithEdit.logger("[ ATTENTION ] : UPDATE INSTALL SUCCESSFUL!", "Logs/Update");
+            WraithEdit.logger("[ ATTENTION ] : UPDATE INSTALL SUCCESSFUL!", "/Update");
             status = true;
         }
         catch (Exception ex)
         {
-            WraithEdit.logger("Update Failed! Installation Error.", "Logs/Update");            
+            WraithEdit.logger("Update Failed! Installation Error.", "/Update");            
         }
-        WraithEdit.logger("--- UPDATE LOG END ---", "Logs/Update");
+        WraithEdit.logger("--- UPDATE LOG END ---", "/Update");
         System.gc();
         return status;
     }
